@@ -1,5 +1,7 @@
 package project.manager;
 
+import javax.swing.JFrame;
+
 import project.game.Game;
 
 public class GameManager {
@@ -18,6 +20,6 @@ public class GameManager {
 	}
 	
 	public void check() {
-		game.check();
+		game.check(new JFrame(""));
 	}
 }

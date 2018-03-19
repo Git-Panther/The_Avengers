@@ -23,6 +23,7 @@ public class MainFrame extends JFrame{
 		setBounds(360, 90, 1200, 900);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setResizable(false);
+		setLayout(null);
 		
 		Image bgImage = new ImageIcon("resource/image/bg/title.png").getImage();
 		JPanel bgPanel = new JPanel() {
@@ -44,32 +45,34 @@ public class MainFrame extends JFrame{
 		
 		JButton studyButton = new JButton("학습하기");
 		studyButton.setBounds(30, 250, 300, 150);
+//		studyButton.setOpaque(false);
 		studyButton.addActionListener(new ActionListener() {
 			
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
+			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				
+				new StudyChoiceFrame();
+				dispose();
 			}
 		});
 		
 		JButton gameButton = new JButton("놀이학습");
 		gameButton.setBounds(370, 250, 300, 150);
+//		gameButton.setOpaque(false);
 		gameButton.addActionListener(new ActionListener() {
 			
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
+			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				
+				new GameChoiceFrame();
+				dispose();
 			}
 		});
 		
 		JScrollPane bgPane = new JScrollPane(bgPanel);
 		setContentPane(bgPane);
-		add(studyButton);
-		studyButton.setVisible(true);
-		add(gameButton);
-		gameButton.setVisible(true);
+		getContentPane().add(studyButton);
+	    getContentPane().add(gameButton);
 		
 		setVisible(true);
 	}
