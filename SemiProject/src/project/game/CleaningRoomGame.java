@@ -2,27 +2,26 @@ package project.game;
 
 import java.util.LinkedList;
 
-import javax.swing.JFrame;
-
+import project.frame.GameFrame;
 import project.vo.Area;
 import project.vo.SelectableImage;
 
 public class CleaningRoomGame extends Game {
 
 	@Override
-	public void start() {
+	public void start(GameFrame frame) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void reset() {
+	public void retry(GameFrame frame) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public boolean check(JFrame frame) {
+	public boolean check(GameFrame frame) {
 		// TODO Auto-generated method stub
 		return false;
 	}

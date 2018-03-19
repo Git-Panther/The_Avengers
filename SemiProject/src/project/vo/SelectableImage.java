@@ -6,17 +6,17 @@ import javax.swing.ImageIcon;
 
 public class SelectableImage extends ImageIcon { // 선택 가능한 이미지
 	
-	public static final int SIZE_HORIZONAL = 50;
-	public static final int SIZE_VERTICAL = 50;
+	public static final int SIZE_HORIZONAL = 75;
+	public static final int SIZE_VERTICAL = 75;
 	// 위는 고정 크기
 	
 	private String name; // 해당 이미지의 이름
-	private Point originalLocation; // 해당 이미지의 원래 좌표
-	private Point currentLocation; // 해당 이미지가 동물원에 있을 때의 좌표
+	private Point originalLocation; // 해당 이미지의 원래 좌표. 쓸 일 없을 듯?
+	private Point currentLocation; // 해당 이미지가 동물원에 있을 때의 좌표. 쓸 일 없을 듯?
 	private String imageLocation; // 해당 이미지의 이미지 경로
 	
 	public SelectableImage(String name, String imageLocation) {
-		super(new ImageIcon(imageLocation).getImage().getScaledInstance(30, 30, 0));
+		super(new ImageIcon(imageLocation).getImage().getScaledInstance(SIZE_HORIZONAL, SIZE_VERTICAL, 0));
 		this.name = name;
 	}
 	
