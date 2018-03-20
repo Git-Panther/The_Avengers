@@ -4,7 +4,7 @@ import java.awt.Point;
 
 import javax.swing.ImageIcon;
 
-public class SelectableImage extends ImageIcon { // 선택 가능한 이미지
+public class AnimalImage extends ImageIcon { // 선택 가능한 이미지
 	
 	public static final int SIZE_HORIZONAL = 75;
 	public static final int SIZE_VERTICAL = 75;
@@ -15,7 +15,7 @@ public class SelectableImage extends ImageIcon { // 선택 가능한 이미지
 	private Point currentLocation; // 해당 이미지가 동물원에 있을 때의 좌표. 쓸 일 없을 듯?
 	private String imageLocation; // 해당 이미지의 이미지 경로
 	
-	public SelectableImage(String name, String imageLocation) {
+	public AnimalImage(String name, String imageLocation) {
 		super(new ImageIcon(imageLocation).getImage().getScaledInstance(SIZE_HORIZONAL, SIZE_VERTICAL, 0));
 		this.name = name;
 	}
