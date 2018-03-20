@@ -26,16 +26,4 @@ public class TouchingBodyGame extends Game {
 		return false;
 	}
 
-	@Override
-	public LinkedList<AnimalImage> getImages() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public LinkedList<AnimalArea> getArea() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }
