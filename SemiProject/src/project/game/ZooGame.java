@@ -124,6 +124,7 @@ public class ZooGame extends Game {
 //					else {
 //						System.out.println("형상변환 불가");
 //					}
+					// 위를 통해 동물 공간(JPanel)만 인식함을 알 수 있다.
 					
 					while(itrArea.hasNext()) {
 						targetArea= itrArea.next();

@@ -1,11 +1,10 @@
 package project.vo;
 
 import java.awt.Point;
-import java.awt.Rectangle;
 
-import javax.swing.JLabel;
+import javax.swing.JPanel;
 
-public class AnimalArea extends Rectangle{ // 들어갈 수 있는 공간. 무언가 들어왔을 때 이벤트 발생
+public class AnimalArea extends JPanel{ // 들어갈 수 있는 공간. 무언가 들어왔을 때 이벤트 발생
 	
 	public static final int SIZE_HORIZONAL = 250;
 	public static final int SIZE_VERTICAL = 250;
@@ -22,6 +21,7 @@ public class AnimalArea extends Rectangle{ // 들어갈 수 있는 공간. 무�
 		this.answer = answer;
 		this.direction = direction;
 		setBounds(direction.x, direction.y, SIZE_HORIZONAL, SIZE_VERTICAL);
+		setOpaque(false);
 	}
 	
 	public String getAnswer() {
