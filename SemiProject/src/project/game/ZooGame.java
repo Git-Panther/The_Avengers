@@ -1,6 +1,7 @@
 package project.game;
 
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
@@ -18,7 +19,8 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import project.frame.GameFrame;
+import project.frame.GameChoiceFrame;
+import project.frame.MainFrame;
 import project.vo.AnimalImage;
 import project.vo.AnimalLabel;
 import project.vo.AnimalRectangle;
@@ -57,8 +59,167 @@ public class ZooGame extends Game {
 		startingRectangle = new AnimalRectangle();
 	}
 
+	class ZooListener implements MouseListener, MouseMotionListener {
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			// TODO Auto-generated method stub
+			// 마우스를 뗐을 때 이미지가 패널에 접근(e)했다면 넣고, 아니면 원위치로. 대신 접근한 곳이 원 부모와 같은
+			// 곳이면 원위치로.
+			if (movingLabel != null && movingLabelParent != null) { 
+				AnimalRectangle targetRectangle = null;
+				Rectangle[] targetSubRectangle = null;
+				// int addingIndex = -1; // 넣었을 때의 자리 인덱스. 순서대로 채우기 위함.
+
+				// 문제 영역에 접근했을 때
+				targetRectangle = startingRectangle;
+				targetSubRectangle = targetRectangle.getSubRectangle();
+				if (collocateAnimal(targetRectangle, targetSubRectangle, e)) 
+					return;
+
+				// 우리 영역 n개 중 하나이면
+				Iterator<AnimalRectangle> itrRectangle = zooRectangle.iterator();
+				while (itrRectangle.hasNext()) {
+					targetRectangle = itrRectangle.next();
+					targetSubRectangle = targetRectangle.getSubRectangle();
+					if (collocateAnimal(targetRectangle, targetSubRectangle, e)) 
+						return;
+				}
+				// 사각형들이 아닌 공간에서 뗀 것이라면 이하의 빽이 발생할 것이다.
+				back();
+			} else {
+				// System.out.println("옮기기 실패");
+			}
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+			// TODO Auto-generated method stub
+			// 마우스를 눌렀을 때의 좌표 저장
+			// JPanel에 담기에는 애매. 왜냐하면 패널 안에서 따로 좌표를 따질 수도 있는 위험성이 존재
+			// 그리고 패널이 좌표를 가지니까 패널 옮기는 방식으로 바꿔야 됨.
+			// 따라서 이미지=>레이블=>패널 이런 식으로 해야해서 더러워짐
+			// 사실 Panel이나 Label이나 addMouseListener()로 읽을 수 있음 ㅋ
+			AnimalRectangle targetRectangle = null;
+			Rectangle[] targetSubRectangle = null;
+
+			// 문제 영역에서 눌렀을 때
+			targetRectangle = startingRectangle;
+			targetSubRectangle = targetRectangle.getSubRectangle();
+			if (collocatePoint(targetRectangle, targetSubRectangle, e)) 
+				return;
+
+			// 동물원 우리 1~n 중 하나일 때
+			Iterator<AnimalRectangle> itrRectangle = zooRectangle.iterator();
+			while (itrRectangle.hasNext()) {
+				targetRectangle = itrRectangle.next();
+				targetSubRectangle = targetRectangle.getSubRectangle();
+				if (collocatePoint(targetRectangle, targetSubRectangle, e)) 
+					return;
+			}
+			// 만일 위에서 탈출 못했으면 movingLabel, movingLabelParent가 null이므로 작동 안 할 것이다.
+			// System.out.println("인식 실패");
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e) {
+			// TODO Auto-generated method stub
+			// 마우스가 떠났을 때
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			// TODO Auto-generated method stub
+			// 마우스가 들어왔을 때
+		}
+
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			// TODO Auto-generated method stub
+			// 마우스를 클릭했을 때
+		}
+
+		@Override
+		public void mouseMoved(MouseEvent e) {
+			// TODO Auto-generated method stub
+			// 마우스가 움직일 때
+		}
+
+		@Override
+		public void mouseDragged(MouseEvent e) {
+			// TODO Auto-generated method stub
+			// 마우스를 드래그하고 있을 때 그린다.
+			if (isDragged && movingLabel != null && movingLabelParent != null) {
+				movingLabel.setLocation(e.getX() - mouseX, e.getY() - mouseY);
+				frame.getContentPane().repaint();
+				movingLabel.repaint();
+			}
+		}
+
+	}
+	
+	class ResultDialog extends JDialog{
+
+		private static final long serialVersionUID = 7488391241677890730L;
+		
+		private JPanel messagePanel; // 다이얼로그 전체 패널
+		private JPanel buttonPanel; // 버튼들 패널
+		private JLabel messageLabel1; // 메시지 레이블 1
+		private JLabel messageLabel2; // 메시지 레이블 2
+		
+		public ResultDialog(String title) 
+		{
+			super(frame, title, true); // 모달(자기 끝낼 때까지 딴거 못함)
+			setBounds(960 - 175, 540 - 75, 350, 150);
+			setResizable(false);
+			setLayout(null);
+			setUndecorated(true); // x창 포함 타이틀도 다 가려버림(...)
+			// 바로 위 코드는 이미지 입힐 거 아니면 쓰지 말자..
+//			setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+			
+			messagePanel = new JPanel();
+	        messagePanel.setLayout(new FlowLayout());
+	        messagePanel.setBounds(0, 15, 350, 50);
+	        add(messagePanel, BorderLayout.CENTER);
+	       
+	        messageLabel1 = new JLabel("", JLabel.CENTER);		
+	        messageLabel2 = new JLabel("", JLabel.CENTER);	
+	        
+	        messagePanel.add(messageLabel1);
+	        messagePanel.add(messageLabel2);
+	        
+	        buttonPanel = new JPanel();
+	        buttonPanel.setLayout(new FlowLayout());
+	        buttonPanel.setBounds(0, 65, 350, 50);
+	        add(buttonPanel, BorderLayout.SOUTH);
+	        
+	        addWindowListener(new WindowAdapter() { // 창 닫힐 때 닫아야 함.
+	            @Override
+	            public void windowClosing(WindowEvent e) {
+	                super.windowClosing(e);
+	                dispose(); // 다이얼로그 제거
+	            }
+	        });
+		}
+
+		public JPanel getMessagePanel() {
+			return messagePanel;
+		}
+
+		public JPanel getButtonPanel() {
+			return buttonPanel;
+		}
+
+		public JLabel getMessageLabel1() {
+			return messageLabel1;
+		}
+
+		public JLabel getMessageLabel2() {
+			return messageLabel2;
+		}
+	}
+	
 	@Override
-	public void start(GameFrame frame) { // 새로 시작, 게임 엎을 때
+	public void start() { // 새로 시작, 게임 엎을 때
 		// TODO Auto-generated method stub
 		frame.getQuestionMessage().setText(getQuiz());
 		// 문제 텍스트
@@ -74,110 +235,12 @@ public class ZooGame extends Game {
 
 		frame.getContentPane().repaint();
 		// 동물들을 문제 창에 모아놓는다.
-		
-		class ZooListener implements MouseListener, MouseMotionListener {
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-				// 마우스를 뗐을 때 이미지가 패널에 접근(e)했다면 넣고, 아니면 원위치로. 대신 접근한 곳이 원 부모와 같은
-				// 곳이면 원위치로.
-				if (movingLabel != null && movingLabelParent != null) { 
-					AnimalRectangle targetRectangle = null;
-					Rectangle[] targetSubRectangle = null;
-					// int addingIndex = -1; // 넣었을 때의 자리 인덱스. 순서대로 채우기 위함.
-
-					// 문제 영역에 접근했을 때
-					targetRectangle = startingRectangle;
-					targetSubRectangle = targetRectangle.getSubRectangle();
-					if (collocateAnimal(frame, targetRectangle, targetSubRectangle, e)) 
-						return;
-
-					// 우리 영역 n개 중 하나이면
-					Iterator<AnimalRectangle> itrRectangle = zooRectangle.iterator();
-					while (itrRectangle.hasNext()) {
-						targetRectangle = itrRectangle.next();
-						targetSubRectangle = targetRectangle.getSubRectangle();
-						if (collocateAnimal(frame, targetRectangle, targetSubRectangle, e)) 
-							return;
-					}
-					// 사각형들이 아닌 공간에서 뗀 것이라면 이하의 빽이 발생할 것이다.
-					back(frame);
-				} else {
-					// System.out.println("옮기기 실패");
-				}
-			}
-
-			@Override
-			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
-				// 마우스를 눌렀을 때의 좌표 저장
-				// JPanel에 담기에는 애매. 왜냐하면 패널 안에서 따로 좌표를 따질 수도 있는 위험성이 존재
-				// 그리고 패널이 좌표를 가지니까 패널 옮기는 방식으로 바꿔야 됨.
-				// 따라서 이미지=>레이블=>패널 이런 식으로 해야해서 더러워짐
-				AnimalRectangle targetRectangle = null;
-				Rectangle[] targetSubRectangle = null;
-
-				// 문제 영역에서 눌렀을 때
-				targetRectangle = startingRectangle;
-				targetSubRectangle = targetRectangle.getSubRectangle();
-				if (collocatePoint(frame, targetRectangle, targetSubRectangle, e)) 
-					return;
-
-				// 동물원 우리 1~n 중 하나일 때
-				Iterator<AnimalRectangle> itrRectangle = zooRectangle.iterator();
-				while (itrRectangle.hasNext()) {
-					targetRectangle = itrRectangle.next();
-					targetSubRectangle = targetRectangle.getSubRectangle();
-					if (collocatePoint(frame, targetRectangle, targetSubRectangle, e)) 
-						return;
-				}
-				// 만일 위에서 탈출 못했으면 movingLabel, movingLabelParent가 null이므로 작동 안 할 것이다.
-				// System.out.println("인식 실패");
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
-				// 마우스가 떠났을 때
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
-				// 마우스가 들어왔을 때
-			}
-
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				// TODO Auto-generated method stub
-				// 마우스를 클릭했을 때
-			}
-
-			@Override
-			public void mouseMoved(MouseEvent e) {
-				// TODO Auto-generated method stub
-				// 마우스가 움직일 때
-			}
-
-			@Override
-			public void mouseDragged(MouseEvent e) {
-				// TODO Auto-generated method stub
-				// 마우스를 드래그하고 있을 때 그린다.
-				if (isDragged && movingLabel != null && movingLabelParent != null) {
-					movingLabel.setLocation(e.getX() - mouseX, e.getY() - mouseY);
-					frame.getContentPane().repaint();
-					movingLabel.repaint();
-				}
-			}
-
-		}
-
 		frame.getContentPane().addMouseMotionListener(new ZooListener());
 		frame.getContentPane().addMouseListener(new ZooListener());
 	}
 
 	@Override
-	public void retry(GameFrame frame) { // 실패했을 때 재시도
+	public void retry() { // 실패했을 때 재시도
 		// TODO Auto-generated method stub
 
 		// 동물원 검사
@@ -202,71 +265,20 @@ public class ZooGame extends Game {
 	}
 
 	@Override
-	public boolean check(GameFrame frame) { // 동물원 게임은 이름이 일치하지 않는 것이 발견되면
-											// false다.
+	public boolean check() { // 동물원 게임은 이름이 일치하지 않는 것이 발견되면 false다.
 		// TODO Auto-generated method stub
-
 		// 여기서 다이얼로그 만들어줘야 자유롭게 조절 가능(...)
-
-		class ResultDialog extends JDialog{
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 7488391241677890730L;
-			
-			private JPanel dialogPanel; // 다이얼로그 전체 패널
-//			private JLabel messageLabel; // 메시지 레이블
-			private JPanel buttonPanel; // 버튼들 패널
-//			private JButton okBtn;
-//			private JButton cancelBtn;
-			
-			public ResultDialog(GameFrame frame, String title) 
-			{
-				super(frame, title, true); // 모달(자기 끝낼 때까지 딴거 못함)
-				setBounds(960 - 150, 540 - 112, 300, 225);
-				setResizable(false);
-				
-				dialogPanel = new JPanel();
-		        dialogPanel.setLayout(new BorderLayout());
-		        add(dialogPanel);
-
-//		        messageLabel = new JLabel("DEFAULT", JLabel.CENTER);
-//		        dialogPanel.add(messageLabel, BorderLayout.CENTER);
-		       
-		        buttonPanel = new JPanel();
-		        dialogPanel.add(buttonPanel, BorderLayout.SOUTH);
-		        
-		        addWindowListener(new WindowAdapter() { // 창 닫힐 때 닫아야 함.
-		            @Override
-		            public void windowClosing(WindowEvent e) {
-		                super.windowClosing(e);
-		                dispose(); // 다이얼로그 제거
-		            }
-		        });
-			}
-
-			public JPanel getDialogPanel() {
-				return dialogPanel;
-			}
-
-			public JPanel getButtonPanel() {
-				return buttonPanel;
-			}
-		}
 		
-		ResultDialog dialog = new ResultDialog(frame, "미정");
+		ResultDialog dialog = new ResultDialog("미정");
 		
 		// 1. 문제 창 검사. 여기서 안 비었으면 오답 처리
-		AnimalLabel[] checkingLabel = startingRectangle.getAnimals(); // 비었는지검사하기 위한 용도
+		AnimalLabel[] checkingLabel = startingRectangle.getAnimals(); // 비었는지 검사하기 위한 용도
 		for (AnimalLabel label : checkingLabel) {
 			if (label != null) {
 				dialog.setTitle("저런! 다 안 옮겼네요?");
-				JLabel wrongMessage1 = new JLabel("아직 동물들이 밖에 남아있어요!", JLabel.CENTER);
-//				JLabel wrongMessage2 = new JLabel("모든 동물들을 돌려보내세요!", JLabel.CENTER);
-				// 이번엔 다이얼로그 조절. 두 줄 이상 출력할 수 있어야 한다.
-				dialog.getDialogPanel().add(wrongMessage1);
-//				dialog.getDialogPanel().add(wrongMessage2);
-				
+				dialog.getMessageLabel1().setText("아직 동물들이 밖에 남아있어요!");
+				dialog.getMessageLabel2().setText("모든 동물들을 돌려보내세요!");
+								
 				JButton acceptButton = new JButton("확인");
 				acceptButton.addActionListener(new ActionListener() {
 					
@@ -295,7 +307,22 @@ public class ZooGame extends Game {
 
 				if (!zooLabels[x].getName().equals(zoo.getAnswer())) { // 오답이면
 					dialog.setTitle("땡! 틀렸습니다!");
+					dialog.getMessageLabel1().setText("저런, 동물들이 잘못 들어갔아요!");	
+					dialog.getMessageLabel2().setText("잘못 들어간 동물들을 다시 돌려보내세요!");
 					
+					JButton retryButton = new JButton("재시도");
+					retryButton.addActionListener(new ActionListener() {
+						
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							// TODO Auto-generated method stub
+							ZooGame.this.retry();
+							dialog.dispose(); // 다이얼로그 종료
+						}
+					});
+					dialog.getButtonPanel().add(retryButton);
+					
+					buildDialog(dialog);
 					
 					dialog.setVisible(true);
 					return false;
@@ -305,12 +332,33 @@ public class ZooGame extends Game {
 
 		dialog.setTitle("정답!");
 		
+		dialog.getMessageLabel1().setText("정말 잘했어요! 동물들이 모두 돌아왔어요!");			
+		dialog.getMessageLabel2().setText("다시 한 번 할까요?");
 		
+		JButton restartButton = new JButton("다시 하기");
+		restartButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				ZooGame.this.restart();
+				dialog.dispose(); // 다이얼로그 종료
+			}
+		});
+		dialog.getButtonPanel().add(restartButton);
+		buildDialog(dialog);
 		
 		dialog.setVisible(true);
 		return true;
 	}
 
+	@Override
+	public void restart() { // 재시작
+		// TODO Auto-generated method stub
+		// 배열 같은 거 싹 다 비우고 시작
+		start();
+	}
+	
 	public void putAnimals() { // 무작위 동물 9마리 쑤심
 		// TODO Auto-generated method stub
 		// 1. 무작위 동물 n종류를 Set 컬렉션에 넣는다.
@@ -340,13 +388,13 @@ public class ZooGame extends Game {
 		mouseY = -1;
 	}
 
-	public boolean collocatePoint(GameFrame frame, AnimalRectangle targetRectangle, Rectangle[] targetSubRectangle,
-			MouseEvent e) { // 마우스 포인터 좌표 잡기 위한 계산식
+	public boolean collocatePoint(AnimalRectangle targetRectangle, Rectangle[] targetSubRectangle, MouseEvent e) { // 마우스 포인터 좌표 잡기 위한 계산식
 		for (int x = 0; x < targetSubRectangle.length; x++) {
 			if (targetSubRectangle[x].contains(e.getPoint()) && targetRectangle.getAnimal(x) != null) {
 				movingLabel = targetRectangle.getAnimal(x);
 				movingLabelParent = targetRectangle;
 				movingLabelIndex = movingLabelParent.removeAnimal(movingLabel); // 옮기려면 삭제 후 인덱스 저장
+				// x번째가 이미 movingLabel의 인덱스인데 굳이 위처럼 추출할 필요가 있었나..(물론 사각형에서 제외시키는 건 맞음)
 				// 객체 정보 저장 : 옮기고 있는 것과 그의 부모를 알기 위해
 				mouseX = e.getX() - movingLabel.getX();
 				mouseY = e.getY() - movingLabel.getY();
@@ -361,24 +409,27 @@ public class ZooGame extends Game {
 		return false;
 	}
 
-	public boolean collocateAnimal(GameFrame frame, AnimalRectangle targetRectangle, Rectangle[] targetSubRectangle,
-			MouseEvent e) { // 동물 레이블 위치 결정
+	public boolean collocateAnimal(AnimalRectangle targetRectangle, Rectangle[] targetSubRectangle, MouseEvent e) { // 동물 레이블 위치 결정
 		// 만일 교체에 성공했다면 true, 아니면 false
 		for (int x = 0; x < targetSubRectangle.length; x++) {
-			if (targetSubRectangle[x].contains(e.getPoint())) {
-				// 작은 사각형 영역에 접근했을 때
-				if (targetRectangle.equals(movingLabelParent)) { // 놓았다 뗀 영역이 원래 부모와 같으면
-					back(frame); // 빽시킴
-					return true;
-				} else if (targetRectangle.getAnimal(x) != null) { // 교체 매커니즘
-					swap(frame, targetRectangle.getAnimal(x), x, targetRectangle); 
+			if (targetSubRectangle[x].contains(e.getPoint())) { // 작은 사각형 영역에 접근했을 때
+				if (targetRectangle.getAnimal(x) != null) { // 1. 두 객체를 교환해야 할 때
+					swap(x, targetRectangle); 
 					return true; // 교체가 끝났으므로 리턴
-				} else { // 원래 부모와 다르면서 접근 영역이 비어있다면
-					targetRectangle.addAnimal(movingLabel); 
+				}
+//				else if (targetRectangle.equals(movingLabelParent)) { // 2. 두 객체 간 접근 안 했는데 원래 부모 안에서 이동하려 했다면
+//					back(frame); // 빽시킴
+//					return true;
+//				}
+				else { // 3. 원래 부모와 다르면서 접근 영역이 비어있다면
+					// 방법 1 : 비어있는 가장 앞 칸에 넣는다.
+//					targetRectangle.addAnimal(movingLabel);
+					// 방법 2 : 접근된 칸에 쑤셔 넣는다. 참고로 접근된 작은 사각형에 이미 동물이 있다면 swap()하므로 걱정할 필요 없다.
+					targetRectangle.addAnimalAt(movingLabel, x);
 					// 좌표 변경은 addAnimal(AnimalLabel)에서 해준다.
 					frame.getContentPane().repaint();
 					// 다시 그려준다.
-					initializeFields();
+					initializeFields(); // 무빙이 끝났으므로 무빙에 쓰인 값들은 초기화해준다.
 					return true;
 					// 값 초기화하고 찾기 종료
 				}
@@ -390,19 +441,48 @@ public class ZooGame extends Game {
 		return false; // 다 하고도 못했으면 false
 	}
 
-	public void swap(GameFrame frame, AnimalLabel targetAnimal, int targetIndex, AnimalRectangle targetRectangle) {
-		movingLabelParent.addAnimalAt(targetAnimal, movingLabelIndex);
+	public void swap(int targetIndex, AnimalRectangle targetRectangle) {
+		movingLabelParent.addAnimalAt(targetRectangle.getAnimal(targetIndex), movingLabelIndex);
 		// 접근당한 동물은 옮기고 있던 동물의 인덱스 번째로 옮기고 있던 동물의 부모 사각창으로
 		targetRectangle.addAnimalAt(movingLabel, targetIndex);
 		// 옮기고 있던 동물은 접근당한 동물의 인덱스 번째로 접근당한 동물의 부모 사각창으로
-		frame.repaint();
+		frame.getContentPane().repaint();
 	}
 
-	public void back(GameFrame frame) { // 동물 레이블을 원위치로 돌리는 메소드
+	public void back() { // 동물 레이블을 원위치로 돌리는 메소드
 		movingLabelParent.addAnimalAt(movingLabel, movingLabelIndex);
 		frame.getContentPane().repaint();
 		// 이동하면 보여줘야 하니
 		initializeFields();
 		// 원위치로 그리고 초기화
+	}
+	
+	public void buildDialog(ResultDialog dialog) // 기본적인 커스텀 다이얼로그 생성
+	{
+		JButton choiceButton = new JButton("다른 게임");
+		choiceButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				dialog.dispose(); // 다이얼로그 종료
+				new GameChoiceFrame();
+				frame.dispose();
+			}
+		});
+		dialog.getButtonPanel().add(choiceButton);
+		
+		JButton mainButton = new JButton("메인 화면");
+		mainButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				dialog.dispose(); // 다이얼로그 종료
+				new MainFrame();
+				frame.dispose();
+			}
+		});
+		dialog.getButtonPanel().add(mainButton);
 	}
 }

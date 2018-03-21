@@ -12,6 +12,7 @@ public abstract class Game {
 	protected String bgLocation; // 경로
 	protected LinkedList<ImageIcon> imageObjects = new LinkedList<ImageIcon>();
 	protected String quiz;
+	protected GameFrame frame;
 	
 //	public Map<String, Image> getList() {
 //		return map;
@@ -29,7 +30,17 @@ public abstract class Game {
 		return bgLocation;
 	}	
 
-	public abstract void start(GameFrame frame);
-	public abstract void retry(GameFrame frame);
-	public abstract boolean check(GameFrame frame);
+	public abstract void start();
+	public abstract void restart();
+	public abstract void retry();
+	public abstract boolean check();
+
+	public void setGameFrame(GameFrame gameFrame) {
+		// TODO Auto-generated method stub
+		this.frame = gameFrame;
+	}
+	
+	public GameFrame getGameFrame() {
+		return frame;
+	}
 }

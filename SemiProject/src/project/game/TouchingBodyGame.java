@@ -1,25 +1,29 @@
 package project.game;
 
-import project.frame.GameFrame;
-
 public class TouchingBodyGame extends Game {
 
 	@Override
-	public void start(GameFrame frame) {
+	public void start() {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void retry(GameFrame frame) {
+	public void retry() {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public boolean check(GameFrame frame) {
+	public boolean check() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public void restart() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

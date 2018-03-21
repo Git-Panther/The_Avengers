@@ -29,6 +29,7 @@ public class GameFrame extends JFrame{
 		// 화면 생성
 		super("샘과 함께");
 		this.setGame(game);
+		game.setGameFrame(this);
 		setBounds(360, 90, 1200, 900);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setResizable(false);
@@ -46,7 +47,7 @@ public class GameFrame extends JFrame{
 		questionMessage.setBounds(0, 650, 1200, 100);
 		getContentPane().add(questionMessage);
 		
-		game.start(this); // 주입받는 형식으로 생성
+		game.start(); // 주입받는 형식으로 생성
 		repaint();
 
 		JButton changeButton = new JButton("게임 바꾸기");
@@ -80,7 +81,7 @@ public class GameFrame extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				game.check(GameFrame.this);
+				game.check();
 			}
 		});
 
