@@ -137,8 +137,9 @@ public class ZooGame extends Game {
 						targetRectangle= itrRectangle.next();
 						targetSubRectangle = targetRectangle.getSubRectangle();
 						for(int x = 0; x < targetSubRectangle.length; x++) {
-							if(targetSubRectangle[x].contains(e.getPoint())) {
+							if(targetSubRectangle[x].contains(e.getPoint())) {								
 								addingIndex = targetRectangle.addAnimal(movingLabel); // 다시 넣어준다. 그리고 넣었을 때의 인덱스 얻는다.
+								// 바로 윗줄, NullPointException 발생(AddAnimal이 원인)
 								movingLabel.setOriginalPoint(targetSubRectangle[addingIndex].getLocation());
 //								movingLabel.setOriginalPoint(new Point(targetSubRectangle[addingIndex].x, targetSubRectangle[addingIndex].y));
 								// 원 좌표를 빈 공간이었던 곳의 좌표로 변경
@@ -186,7 +187,7 @@ public class ZooGame extends Game {
 				targetRectangle = startingRectangle;
 				targetSubRectangle = targetRectangle.getSubRectangle();
 				for(int x = 0; x < targetSubRectangle.length; x++) {
-					if(targetSubRectangle[x].contains(e.getPoint())) {
+					if(targetSubRectangle[x].contains(e.getPoint()) && targetRectangle.getAnimal(x) != null) {
 						movingLabel = targetRectangle.getAnimal(x);
 						movingLabelParent = targetRectangle;
 						movingLabelIndex = movingLabelParent.removeAnimal(movingLabel); // 옮기려면 삭제부터(인덱스도 추출)
@@ -327,7 +328,7 @@ public class ZooGame extends Game {
 		return true; // 검사를 해서 false가 안 뜨면 true다.
 	}
 
-	public LinkedList<AnimalImage> putAnimals() {
+	public void putAnimals() {
 		// TODO Auto-generated method stub
 		LinkedList<AnimalImage> animalObjects = new LinkedList<AnimalImage>();
 		
@@ -343,7 +344,5 @@ public class ZooGame extends Game {
 //			baseX = 100;
 //			baseY += 100;
 		}
-		
-		return animalObjects;
 	}
 }
