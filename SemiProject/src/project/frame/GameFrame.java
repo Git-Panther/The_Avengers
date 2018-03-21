@@ -46,7 +46,7 @@ public class GameFrame extends JFrame{
 		questionMessage.setBounds(0, 650, 1200, 100);
 		getContentPane().add(questionMessage);
 		
-		game.start(this);
+		game.start(this); // 주입받는 형식으로 생성
 		repaint();
 
 		JButton changeButton = new JButton("게임 바꾸기");
@@ -80,11 +80,7 @@ public class GameFrame extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				if (game.check(GameFrame.this)) {
-					System.out.println("정답");
-				} else {
-					System.out.println("오답");
-				}
+				game.check(GameFrame.this);
 			}
 		});
 

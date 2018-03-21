@@ -74,9 +74,7 @@ public class AnimalRectangle extends Rectangle {
 		this.animals = animals;
 		for(int x = 0; x < animals.length; x++) {
 				animals[x].setOriginalPoint(subRectangle[x].getLocation());
-//				animals[x].setOriginalPoint(new Point(subRectangle[x].x, subRectangle[x].y));
 				animals[x].setBounds(subRectangle[x]);
-//				animals[x].setLocation(animals[x].getOriginalPoint());
 				animals[x].repaint();
 		}
 	}
@@ -84,17 +82,8 @@ public class AnimalRectangle extends Rectangle {
 	public int addAnimal(AnimalLabel animal) { // 비어있는 공간에 동물 넣어버린다. 그리고 비었던 x 좌표를 반환
 		for(int x = 0; x < animals.length; x++) {
 			if(animals[x] == null) {
-				animals[x] = animal;
-				if(animals[x] == null)
-					System.out.println("animals[" + x + "] NULL");
-				if(subRectangle[x] == null)
-					System.out.println("subRectangle[" + x + "] NULL");
-				if(subRectangle[x].getLocation() == null)
-					System.out.println("getLocation() NULL");
-				
+				animals[x] = animal; // 요 추가가 빠진 게 원인(...)		
 				animals[x].setOriginalPoint(subRectangle[x].getLocation());
-				// 위에서도 null 발생
-//				animals[x].setOriginalPoint(new Point(subRectangle[x].x, subRectangle[x].y));
 				animals[x].setLocation(animals[x].getOriginalPoint());
 				animals[x].repaint();
 				return x;
@@ -119,7 +108,11 @@ public class AnimalRectangle extends Rectangle {
 		return animals[index];
 	}
 	
-	public void addAnimalAt(AnimalLabel animal, int index) {
+	public void addAnimalAt(AnimalLabel animal, int index) { // 지정된 위치에 넣어주고 위치 재설정
+		animals[index] = null;
 		animals[index] = animal;
+		animals[index].setOriginalPoint(subRectangle[index].getLocation());		
+		animals[index].setLocation(animals[index].getOriginalPoint());
+		animals[index].repaint();
 	}
 }

@@ -1,6 +1,5 @@
 package project.frame;
 
-import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -8,8 +7,7 @@ import java.awt.event.ActionListener;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
+import javax.swing.JLabel;
 
 public class MainFrame extends JFrame{
 	/**
@@ -25,23 +23,25 @@ public class MainFrame extends JFrame{
 		setResizable(false);
 		setLayout(null);
 		
-		Image bgImage = new ImageIcon("resource/image/bg/title.png").getImage();
-		JPanel bgPanel = new JPanel() {
-
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 6410213718089658288L;
-
-			@Override
-			public void paintComponent(Graphics bg) {
-				// TODO Auto-generated method stub
-				bg.drawImage(bgImage, 0, 0, 1200, 900, null);
-				setOpaque(false);
-				super.paintComponent(bg);
-			}
-			
-		};
+		Image bgImage = new ImageIcon("resource/image/bg/title.png").getImage().getScaledInstance(1200, 900, 0);
+		JLabel bgLabel = new JLabel(new ImageIcon(bgImage));
+		setContentPane(bgLabel);
+//		JPanel bgPanel = new JPanel() {
+//
+//			/**
+//			 * 
+//			 */
+//			private static final long serialVersionUID = 6410213718089658288L;
+//
+//			@Override
+//			public void paintComponent(Graphics bg) {
+//				// TODO Auto-generated method stub
+//				bg.drawImage(bgImage, 0, 0, 1200, 900, null);
+//				setOpaque(false);
+//				super.paintComponent(bg);
+//			}
+//			
+//		};
 		
 		JButton studyButton = new JButton("학습하기");
 		studyButton.setBounds(30, 250, 300, 150);
@@ -69,8 +69,9 @@ public class MainFrame extends JFrame{
 			}
 		});
 		
-		JScrollPane bgPane = new JScrollPane(bgPanel);
-		setContentPane(bgPane);
+//		JScrollPane bgPane = new JScrollPane(bgPanel);
+//		setContentPane(bgPane);
+	
 		getContentPane().add(studyButton);
 	    getContentPane().add(gameButton);
 		

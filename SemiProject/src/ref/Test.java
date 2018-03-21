@@ -21,6 +21,10 @@ import javax.swing.UIManager;
  *
  */
 public class Test extends JFrame {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6445755218864464416L;
 	// Variables declaration
 	private JPanel contentPane;
 	// -----
@@ -87,6 +91,7 @@ public class Test extends JFrame {
 
 		jButton1.addMouseMotionListener(new MouseMotionAdapter() {
 
+			@SuppressWarnings("unused")
 			public void mouseDown(MouseEvent ev, int x, int y) {
 				System.out.println(x);
 

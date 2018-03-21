@@ -1,6 +1,5 @@
 package project.frame;
 
-import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -8,8 +7,7 @@ import java.awt.event.ActionListener;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
+import javax.swing.JLabel;
 
 import project.game.CartGame;
 import project.game.CleaningRoomGame;
@@ -31,21 +29,23 @@ public class GameChoiceFrame extends JFrame{
 		setLayout(null);
 		
 		Image bgImage = new ImageIcon("resource/image/bg/game.png").getImage();
-		JPanel bgPanel = new JPanel() {
-
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 6410213718089658288L;
-
-			@Override
-			public void paintComponent(Graphics bg) {
-				// TODO Auto-generated method stub
-				bg.drawImage(bgImage, 0, 0, 1200, 900, null);
-				setOpaque(false);
-				super.paintComponent(bg);
-			}
-		};
+		JLabel bgLabel = new JLabel(new ImageIcon(bgImage));
+		setContentPane(bgLabel);
+//		JPanel bgPanel = new JPanel() {
+//
+//			/**
+//			 * 
+//			 */
+//			private static final long serialVersionUID = 6410213718089658288L;
+//
+//			@Override
+//			public void paintComponent(Graphics bg) {
+//				// TODO Auto-generated method stub
+//				bg.drawImage(bgImage, 0, 0, 1200, 900, null);
+//				setOpaque(false);
+//				super.paintComponent(bg);
+//			}
+//		};
 		
 		JButton mainButton = new JButton("메인 화면");
 		mainButton.setBounds(800, 700, 200, 100);
@@ -112,8 +112,8 @@ public class GameChoiceFrame extends JFrame{
 			baseY+=160;
 		}
 		
-		JScrollPane bgPane = new JScrollPane(bgPanel);
-		setContentPane(bgPane);
+//		JScrollPane bgPane = new JScrollPane(bgPanel);
+//		setContentPane(bgPane);
 		for(JButton[] buttonGroup : buttons) {
 			for(JButton button : buttonGroup) {
 				getContentPane().add(button);

@@ -1,10 +1,6 @@
 package project.game;
 
-import java.util.LinkedList;
-
 import project.frame.GameFrame;
-import project.vo.AnimalArea;
-import project.vo.AnimalImage;
 
 public class CleaningRoomGame extends Game {
 
