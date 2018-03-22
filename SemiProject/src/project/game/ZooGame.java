@@ -1,7 +1,5 @@
 package project.game;
 
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
@@ -9,17 +7,15 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 
 import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 
+import project.dialog.ResultDialog;
 import project.frame.GameChoiceFrame;
+import project.frame.GameFrame;
 import project.frame.MainFrame;
 import project.vo.AnimalImage;
 import project.vo.AnimalLabel;
@@ -33,33 +29,32 @@ public class ZooGame extends Game {
 	private AnimalRectangle startingRectangle; // 랜덤으로 할당된 동물의 레이블이 들어갈 공간
 
 	private AnimalLabel movingLabel; // 움직이는 레이블(또는 이미지)
-	private AnimalRectangle movingLabelParent; // 움직이는 레이블이 움직이기 전에 있던 사각형 범위.
-												// 9개 합친 큰 덩어리. 빽할 때 필요.
+	private AnimalRectangle movingLabelParent; // 움직이는 레이블이 움직이기 전에 있던 사각형 범위.  9개 합친 큰 덩어리. 빽할 때 필요.
 	private int movingLabelIndex; // 뺐을 때 해당 레이블이 있었던 인덱스. 원위치 시킬 때 필요.
 
 	private boolean isDragged; // 마우스 눌림 여부
 	private int mouseX, mouseY; // 마우스의 x, y 좌표
-
+	
 	public ZooGame() {
 		bgLocation = "resource/image/bg/zoo.jpg";
 		quiz = "동물들을 제 우리에 맞게 돌려보내세요.";
-		// 문제의 동물들 종류
-		imageObjects.add(new AnimalImage("Dog", "resource/image/character/dog.png"));
-		imageObjects.add(new AnimalImage("Giraffe", "resource/image/character/giraffe.png"));
-		imageObjects.add(new AnimalImage("Hare", "resource/image/character/hare.png"));
-		imageObjects.add(new AnimalImage("Lion", "resource/image/character/lion.png"));
-		imageObjects.add(new AnimalImage("Monkey", "resource/image/character/monkey.png"));
-		imageObjects.add(new AnimalImage("Owl", "resource/image/character/owl.png"));
-
-		movingLabel = null; // 초기화
-		movingLabelParent = null;
-		movingLabelIndex = -1;
-
-		// 문제의 동물들 배치공간
-		startingRectangle = new AnimalRectangle();
+		// 동물 10종
+		imageObjects.add(new AnimalImage("곰", "resource/image/animal/bear.png"));
+		imageObjects.add(new AnimalImage("고양이", "resource/image/animal/cat.png"));
+		imageObjects.add(new AnimalImage("개", "resource/image/animal/dog.png"));
+		imageObjects.add(new AnimalImage("여우", "resource/image/animal/fox.png"));
+		imageObjects.add(new AnimalImage("기린", "resource/image/animal/giraffe.png"));
+		imageObjects.add(new AnimalImage("코알라", "resource/image/animal/koala.png"));
+		imageObjects.add(new AnimalImage("부엉이", "resource/image/animal/owl.png"));
+		imageObjects.add(new AnimalImage("양", "resource/image/animal/sheep.png"));
+		imageObjects.add(new AnimalImage("호랑이", "resource/image/animal/tiger.png"));
+		imageObjects.add(new AnimalImage("얼룩말", "resource/image/animal/Zebra.png"));
+		
+		initializeFields(); // 주요 변수 초기화
+		startingRectangle = new AnimalRectangle(); // 문제의 동물들 배치공간
 	}
 
-	class ZooListener implements MouseListener, MouseMotionListener {
+	class ZooGameListener implements MouseListener, MouseMotionListener {
 		@Override
 		public void mouseReleased(MouseEvent e) {
 			// TODO Auto-generated method stub
@@ -157,67 +152,6 @@ public class ZooGame extends Game {
 
 	}
 	
-	class ResultDialog extends JDialog{
-
-		private static final long serialVersionUID = 7488391241677890730L;
-		
-		private JPanel messagePanel; // 다이얼로그 전체 패널
-		private JPanel buttonPanel; // 버튼들 패널
-		private JLabel messageLabel1; // 메시지 레이블 1
-		private JLabel messageLabel2; // 메시지 레이블 2
-		
-		public ResultDialog(String title) 
-		{
-			super(frame, title, true); // 모달(자기 끝낼 때까지 딴거 못함)
-			setBounds(960 - 175, 540 - 75, 350, 150);
-			setResizable(false);
-			setLayout(null);
-			setUndecorated(true); // x창 포함 타이틀도 다 가려버림(...)
-			// 바로 위 코드는 이미지 입힐 거 아니면 쓰지 말자..
-//			setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-			
-			messagePanel = new JPanel();
-	        messagePanel.setLayout(new FlowLayout());
-	        messagePanel.setBounds(0, 15, 350, 50);
-	        add(messagePanel, BorderLayout.CENTER);
-	       
-	        messageLabel1 = new JLabel("", JLabel.CENTER);		
-	        messageLabel2 = new JLabel("", JLabel.CENTER);	
-	        
-	        messagePanel.add(messageLabel1);
-	        messagePanel.add(messageLabel2);
-	        
-	        buttonPanel = new JPanel();
-	        buttonPanel.setLayout(new FlowLayout());
-	        buttonPanel.setBounds(0, 65, 350, 50);
-	        add(buttonPanel, BorderLayout.SOUTH);
-	        
-	        addWindowListener(new WindowAdapter() { // 창 닫힐 때 닫아야 함.
-	            @Override
-	            public void windowClosing(WindowEvent e) {
-	                super.windowClosing(e);
-	                dispose(); // 다이얼로그 제거
-	            }
-	        });
-		}
-
-		public JPanel getMessagePanel() {
-			return messagePanel;
-		}
-
-		public JPanel getButtonPanel() {
-			return buttonPanel;
-		}
-
-		public JLabel getMessageLabel1() {
-			return messageLabel1;
-		}
-
-		public JLabel getMessageLabel2() {
-			return messageLabel2;
-		}
-	}
-	
 	@Override
 	public void start() { // 새로 시작, 게임 엎을 때
 		// TODO Auto-generated method stub
@@ -226,17 +160,10 @@ public class ZooGame extends Game {
 
 		// 문제 시작시 배치되는 항목 모아놓는 곳
 		putAnimals(); // 공간 n개, 동물 x마리 무작위 선출하여 화면에 쑤신다.
-		Iterator<AnimalLabel> itrLabel = animalLabels.iterator();
-		startingRectangle.setAnimals(animalLabels.toArray(new AnimalLabel[9]));
-
-		while (itrLabel.hasNext()) { // 9마리 넣는다. 주의사항은 setBounds(); 처리가 되었는지 잘 볼 것.
-			frame.getContentPane().add(itrLabel.next());
-		}
-
 		frame.getContentPane().repaint();
 		// 동물들을 문제 창에 모아놓는다.
-		frame.getContentPane().addMouseMotionListener(new ZooListener());
-		frame.getContentPane().addMouseListener(new ZooListener());
+		frame.getContentPane().addMouseMotionListener(new ZooGameListener());
+		frame.getContentPane().addMouseListener(new ZooGameListener());
 	}
 
 	@Override
@@ -247,6 +174,7 @@ public class ZooGame extends Game {
 		Iterator<AnimalRectangle> zooItr = zooRectangle.iterator();
 		AnimalRectangle zoo = null;
 		AnimalLabel[] zooLabels = null;
+		AnimalLabel swapingAnimal = null;
 		while (zooItr.hasNext()) {
 			zoo = zooItr.next();
 			zooLabels = zoo.getAnimals();
@@ -255,8 +183,9 @@ public class ZooGame extends Game {
 					continue; // 위치 선정이 자유로워진만큼 모든 배열의 인덱스를 검사해야 한다.
 
 				if (!zooLabels[x].getName().equals(zoo.getAnswer())) { // 오답인 것들은 문제창으로
-					zoo.removeAnimal(zooLabels[x]); // 해당 우리에서 제거
-					startingRectangle.addAnimal(zooLabels[x]);	// 시작 창으로 다시 삽입
+					swapingAnimal = zooLabels[x];
+					zoo.removeAnimal(swapingAnimal); // 해당 우리에서 제거
+					startingRectangle.addAnimal(swapingAnimal);	// 시작 창으로 다시 삽입
 				}
 
 			}
@@ -269,12 +198,13 @@ public class ZooGame extends Game {
 		// TODO Auto-generated method stub
 		// 여기서 다이얼로그 만들어줘야 자유롭게 조절 가능(...)
 		
-		ResultDialog dialog = new ResultDialog("미정");
+		ResultDialog dialog = new ResultDialog(frame, "미정");
 		
 		// 1. 문제 창 검사. 여기서 안 비었으면 오답 처리
 		AnimalLabel[] checkingLabel = startingRectangle.getAnimals(); // 비었는지 검사하기 위한 용도
 		for (AnimalLabel label : checkingLabel) {
 			if (label != null) {
+				dialog.setCorrect(false);
 				dialog.setTitle("저런! 다 안 옮겼네요?");
 				dialog.getMessageLabel1().setText("아직 동물들이 밖에 남아있어요!");
 				dialog.getMessageLabel2().setText("모든 동물들을 돌려보내세요!");
@@ -306,6 +236,7 @@ public class ZooGame extends Game {
 					continue; // 위치 선정이 자유로워진만큼 모든 배열의 인덱스를 검사해야 한다.
 
 				if (!zooLabels[x].getName().equals(zoo.getAnswer())) { // 오답이면
+					dialog.setCorrect(false);
 					dialog.setTitle("땡! 틀렸습니다!");
 					dialog.getMessageLabel1().setText("저런, 동물들이 잘못 들어갔아요!");	
 					dialog.getMessageLabel2().setText("잘못 들어간 동물들을 다시 돌려보내세요!");
@@ -330,8 +261,8 @@ public class ZooGame extends Game {
 			}
 		}
 
-		dialog.setTitle("정답!");
-		
+		dialog.setCorrect(true);
+		dialog.setTitle("정답!");	
 		dialog.getMessageLabel1().setText("정말 잘했어요! 동물들이 모두 돌아왔어요!");			
 		dialog.getMessageLabel2().setText("다시 한 번 할까요?");
 		
@@ -356,27 +287,80 @@ public class ZooGame extends Game {
 	public void restart() { // 재시작
 		// TODO Auto-generated method stub
 		// 배열 같은 거 싹 다 비우고 시작
+		Iterator<AnimalRectangle> itrRect = zooRectangle.iterator();
+		AnimalRectangle removingRect = null;
+		while(itrRect.hasNext()) {
+			removingRect = itrRect.next();
+			frame.remove(removingRect.getZooLabel());
+			for(AnimalLabel animal : removingRect.getAnimals()) {
+				if(animal != null)
+					frame.remove(animal);
+			}		
+		}	
+		
+		initializeFields();
+		zooRectangle.clear();
+		animalLabels.clear();
+		startingRectangle.removeAll();
+		frame.getContentPane().repaint();	
 		start();
 	}
 	
 	public void putAnimals() { // 무작위 동물 9마리 쑤심
 		// TODO Auto-generated method stub
 		// 1. 무작위 동물 n종류를 Set 컬렉션에 넣는다.
-		// Set 생성 이후 넣어준다.
+		LinkedHashSet<AnimalImage> animalSet = new LinkedHashSet<AnimalImage>();
+
+		while(animalSet.size() < 6) { // 중복 저장 안 되니까 6개 채워질 때까지
+			animalSet.add( (AnimalImage) imageObjects.get( (int) (Math.random() * imageObjects.size() ) ) );
+		}	
 		// 2. AnimalRectangle을 n개만큼 생성하고(zooRectangle에 삽입) 이름은 Set 컬렉션에 들어간 동물의 순서대로 넣어준다.
-		zooRectangle.add(new AnimalRectangle("Dog", new Point(50, 0)));
-		zooRectangle.add(new AnimalRectangle("Giraffe", new Point(450, 0)));
-		zooRectangle.add(new AnimalRectangle("Hare", new Point(850, 0)));
-		zooRectangle.add(new AnimalRectangle("Lion", new Point(50, 300)));
-		zooRectangle.add(new AnimalRectangle("Monkey", new Point(900, 450)));
-		zooRectangle.add(new AnimalRectangle("Owl", new Point(50, 600)));
-		// 3. animalLabels에 x마리만큼 Set 컬렉션에서 무작위로 추출하여 새로 생성
-		LinkedList<AnimalImage> animalObjects = new LinkedList<AnimalImage>();
-		for (int x = 1; x <= 9; x++) { // for문은 x마리만큼
-			animalObjects.add( (AnimalImage) imageObjects.get((int) (Math.random() * 6)) );
-			animalLabels.add(new AnimalLabel(animalObjects.getLast()));
+		int startX = 40;
+		int startY = 40;		
+		
+		zooRectangle
+		.add(new AnimalRectangle(new Point(startX, startY)));
+		zooRectangle
+		.add(new AnimalRectangle(new Point((GameFrame.WINDOW_WIDTH - AnimalRectangle.ZOO_HORIZONTAL) / 2, startY)));
+		zooRectangle
+		.add(new AnimalRectangle(new Point(GameFrame.WINDOW_WIDTH - startX - (AnimalRectangle.ZOO_HORIZONTAL), startY)));
+		zooRectangle
+		.add(new AnimalRectangle(new Point(startX
+				, (GameFrame.WINDOW_HEIGHT - (AnimalRectangle.ZOO_VERTICAL + AnimalRectangle.ZOO_LABEL_HEIGHT )) / 2 )));
+		zooRectangle
+		.add(new AnimalRectangle(new Point(GameFrame.WINDOW_WIDTH - (startX + AnimalRectangle.ZOO_HORIZONTAL)
+				, (GameFrame.WINDOW_HEIGHT - (AnimalRectangle.ZOO_VERTICAL + AnimalRectangle.ZOO_LABEL_HEIGHT)) / 2 )));
+		zooRectangle
+		.add(new AnimalRectangle(new Point(startX
+				, GameFrame.WINDOW_HEIGHT - (AnimalRectangle.ZOO_VERTICAL + startY + AnimalRectangle.ZOO_LABEL_HEIGHT))));
+		Iterator<AnimalRectangle> itrRectangle = zooRectangle.iterator();
+		Iterator<AnimalImage> itrImage = animalSet.iterator();
+		AnimalRectangle nextRectangle = null;
+		while(itrRectangle.hasNext()) {
+			nextRectangle = itrRectangle.next();
+			nextRectangle.setAnswer(itrImage.next().getName());
+			nextRectangle.getZooLabel().setText(nextRectangle.getAnswer());
+			frame.getContentPane().add(nextRectangle.getZooLabel());
+//			System.out.println(nextRectangle.getAnswer()); // 확인용
 		}
-		// 4. 이터레이터 사용하여 화면에 넣는다. 이 경우는 프레임 패러미터 보내기 싫어서 밖으로 ㄱㄱ
+		frame.getContentPane().repaint();
+//		System.out.println();
+		
+		// 3. animalLabels에 x마리만큼 Set 컬렉션에서 무작위로 추출하여 새로 생성
+		AnimalImage[] animalImages = animalSet.toArray(new AnimalImage[6]); // animalSet에 저장된 무작위 동물 6마리 배열
+//		LinkedList<AnimalImage> animalObjects = new LinkedList<AnimalImage>();
+		for (int x = 1; x <= 9; x++) { // for문은 x마리만큼
+//			animalObjects.add( (AnimalImage) imageObjects.get((int) (Math.random() * 6)) );
+			animalLabels.add(new AnimalLabel( animalImages[(int) (Math.random() * 6)] )); // 동물 0~5번째 중 무작위로 9개 넣음
+		}
+		// 4. 이터레이터 사용하여 화면에 넣는다.
+		Iterator<AnimalLabel> itrLabel = animalLabels.iterator();
+		startingRectangle.setAnimals(animalLabels.toArray(new AnimalLabel[9]));
+
+		while (itrLabel.hasNext()) { // 9마리 넣는다. 주의사항은 setBounds(); 처리가 되었는지 잘 볼 것.
+			frame.getContentPane().add(itrLabel.next());
+		}
+		
 	}
 
 	public void initializeFields() { // 필드 원래 값으로 초기화
@@ -407,20 +391,24 @@ public class ZooGame extends Game {
 		}
 
 		return false;
+		// 만일 이미지를 만지게끔 해야 한다면
+		// 1. 이미지의 범위 안으로 마우스가 들어왔을 때
+		// 2. 이전 정보들을 저장하고 잡은 이미지는 이전 사각형으로부터 제외
+		// 3. 마우스 좌표 설정은 위와 동일
 	}
 
 	public boolean collocateAnimal(AnimalRectangle targetRectangle, Rectangle[] targetSubRectangle, MouseEvent e) { // 동물 레이블 위치 결정
 		// 만일 교체에 성공했다면 true, 아니면 false
 		for (int x = 0; x < targetSubRectangle.length; x++) {
-			if (targetSubRectangle[x].contains(e.getPoint())) { // 작은 사각형 영역에 접근했을 때
-				if (targetRectangle.getAnimal(x) != null) { // 1. 두 객체를 교환해야 할 때
-					swap(x, targetRectangle); 
-					return true; // 교체가 끝났으므로 리턴
+			if (targetSubRectangle[x].contains(e.getPoint())) { // 작은 사각형 영역에 접근했을 때		
+				if (targetRectangle.equals(movingLabelParent)) { // 2. 두 객체 간 접근 안 했는데 원래 부모 안에서 이동하려 했다면
+					back(); // 빽시킴
+					return true;
 				}
-//				else if (targetRectangle.equals(movingLabelParent)) { // 2. 두 객체 간 접근 안 했는데 원래 부모 안에서 이동하려 했다면
-//					back(frame); // 빽시킴
-//					return true;
-//				}
+				else if (targetRectangle.getAnimal(x) != null) { // 1. 두 객체를 교환해야 할 때
+					swap(targetRectangle, targetRectangle.getAnimal(x), x); 
+					return true; // 교체가 끝났으므로 리턴
+				} 
 				else { // 3. 원래 부모와 다르면서 접근 영역이 비어있다면
 					// 방법 1 : 비어있는 가장 앞 칸에 넣는다.
 //					targetRectangle.addAnimal(movingLabel);
@@ -439,12 +427,20 @@ public class ZooGame extends Game {
 		}
 
 		return false; // 다 하고도 못했으면 false
+		// 위의 조건을 다르게 바꾸는 방법
+		// 1. 큰 사각형 범위 안에 동물 레이블의 좌표가 들어가면
+		// 2. 현재 좌표를 동물 레이블의 좌표로 설정(기존 좌표를 변경)
+		// 3. 그리고 큰 사각형의 동물 레이블 리스트에 새로 저장(배열 쓸 필요 없어짐)
 	}
 
-	public void swap(int targetIndex, AnimalRectangle targetRectangle) {
-		movingLabelParent.addAnimalAt(targetRectangle.getAnimal(targetIndex), movingLabelIndex);
+	public void swap(AnimalRectangle targetAnimalParent, AnimalLabel targetAnimal, int targetIndex) {
+		movingLabelParent.removeAnimal(movingLabel);
+		targetAnimalParent.removeAnimal(targetAnimal);
+		// 둘을 우선 비워준다.
+		
+		movingLabelParent.addAnimalAt(targetAnimal, movingLabelIndex);
 		// 접근당한 동물은 옮기고 있던 동물의 인덱스 번째로 옮기고 있던 동물의 부모 사각창으로
-		targetRectangle.addAnimalAt(movingLabel, targetIndex);
+		targetAnimalParent.addAnimalAt(movingLabel, targetIndex);
 		// 옮기고 있던 동물은 접근당한 동물의 인덱스 번째로 접근당한 동물의 부모 사각창으로
 		frame.getContentPane().repaint();
 	}
