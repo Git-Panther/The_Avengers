@@ -274,6 +274,7 @@ public class ZooGame extends Game {
 				// TODO Auto-generated method stub
 				ZooGame.this.restart();
 				dialog.dispose(); // 다이얼로그 종료
+				// ㅋㅋ
 			}
 		});
 		dialog.getButtonPanel().add(restartButton);
