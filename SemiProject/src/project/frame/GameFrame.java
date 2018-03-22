@@ -23,13 +23,12 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
+import project.dialog.WarningDialog;
 import project.game.Game;
 
 public class GameFrame extends JFrame{
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 2589215222057371650L;
+	// 위 시리얼 id 없으면 warning 창 뜸.
 	
 	// 이미지는 레이블 안에 넣고 레이블의 부모는 그때그때 패널로 바꿔준다.
 
@@ -41,6 +40,11 @@ public class GameFrame extends JFrame{
 	public static final int WINDOW_HEIGHT = 900;
 	public static final int MONITOR_WIDTH = 1920;
 	public static final int MONITOR_HEIGHT = 1080;
+	// 창 사이즈 및 화면 사이즈 기호 상수로 정해서 편하게 쓸 수 있다. 
+	
+	public static final int BUTTON_WIDTH = 150;
+	public static final int BUTTON_HEIGHT = 50;
+	// 버튼 사이즈
 	
 	public GameFrame(Game game) {
 		// 화면 생성
@@ -56,11 +60,10 @@ public class GameFrame extends JFrame{
 		setDefault();
 		
 		setVisible(true);
-		// System.out.println("창 완료");
 	}
 	
-	public void setDefault() {
-		Image bgImage = new ImageIcon(game.getBackgroundLocation()).getImage().getScaledInstance(1200, 900, 0);
+	public void setDefault() { // 기본적인 세팅
+		Image bgImage = new ImageIcon(game.getBackgroundLocation()).getImage().getScaledInstance(WINDOW_WIDTH, WINDOW_HEIGHT, 0);
 		JLabel bgLabel = new JLabel(new ImageIcon(bgImage));
 		setContentPane(bgLabel);
 		// 배경 세팅. 사실 여기서부터는 Game 객체에서 해결하는 것이 좋다.
@@ -69,38 +72,78 @@ public class GameFrame extends JFrame{
 		questionMessage.setForeground(new Color(47, 79, 79));
 		questionMessage.setFont(new Font("맑은 고딕", Font.BOLD, 30));
 		questionMessage.setHorizontalAlignment(SwingConstants.CENTER);
-		questionMessage.setBounds(0, 650, WINDOW_WIDTH, 100);
+		questionMessage.setBounds(0, WINDOW_HEIGHT - 250, WINDOW_WIDTH, 100);
 		getContentPane().add(questionMessage);
 		
-		game.start(); // 주입받는 형식으로 생성
+		game.start(); // Game 객체에게 주입받는 형식으로 생성
 		repaint();
 
-		JButton changeButton = new JButton("게임 바꾸기");
-		changeButton.setBounds(775, 800, 150, 50);
+		JButton changeButton = new JButton("게임 바꾸기"); // 게임 선택 화면으로 이동
+		changeButton.setBounds(WINDOW_WIDTH - 425, WINDOW_HEIGHT - 100, BUTTON_WIDTH, BUTTON_HEIGHT);
 		changeButton.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				new GameChoiceFrame();
-				dispose();
+				WarningDialog dialog = new WarningDialog(GameFrame.this, "게임 바꾸기", "정말로 게임 선택 창으로 이동하시겠습니까?");
+				dialog.getNegativeButton().addActionListener(new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e1) {
+						// TODO Auto-generated method stub
+						dialog.dispose();
+					}
+				});
+				
+				dialog.getPositiveButton().addActionListener(new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e1) {
+						// TODO Auto-generated method stub
+						dialog.dispose();
+						GameFrame.this.dispose();
+						new GameChoiceFrame();
+					}
+				});
+				
+				dialog.setVisible(true);
 			}
 		});
 
-		JButton mainButton = new JButton("메인 화면");
-		mainButton.setBounds(950, 800, 150, 50);
+		JButton mainButton = new JButton("메인 화면"); // 메인 화면으로 이동
+		mainButton.setBounds(WINDOW_WIDTH - 250, WINDOW_HEIGHT - 100, BUTTON_WIDTH, BUTTON_HEIGHT);
 		mainButton.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				new MainFrame();
-				dispose();
+				WarningDialog dialog = new WarningDialog(GameFrame.this, "메인 화면으로 이동", "정말로 메인 화면으로 이동하시겠습니까?");
+				dialog.getNegativeButton().addActionListener(new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e1) {
+						// TODO Auto-generated method stub
+						dialog.dispose();
+					}
+				});
+				
+				dialog.getPositiveButton().addActionListener(new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e1) {
+						// TODO Auto-generated method stub
+						dialog.dispose();
+						GameFrame.this.dispose();
+						new MainFrame();
+					}
+				});
+				
+				dialog.setVisible(true);
 			}
 		});
 
 		JButton checkButton = new JButton("완료");
-		checkButton.setBounds(525, 800, 150, 50);
+		checkButton.setBounds(WINDOW_WIDTH - 675, WINDOW_HEIGHT - 100, BUTTON_WIDTH, BUTTON_HEIGHT);
 		checkButton.addActionListener(new ActionListener() {
 
 			@Override
@@ -137,7 +180,6 @@ public class GameFrame extends JFrame{
 			@Override
 			public void windowDeactivated(WindowEvent e) {
 				// TODO Auto-generated method stub
-//				pauseBGM();
 			}
 			
 			@Override
@@ -184,8 +226,6 @@ public class GameFrame extends JFrame{
 							new FileInputStream("resource/sound/bgm/zoo.wav")));
 		
 			bgm = AudioSystem.getClip();
-//			bgm.loop(Clip.LOOP_CONTINUOUSLY);
-//			bgm.loop(100);
 			bgm.open(ais);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block

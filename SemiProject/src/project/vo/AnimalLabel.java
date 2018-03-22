@@ -4,11 +4,7 @@ import java.awt.Point;
 
 import javax.swing.JLabel;
 
-public class AnimalLabel extends JLabel { // 동물 담는 레이블
-
-	/**
-	 * 
-	 */
+public class AnimalLabel extends JLabel { // 동물 담는 레이블. 이걸 직접 조종한다.
 	private static final long serialVersionUID = 1136494144146454580L;
 
 	private String name; // 동물 이름
