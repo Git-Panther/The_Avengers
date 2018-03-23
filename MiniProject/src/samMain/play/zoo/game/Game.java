@@ -32,7 +32,7 @@ public abstract class Game {
 	
 	public abstract void start();
 	public abstract void restart();
-	public abstract void retry();
+	public abstract void tryAgain();
 	public abstract boolean check();
 
 	public void setGameFrame(GameFrame gameFrame) {

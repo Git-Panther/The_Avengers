@@ -36,7 +36,7 @@ public class WarningDialog extends JDialog {
 				, DIALOG_WIDTH, DIALOG_HEIGHT);
 		setResizable(false);
 		setLayout(null);
-		setUndecorated(true); // x창 포함 타이틀도 다 가려버림(...)
+//		setUndecorated(true); // x창 포함 타이틀도 다 가려버림(...)
 //		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		
 		messagePanel = new JPanel();

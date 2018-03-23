@@ -35,7 +35,7 @@ public class ResultDialog extends JDialog { // 결과창에 대한 다이얼로�
 				, DIALOG_WIDTH, DIALOG_HEIGHT);
 		setResizable(false);
 		setLayout(null);
-		setUndecorated(true); // x창 포함 타이틀도 다 가려버림(...)
+//		setUndecorated(true); // x창 포함 타이틀도 다 가려버림(...)
 //		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		
 		messagePanel = new JPanel();

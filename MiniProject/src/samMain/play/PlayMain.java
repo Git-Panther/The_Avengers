@@ -132,8 +132,8 @@ public class PlayMain extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(e.getSource().equals(zoo)){
-					dispose();
 					new GameFrame(new ZooGame());
+					dispose();
 				}				
 			}
 		});

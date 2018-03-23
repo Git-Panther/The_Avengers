@@ -44,4 +44,22 @@ public class AnimalRectangle extends Rectangle {
 	public void setAnswer(String answer) {
 		this.answer = answer;
 	}
+
+	@Override
+	public boolean contains(int x, int y) {
+		// TODO Auto-generated method stub
+		return contains(new Point(x, y));
+	}
+
+	@Override
+	public boolean contains(Point p) {
+		// TODO Auto-generated method stub
+		if(p.x >= getLocation().x 
+				&& p.x <= getLocation().x + getBounds().width
+				&& p.y >= getLocation().y
+				&& p.y <= getLocation().y +getBounds().height)
+			return true;
+		else
+			return false;
+	}
 }

@@ -3,6 +3,8 @@ package samMain.play.zoo.frame;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.BufferedInputStream;
@@ -16,7 +18,6 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
@@ -30,7 +31,6 @@ public class GameFrame extends JFrame{
 	// 위 시리얼 id 없으면 warning 창 뜸.
 	
 	private Game game; // 게임 객체
-//	private JLabel questionMessage; // 문제 메시지
 	private Clip bgm; // 배경음
 	
 	public static final int WINDOW_WIDTH = 1200;
@@ -39,9 +39,11 @@ public class GameFrame extends JFrame{
 	public static final int MONITOR_HEIGHT = 1080;
 	// 창 사이즈 및 화면 사이즈 기호 상수로 정해서 편하게 쓸 수 있다. 
 	
-	public static final int BUTTON_WIDTH = 150;
-	public static final int BUTTON_HEIGHT = 50;
+	public static final int BUTTON_WIDTH = 180;
+	public static final int BUTTON_HEIGHT = 114;
 	// 버튼 사이즈
+	
+	private boolean isClicked = false;
 	
 	public GameFrame(Game game) {
 		// 화면 생성
@@ -66,85 +68,174 @@ public class GameFrame extends JFrame{
 		// 배경 세팅. 사실 여기서부터는 Game 객체에서 해결하는 것이 좋다.
 		getContentPane().add(game.getQuizLabel());
 		// 문제 세팅
-		
-		game.start(); // Game 객체에게 주입받는 형식으로 생성
 		repaint();
+		game.start(); // Game 객체에게 주입받는 형식으로 생성
 
-		JButton changeButton = new JButton("게임 바꾸기"); // 게임 선택 화면으로 이동
-		changeButton.setBounds(WINDOW_WIDTH - 425, WINDOW_HEIGHT - 100, BUTTON_WIDTH, BUTTON_HEIGHT);
-		changeButton.addActionListener(new ActionListener() {
-
+		JLabel changeButton = new JLabel(new ImageIcon(new ImageIcon("resource/image/zoo/button/back_choice.png").getImage().getScaledInstance(BUTTON_WIDTH, BUTTON_HEIGHT, 0)));
+		changeButton.setBounds(WINDOW_WIDTH - 439, WINDOW_HEIGHT - 156, BUTTON_WIDTH, BUTTON_HEIGHT);
+		changeButton.addMouseListener(new MouseListener() {
+			
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void mouseReleased(MouseEvent e) {
 				// TODO Auto-generated method stub
-				WarningDialog dialog = new WarningDialog(GameFrame.this, "게임 바꾸기", "정말로 게임 선택 창으로 이동하시겠습니까?");
-				dialog.getNegativeButton().addActionListener(new ActionListener() {
+				changeButton.setIcon(new ImageIcon(new ImageIcon("resource/image/zoo/button/back_choice.png").getImage().getScaledInstance(BUTTON_WIDTH, BUTTON_HEIGHT, 0)));
+				if(isClicked) {
+					WarningDialog dialog = new WarningDialog(GameFrame.this, "게임 바꾸기", "정말로 게임 선택 창으로 이동하시겠습니까?");
+					dialog.getNegativeButton().addActionListener(new ActionListener() {
+						
+						@Override
+						public void actionPerformed(ActionEvent e1) {
+							// TODO Auto-generated method stub
+							dialog.dispose();
+						}
+					});
 					
-					@Override
-					public void actionPerformed(ActionEvent e1) {
-						// TODO Auto-generated method stub
-						dialog.dispose();
-					}
-				});
-				
-				dialog.getPositiveButton().addActionListener(new ActionListener() {
+					dialog.getPositiveButton().addActionListener(new ActionListener() {
+						
+						@Override
+						public void actionPerformed(ActionEvent e1) {
+							// TODO Auto-generated method stub
+							dialog.dispose();
+							GameFrame.this.dispose();
+							new PlayMain().setVisible(true);
+						}
+					});
 					
-					@Override
-					public void actionPerformed(ActionEvent e1) {
-						// TODO Auto-generated method stub
-						dialog.dispose();
-						GameFrame.this.dispose();
-						new PlayMain().setVisible(true);
-					}
-				});
+					dialog.setVisible(true);
+					isClicked = false;
+				}
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				changeButton.setIcon(new ImageIcon(new ImageIcon("resource/image/zoo/button/back_choice_press.png").getImage().getScaledInstance(BUTTON_WIDTH, BUTTON_HEIGHT, 0)));
+				isClicked = true;
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				changeButton.setIcon(new ImageIcon(new ImageIcon("resource/image/zoo/button/back_choice.png").getImage().getScaledInstance(BUTTON_WIDTH, BUTTON_HEIGHT, 0)));
+				isClicked = false;
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				changeButton.setIcon(new ImageIcon(new ImageIcon("resource/image/zoo/button/back_choice_focus.png").getImage().getScaledInstance(BUTTON_WIDTH, BUTTON_HEIGHT, 0)));
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
 				
-				dialog.setVisible(true);
 			}
 		});
 
-		JButton mainButton = new JButton("메인 화면"); // 메인 화면으로 이동
-		mainButton.setBounds(WINDOW_WIDTH - 250, WINDOW_HEIGHT - 100, BUTTON_WIDTH, BUTTON_HEIGHT);
-		mainButton.addActionListener(new ActionListener() {
-
+		JLabel mainButton = new JLabel(new ImageIcon(new ImageIcon("resource/image/zoo/button/back_main.png").getImage().getScaledInstance(BUTTON_WIDTH, BUTTON_HEIGHT, 0)));
+		mainButton.setBounds(WINDOW_WIDTH - 222, WINDOW_HEIGHT - 156, BUTTON_WIDTH, BUTTON_HEIGHT);
+		mainButton.addMouseListener(new MouseListener() {
+			
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void mouseReleased(MouseEvent e) {
 				// TODO Auto-generated method stub
-				WarningDialog dialog = new WarningDialog(GameFrame.this, "메인 화면으로 이동", "정말로 메인 화면으로 이동하시겠습니까?");
-				dialog.getNegativeButton().addActionListener(new ActionListener() {
+				mainButton.setIcon(new ImageIcon(new ImageIcon("resource/image/zoo/button/back_main.png").getImage().getScaledInstance(BUTTON_WIDTH, BUTTON_HEIGHT, 0)));
+				if(isClicked) {
+					WarningDialog dialog = new WarningDialog(GameFrame.this, "메인 화면으로 이동", "정말로 메인 화면으로 이동하시겠습니까?");
+					dialog.getNegativeButton().addActionListener(new ActionListener() {
+						
+						@Override
+						public void actionPerformed(ActionEvent e1) {
+							// TODO Auto-generated method stub
+							dialog.dispose();
+						}
+					});
 					
-					@Override
-					public void actionPerformed(ActionEvent e1) {
-						// TODO Auto-generated method stub
-						dialog.dispose();
-					}
-				});
-				
-				dialog.getPositiveButton().addActionListener(new ActionListener() {
+					dialog.getPositiveButton().addActionListener(new ActionListener() {
+						
+						@Override
+						public void actionPerformed(ActionEvent e1) {
+							// TODO Auto-generated method stub
+							dialog.dispose();
+							GameFrame.this.dispose();
+							new SamMain();
+						}
+					});
 					
-					@Override
-					public void actionPerformed(ActionEvent e1) {
-						// TODO Auto-generated method stub
-						dialog.dispose();
-						GameFrame.this.dispose();
-						new SamMain();
-					}
-				});
+					dialog.setVisible(true);
+					isClicked = false;
+				}
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				mainButton.setIcon(new ImageIcon(new ImageIcon("resource/image/zoo/button/back_main_press.png").getImage().getScaledInstance(BUTTON_WIDTH, BUTTON_HEIGHT, 0)));
+				isClicked = true;
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				mainButton.setIcon(new ImageIcon(new ImageIcon("resource/image/zoo/button/back_main.png").getImage().getScaledInstance(BUTTON_WIDTH, BUTTON_HEIGHT, 0)));
+				isClicked = false;
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				mainButton.setIcon(new ImageIcon(new ImageIcon("resource/image/zoo/button/back_main_focus.png").getImage().getScaledInstance(BUTTON_WIDTH, BUTTON_HEIGHT, 0)));
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
 				
-				dialog.setVisible(true);
 			}
 		});
 
-		JButton checkButton = new JButton("완료");
-		checkButton.setBounds(WINDOW_WIDTH - 675, WINDOW_HEIGHT - 100, BUTTON_WIDTH, BUTTON_HEIGHT);
-		checkButton.addActionListener(new ActionListener() {
-
+		JLabel checkButton = new JLabel(new ImageIcon(new ImageIcon("resource/image/zoo/button/check.png").getImage().getScaledInstance(BUTTON_WIDTH, BUTTON_HEIGHT, 0)));
+		checkButton.setBounds(WINDOW_WIDTH - 666, WINDOW_HEIGHT - 156, BUTTON_WIDTH, BUTTON_HEIGHT);
+		checkButton.addMouseListener(new MouseListener() {
+			
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void mouseReleased(MouseEvent e) {
 				// TODO Auto-generated method stub
-				game.check();
+				checkButton.setIcon(new ImageIcon(new ImageIcon("resource/image/zoo/button/check.png").getImage().getScaledInstance(BUTTON_WIDTH, BUTTON_HEIGHT, 0)));
+				if(isClicked) {
+					game.check();
+					isClicked = false;
+				}
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				checkButton.setIcon(new ImageIcon(new ImageIcon("resource/image/zoo/button/check_press.png").getImage().getScaledInstance(BUTTON_WIDTH, BUTTON_HEIGHT, 0)));
+				isClicked = true;
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				checkButton.setIcon(new ImageIcon(new ImageIcon("resource/image/zoo/button/check.png").getImage().getScaledInstance(BUTTON_WIDTH, BUTTON_HEIGHT, 0)));
+				isClicked = false;
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				checkButton.setIcon(new ImageIcon(new ImageIcon("resource/image/zoo/button/check_focus.png").getImage().getScaledInstance(BUTTON_WIDTH, BUTTON_HEIGHT, 0)));
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
 			}
 		});
-
+		
 		getContentPane().add(mainButton);
 		getContentPane().add(changeButton);
 		getContentPane().add(checkButton);
@@ -194,14 +285,6 @@ public class GameFrame extends JFrame{
 			}
 		});
 	}
-	
-//	public JLabel getQuestionMessage() { // 문제 레이블 반환
-//		return questionMessage;
-//	}
-//
-//	public void setQuestionMessage(JLabel questionMessage) { // 문제 레이블 설정
-//		this.questionMessage = questionMessage;
-//	}
 
 	public Game getGame() {
 		return game;
