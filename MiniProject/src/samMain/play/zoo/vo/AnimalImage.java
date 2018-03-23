@@ -3,16 +3,17 @@ package samMain.play.zoo.vo;
 import javax.swing.ImageIcon;
 
 public class AnimalImage extends ImageIcon { // 선택 가능한 이미지
+	private static final long serialVersionUID = 4513748695459482282L;
 	
-	public static final int SIZE_HORIZONTAL = 80;
-	public static final int SIZE_VERTICAL = 80;
+	public static final int ANIMAL_WIDTH = 75;
+	public static final int ANIMAL_HEIGHT = 75;
 	// 이미지 크기
 	
 	private String name; // 해당 이미지의 이름
 	private String imageLocation; // 해당 이미지의 이미지 경로
 	
 	public AnimalImage(String name, String imageLocation) {
-		super(new ImageIcon(imageLocation).getImage().getScaledInstance(SIZE_HORIZONTAL, SIZE_VERTICAL, 0));
+		super(new ImageIcon(imageLocation).getImage().getScaledInstance(ANIMAL_WIDTH, ANIMAL_HEIGHT, 0));
 		this.name = name;
 	}
 	
@@ -31,7 +32,4 @@ public class AnimalImage extends ImageIcon { // 선택 가능한 이미지
 	public void setImageLocation(String imageLocation) {
 		this.imageLocation = imageLocation;
 	}
-
-	private static final long serialVersionUID = 4513748695459482282L;
-	
 }

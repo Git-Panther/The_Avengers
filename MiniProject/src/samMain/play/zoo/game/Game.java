@@ -3,6 +3,7 @@ package samMain.play.zoo.game;
 import java.util.LinkedList;
 
 import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 
 import samMain.play.zoo.frame.GameFrame;
 
@@ -11,6 +12,7 @@ public abstract class Game {
 	protected LinkedList<ImageIcon> imageObjects = new LinkedList<ImageIcon>(); // 이미지 저장용
 	protected String quiz; // 문제 메시지
 	protected GameFrame frame; // 컨텐츠를 주입할 프레임
+	protected JLabel quizLabel; // 퀴즈 레이블
 	
 	public String getQuiz() {
 		return quiz;
@@ -41,4 +43,13 @@ public abstract class Game {
 	public GameFrame getGameFrame() {
 		return frame;
 	}
+
+	public JLabel getQuizLabel() {
+		return quizLabel;
+	}
+
+	public void setQuizLabel(JLabel quizLabel) {
+		this.quizLabel = quizLabel;
+	}
+	
 }

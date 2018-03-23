@@ -1,7 +1,5 @@
 package samMain.play.zoo.frame;
 
-import java.awt.Color;
-import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,7 +19,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.SwingConstants;
 
 import samMain.main.SamMain;
 import samMain.play.PlayMain;
@@ -33,7 +30,7 @@ public class GameFrame extends JFrame{
 	// 위 시리얼 id 없으면 warning 창 뜸.
 	
 	private Game game; // 게임 객체
-	private JLabel questionMessage; // 문제 메시지
+//	private JLabel questionMessage; // 문제 메시지
 	private Clip bgm; // 배경음
 	
 	public static final int WINDOW_WIDTH = 1200;
@@ -67,13 +64,8 @@ public class GameFrame extends JFrame{
 		JLabel bgLabel = new JLabel(new ImageIcon(bgImage));
 		setContentPane(bgLabel);
 		// 배경 세팅. 사실 여기서부터는 Game 객체에서 해결하는 것이 좋다.
-		
-		questionMessage = new JLabel();
-		questionMessage.setForeground(new Color(47, 79, 79));
-		questionMessage.setFont(new Font("맑은 고딕", Font.BOLD, 30));
-		questionMessage.setHorizontalAlignment(SwingConstants.CENTER);
-		questionMessage.setBounds(0, WINDOW_HEIGHT - 250, WINDOW_WIDTH, 100);
-		getContentPane().add(questionMessage);
+		getContentPane().add(game.getQuizLabel());
+		// 문제 세팅
 		
 		game.start(); // Game 객체에게 주입받는 형식으로 생성
 		repaint();
@@ -203,13 +195,13 @@ public class GameFrame extends JFrame{
 		});
 	}
 	
-	public JLabel getQuestionMessage() { // 문제 레이블 반환
-		return questionMessage;
-	}
-
-	public void setQuestionMessage(JLabel questionMessage) { // 문제 레이블 설정
-		this.questionMessage = questionMessage;
-	}
+//	public JLabel getQuestionMessage() { // 문제 레이블 반환
+//		return questionMessage;
+//	}
+//
+//	public void setQuestionMessage(JLabel questionMessage) { // 문제 레이블 설정
+//		this.questionMessage = questionMessage;
+//	}
 
 	public Game getGame() {
 		return game;
