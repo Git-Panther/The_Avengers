@@ -1,59 +1,26 @@
 package samMain.play.zoo.dialog;
 
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-import javax.swing.JDialog;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 
+import samMain.main.SamMain;
+import samMain.play.PlayMain;
+import samMain.play.zoo.Listener.ZooMouseListener;
+import samMain.play.zoo.button.ZooButton;
 import samMain.play.zoo.clip.ClipSet;
-import samMain.play.zoo.frame.GameFrame;
 
-public class ResultDialog extends JDialog { // 결과창에 대한 다이얼로그
+public class ResultDialog extends ZooDialog { // 결과창에 대한 다이얼로그
 	private static final long serialVersionUID = 7488391241677890730L;
-	
-	private JPanel messagePanel; // 다이얼로그 메시지 패널
-	private JPanel buttonPanel; // 버튼들 패널
-	private JLabel messageLabel1; // 메시지 레이블 1
-	private JLabel messageLabel2; // 메시지 레이블 2
 	
 	private boolean isCorrect; // 정답 여부
 	
-	public static final int DIALOG_WIDTH = 350; // 패널 가로 길이이기도 함
-	public static final int DIALOG_HEIGHT = 150;
-	public static final int PANEL_HEIGHT = 50;
-	// 다이얼로그 크기 및 각 패널 세로 길이
-	
 	public ResultDialog(JFrame frame, String title) 
 	{
-		super(frame, title, true); // 모달(자기 끝낼 때까지 딴거 못함)
-		setBounds( (GameFrame.MONITOR_WIDTH - DIALOG_WIDTH) / 2 , (GameFrame.MONITOR_HEIGHT - DIALOG_HEIGHT) / 2
-				, DIALOG_WIDTH, DIALOG_HEIGHT);
-		setResizable(false);
-		setLayout(null);
-//		setUndecorated(true); // x창 포함 타이틀도 다 가려버림(...)
-//		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		
-		messagePanel = new JPanel();
-        messagePanel.setLayout(new FlowLayout());
-        messagePanel.setBounds(0, 15, DIALOG_WIDTH, PANEL_HEIGHT);
-        add(messagePanel, BorderLayout.CENTER);
-       
-        messageLabel1 = new JLabel("", JLabel.CENTER);		
-        messageLabel2 = new JLabel("", JLabel.CENTER);	
-        
-        messagePanel.add(messageLabel1);
-        messagePanel.add(messageLabel2);
-        
-        buttonPanel = new JPanel();
-        buttonPanel.setLayout(new FlowLayout());
-        buttonPanel.setBounds(0, 15 + PANEL_HEIGHT, DIALOG_WIDTH, PANEL_HEIGHT);
-        add(buttonPanel, BorderLayout.SOUTH);
-        
+		super(frame, title); // 모달(자기 끝낼 때까지 딴거 못함)
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         addWindowListener(new WindowAdapter() { // 창 닫힐 때 닫아야 함.
             @Override
 			public void windowOpened(WindowEvent e) {
@@ -70,22 +37,44 @@ public class ResultDialog extends JDialog { // 결과창에 대한 다이얼로�
         });
 	}
 
-	public JPanel getMessagePanel() {
-		return messagePanel;
+	public void buildZooDialog() // 기본적인 커스텀 다이얼로그(다 비웠는데 오답, 정답일 때) 생성
+	{
+		ZooButton choiceButton = new ZooButton("다른 게임");
+		getButtonPanel().add(choiceButton);
+		choiceButton.addMouseListener(new ZooMouseListener(choiceButton) {
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				choiceButton.setIcon(ZooButton.DEFAULT);
+				choiceButton.getParent().repaint();
+				if(choiceButton.isClicked()) {
+					choiceButton.setClicked(false);
+					new PlayMain().setVisible(true);
+					dispose(); // 다이얼로그 종료
+					getParent().dispose();
+				}
+			}
+		});
+		
+		ZooButton mainButton = new ZooButton("메인 화면");
+		getButtonPanel().add(mainButton);
+		mainButton.addMouseListener(new ZooMouseListener(mainButton){
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				mainButton.setIcon(ZooButton.DEFAULT);
+				mainButton.getParent().repaint();
+				if(mainButton.isClicked()) {
+					mainButton.setClicked(false);
+					dispose(); // 다이얼로그 종료
+					new SamMain();
+					getParent().dispose();
+				}
+				repaint();
+			}
+		});
 	}
-
-	public JPanel getButtonPanel() {
-		return buttonPanel;
-	}
-
-	public JLabel getMessageLabel1() {
-		return messageLabel1;
-	}
-
-	public JLabel getMessageLabel2() {
-		return messageLabel2;
-	}
-
+	
 	public boolean isCorrect() {
 		return isCorrect;
 	}

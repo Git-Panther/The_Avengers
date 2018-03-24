@@ -17,6 +17,10 @@ public class ClipSet { // 긍, 부정 효과음
 	
 	private static ClipSet clips = new ClipSet();
 
+	private ClipSet() {
+		
+	}
+	
 	public void activateEFS(boolean bool) {
 		String location = null;
 		

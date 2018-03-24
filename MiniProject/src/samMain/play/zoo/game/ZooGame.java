@@ -3,8 +3,6 @@ package samMain.play.zoo.game;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -14,12 +12,11 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
-import samMain.main.SamMain;
-import samMain.play.PlayMain;
+import samMain.play.zoo.Listener.ZooMouseListener;
+import samMain.play.zoo.button.ZooButton;
 import samMain.play.zoo.dialog.ResultDialog;
 import samMain.play.zoo.frame.GameFrame;
 import samMain.play.zoo.vo.AnimalImage;
@@ -305,16 +302,21 @@ public class ZooGame extends Game {
 				dialog.getMessageLabel1().setText("아직 동물들이 밖에 남아있어요!");
 				dialog.getMessageLabel2().setText("모든 동물들을 돌려보내세요!");
 								
-				JButton acceptButton = new JButton("확인");
-				acceptButton.addActionListener(new ActionListener() {
-					
+				ZooButton acceptButton = new ZooButton("확인");
+				dialog.getButtonPanel().add(acceptButton);
+				acceptButton.addMouseListener(new ZooMouseListener(acceptButton) {
 					@Override
-					public void actionPerformed(ActionEvent e) {
+					public void mouseReleased(MouseEvent e) {
 						// TODO Auto-generated method stub
-						dialog.dispose(); // 다이얼로그 종료
+						acceptButton.setIcon(ZooButton.DEFAULT);
+						acceptButton.getParent().repaint();
+						if(acceptButton.isClicked()) {
+							acceptButton.setClicked(false);
+							dialog.dispose();			
+						}
 					}
 				});
-				dialog.getButtonPanel().add(acceptButton);
+				
 				dialog.setVisible(true);
 				return false; // 다 안 비었으므로 오답
 			}
@@ -333,26 +335,28 @@ public class ZooGame extends Game {
 					if(!itrTargetZooAnimals.next().getName().equals(targetZoo.getAnswer())) { // 해당 우리에 들어가면 안 될 동물이 들어갔으면
 						dialog.setCorrect(false);
 						dialog.setTitle("땡! 틀렸습니다!");
-						dialog.getMessageLabel1().setText("저런, 동물들이 잘못 들어갔아요!");	
-						dialog.getMessageLabel2().setText("잘못 들어간 동물들을 다시 돌려보내세요!");
+						dialog.getMessageLabel1().setText("저런, 잘못 들어간 동물이 있어요!");	
+						dialog.getMessageLabel2().setText("다시 한 번 돌려보낼까요?");
 						
-						JButton retryButton = new JButton("재시도");
-						retryButton.addActionListener(new ActionListener() {
-							
+						ZooButton againButton = new ZooButton("재시도");
+						dialog.getButtonPanel().add(againButton);
+						againButton.addMouseListener(new ZooMouseListener(againButton){
 							@Override
-							public void actionPerformed(ActionEvent e) {
+							public void mouseReleased(MouseEvent e) {
 								// TODO Auto-generated method stub
-								dialog.dispose(); // 다이얼로그 종료
-								ZooGame.this.tryAgain();
+								againButton.setIcon(ZooButton.DEFAULT);
+								againButton.getParent().repaint();
+								if(againButton.isClicked()) {
+									againButton.setClicked(false);
+									dialog.dispose(); // 다이얼로그 종료
+									ZooGame.this.tryAgain();		
+								}
 							}
-						});
-						dialog.getButtonPanel().add(retryButton);
-						
-						buildDialog(dialog);
-						
+						});		
+						dialog.buildZooDialog();					
 						dialog.setVisible(true);
 						return false;
-					}			
+					}
 				}
 			}
 		}
@@ -360,22 +364,26 @@ public class ZooGame extends Game {
 		// 정답이라면 위의 오답인지 검사하는 과정에서 빠져나오지 못하고 여기까지 올 것이다.
 		dialog.setCorrect(true);
 		dialog.setTitle("정답!");	
-		dialog.getMessageLabel1().setText("정말 잘했어요! 동물들이 모두 돌아왔어요!");			
-		dialog.getMessageLabel2().setText("다시 한 번 도전해볼까요?");
+		dialog.getMessageLabel1().setText("잘했어요! 동물들이 모두 돌아왔어요!");			
+		dialog.getMessageLabel2().setText("한 판 더 하시겠어요?");
 		
-		JButton restartButton = new JButton("다시 하기");
-		restartButton.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				dialog.dispose(); // 다이얼로그 종료
-				ZooGame.this.restart();
-			}
-		});
+		ZooButton restartButton = new ZooButton("다시 하기");
 		dialog.getButtonPanel().add(restartButton);
-		buildDialog(dialog);
-		
+		restartButton.addMouseListener(new ZooMouseListener(restartButton) {
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				restartButton.setIcon(ZooButton.DEFAULT);
+				restartButton.getParent().repaint();
+				if(restartButton.isClicked()) {
+					restartButton.setClicked(false);
+					dialog.dispose(); // 다이얼로그 종료
+					ZooGame.this.restart();	
+				}
+				dialog.repaint();
+			}
+		});	
+		dialog.buildZooDialog();	
 		dialog.setVisible(true);
 		return true;
 	}
@@ -491,34 +499,5 @@ public class ZooGame extends Game {
 			return true;
 		} 
 		return false; // 해당 우리에 들어오지 않았다면 false
-	}
-	
-	public void buildDialog(ResultDialog dialog) // 기본적인 커스텀 다이얼로그(다 비웠는데 오답, 정답일 때) 생성
-	{
-		JButton choiceButton = new JButton("다른 게임");
-		choiceButton.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				new PlayMain().setVisible(true);
-				dialog.dispose(); // 다이얼로그 종료
-				frame.dispose();
-			}
-		});
-		dialog.getButtonPanel().add(choiceButton);
-		
-		JButton mainButton = new JButton("메인 화면");
-		mainButton.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				dialog.dispose(); // 다이얼로그 종료
-				new SamMain();
-				frame.dispose();
-			}
-		});
-		dialog.getButtonPanel().add(mainButton);
 	}
 }

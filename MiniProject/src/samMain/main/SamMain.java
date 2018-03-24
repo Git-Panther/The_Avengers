@@ -19,8 +19,6 @@ public class SamMain{
 	JButton study,play;
 	Clip clip1;
 
-
-	
 	public SamMain(){
 		mainFrame.setBounds(350, 80, 1210, 930);
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
@@ -93,7 +91,6 @@ public class SamMain{
 				
 			}
 		});
-		
 		mainFrame.setVisible(true);
 	}
 	
@@ -109,7 +106,9 @@ public class SamMain{
 //         }
 //	}
 
-
+public JFrame getFrame() {
+	return mainFrame;
+}
 
 
 	

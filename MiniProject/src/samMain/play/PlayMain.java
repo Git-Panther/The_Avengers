@@ -169,8 +169,7 @@ public class PlayMain extends JFrame {
 			}
 		});
 	
-	
-		
+		setVisible(true);
 	}
 
 }

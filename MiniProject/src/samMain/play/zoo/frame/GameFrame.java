@@ -1,28 +1,20 @@
 package samMain.play.zoo.frame;
 
 import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import samMain.main.SamMain;
 import samMain.play.PlayMain;
+import samMain.play.zoo.button.EventButton;
+import samMain.play.zoo.button.BGMButton;
+import samMain.play.zoo.clip.BackgroundClip;
 import samMain.play.zoo.dialog.WarningDialog;
 import samMain.play.zoo.game.Game;
 
@@ -31,19 +23,13 @@ public class GameFrame extends JFrame{
 	// 위 시리얼 id 없으면 warning 창 뜸.
 	
 	private Game game; // 게임 객체
-	private Clip bgm; // 배경음
+	private BackgroundClip bgm = BackgroundClip.getClip(); // BGM 클립
 	
 	public static final int WINDOW_WIDTH = 1200;
 	public static final int WINDOW_HEIGHT = 900;
 	public static final int MONITOR_WIDTH = 1920;
 	public static final int MONITOR_HEIGHT = 1080;
 	// 창 사이즈 및 화면 사이즈 기호 상수로 정해서 편하게 쓸 수 있다. 
-	
-	public static final int BUTTON_WIDTH = 180;
-	public static final int BUTTON_HEIGHT = 114;
-	// 버튼 사이즈
-	
-	private boolean isClicked = false;
 	
 	public GameFrame(Game game) {
 		// 화면 생성
@@ -54,10 +40,9 @@ public class GameFrame extends JFrame{
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setResizable(false);
 		getContentPane().setLayout(null);
-		setBGM();
-
+		bgm.setBGM("resource/sound/bgm/zoo.wav");
+		bgm.on(); // 시작했으니 켜준다. 사실 음악을 끈 상태에서 나가면 false가 그대로 남기 때문에 시작할 때 초기화해줘야 한다.
 		setDefault();
-		
 		setVisible(true);
 	}
 	
@@ -71,162 +56,64 @@ public class GameFrame extends JFrame{
 		repaint();
 		game.start(); // Game 객체에게 주입받는 형식으로 생성
 
-		JLabel changeButton = new JLabel(new ImageIcon(new ImageIcon("resource/image/zoo/button/back_choice.png").getImage().getScaledInstance(BUTTON_WIDTH, BUTTON_HEIGHT, 0)));
-		changeButton.setBounds(WINDOW_WIDTH - 439, WINDOW_HEIGHT - 156, BUTTON_WIDTH, BUTTON_HEIGHT);
-		changeButton.addMouseListener(new MouseListener() {
-			
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-				changeButton.setIcon(new ImageIcon(new ImageIcon("resource/image/zoo/button/back_choice.png").getImage().getScaledInstance(BUTTON_WIDTH, BUTTON_HEIGHT, 0)));
-				if(isClicked) {
-					WarningDialog dialog = new WarningDialog(GameFrame.this, "게임 바꾸기", "정말로 게임 선택 창으로 이동하시겠습니까?");
-					dialog.getNegativeButton().addActionListener(new ActionListener() {
-						
-						@Override
-						public void actionPerformed(ActionEvent e1) {
-							// TODO Auto-generated method stub
-							dialog.dispose();
-						}
-					});
-					
-					dialog.getPositiveButton().addActionListener(new ActionListener() {
-						
-						@Override
-						public void actionPerformed(ActionEvent e1) {
-							// TODO Auto-generated method stub
-							dialog.dispose();
-							GameFrame.this.dispose();
-							new PlayMain().setVisible(true);
-						}
-					});
-					
-					dialog.setVisible(true);
-					isClicked = false;
-				}
-			}
-			
-			@Override
-			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
-				changeButton.setIcon(new ImageIcon(new ImageIcon("resource/image/zoo/button/back_choice_press.png").getImage().getScaledInstance(BUTTON_WIDTH, BUTTON_HEIGHT, 0)));
-				isClicked = true;
-			}
-			
-			@Override
-			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
-				changeButton.setIcon(new ImageIcon(new ImageIcon("resource/image/zoo/button/back_choice.png").getImage().getScaledInstance(BUTTON_WIDTH, BUTTON_HEIGHT, 0)));
-				isClicked = false;
-			}
-			
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
-				changeButton.setIcon(new ImageIcon(new ImageIcon("resource/image/zoo/button/back_choice_focus.png").getImage().getScaledInstance(BUTTON_WIDTH, BUTTON_HEIGHT, 0)));
-			}
-			
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-		});
-
-		JLabel mainButton = new JLabel(new ImageIcon(new ImageIcon("resource/image/zoo/button/back_main.png").getImage().getScaledInstance(BUTTON_WIDTH, BUTTON_HEIGHT, 0)));
-		mainButton.setBounds(WINDOW_WIDTH - 222, WINDOW_HEIGHT - 156, BUTTON_WIDTH, BUTTON_HEIGHT);
-		mainButton.addMouseListener(new MouseListener() {
-			
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-				mainButton.setIcon(new ImageIcon(new ImageIcon("resource/image/zoo/button/back_main.png").getImage().getScaledInstance(BUTTON_WIDTH, BUTTON_HEIGHT, 0)));
-				if(isClicked) {
-					WarningDialog dialog = new WarningDialog(GameFrame.this, "메인 화면으로 이동", "정말로 메인 화면으로 이동하시겠습니까?");
-					dialog.getNegativeButton().addActionListener(new ActionListener() {
-						
-						@Override
-						public void actionPerformed(ActionEvent e1) {
-							// TODO Auto-generated method stub
-							dialog.dispose();
-						}
-					});
-					
-					dialog.getPositiveButton().addActionListener(new ActionListener() {
-						
-						@Override
-						public void actionPerformed(ActionEvent e1) {
-							// TODO Auto-generated method stub
-							dialog.dispose();
-							GameFrame.this.dispose();
-							new SamMain();
-						}
-					});
-					
-					dialog.setVisible(true);
-					isClicked = false;
-				}
-			}
-			
-			@Override
-			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
-				mainButton.setIcon(new ImageIcon(new ImageIcon("resource/image/zoo/button/back_main_press.png").getImage().getScaledInstance(BUTTON_WIDTH, BUTTON_HEIGHT, 0)));
-				isClicked = true;
-			}
-			
-			@Override
-			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
-				mainButton.setIcon(new ImageIcon(new ImageIcon("resource/image/zoo/button/back_main.png").getImage().getScaledInstance(BUTTON_WIDTH, BUTTON_HEIGHT, 0)));
-				isClicked = false;
-			}
-			
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
-				mainButton.setIcon(new ImageIcon(new ImageIcon("resource/image/zoo/button/back_main_focus.png").getImage().getScaledInstance(BUTTON_WIDTH, BUTTON_HEIGHT, 0)));
-			}
-			
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-		});
-
-		JLabel checkButton = new JLabel(new ImageIcon(new ImageIcon("resource/image/zoo/button/check.png").getImage().getScaledInstance(BUTTON_WIDTH, BUTTON_HEIGHT, 0)));
-		checkButton.setBounds(WINDOW_WIDTH - 666, WINDOW_HEIGHT - 156, BUTTON_WIDTH, BUTTON_HEIGHT);
+		EventButton changeButton = new EventButton(this, new PlayMain());
+		changeButton.setNormalLocation("resource/image/zoo/button/back_choice.png");
+		changeButton.setFocusLocation("resource/image/zoo/button/back_choice_focus.png");
+		changeButton.setPressLocation("resource/image/zoo/button/back_choice_press.png");
+		changeButton.setDialog(new WarningDialog(changeButton.getParent(), changeButton.getNextFrame(), "게임 선택 창으로 이동", "정말로 게임 선택 창으로 이동할까요?"));
+		changeButton.setOneSide(WINDOW_WIDTH - 439, WINDOW_HEIGHT - 156, EventButton.BUTTON_WIDTH, EventButton.BUTTON_HEIGHT);
+		add(changeButton);
+		
+		EventButton mainButton = new EventButton(this, new SamMain().getFrame());
+		mainButton.setNormalLocation("resource/image/zoo/button/back_main.png");
+		mainButton.setFocusLocation("resource/image/zoo/button/back_main_focus.png");
+		mainButton.setPressLocation("resource/image/zoo/button/back_main_press.png");
+		mainButton.setDialog(new WarningDialog(mainButton.getParent(), mainButton.getNextFrame(),"메인 화면으로 이동", "정말로 메인 화면으로 이동할까요?"));
+		mainButton.setOneSide(WINDOW_WIDTH - 222, WINDOW_HEIGHT - 156, EventButton.BUTTON_WIDTH, EventButton.BUTTON_HEIGHT);
+		add(mainButton);
+		
+		EventButton checkButton = new EventButton();
+		checkButton.setParent(this);
+		checkButton.setNormalLocation("resource/image/zoo/button/check.png");
+		checkButton.setFocusLocation("resource/image/zoo/button/check_focus.png");
+		checkButton.setPressLocation("resource/image/zoo/button/check_press.png");
+		checkButton.setBounds(WINDOW_WIDTH - 666, WINDOW_HEIGHT - 156, EventButton.BUTTON_WIDTH, EventButton.BUTTON_HEIGHT);
+		checkButton.setButtonImages();
+		// checkButton은 일반적인 다이얼로그가 아니므로 이벤트는 따로 추가해준다.
 		checkButton.addMouseListener(new MouseListener() {
 			
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				// TODO Auto-generated method stub
-				checkButton.setIcon(new ImageIcon(new ImageIcon("resource/image/zoo/button/check.png").getImage().getScaledInstance(BUTTON_WIDTH, BUTTON_HEIGHT, 0)));
-				if(isClicked) {
+				checkButton.setIcon(checkButton.getNormal());
+				repaint();
+				if(changeButton.isClicked()) {
 					game.check();
-					isClicked = false;
+					changeButton.setClicked(false);
 				}
 			}
 			
 			@Override
 			public void mousePressed(MouseEvent e) {
 				// TODO Auto-generated method stub
-				checkButton.setIcon(new ImageIcon(new ImageIcon("resource/image/zoo/button/check_press.png").getImage().getScaledInstance(BUTTON_WIDTH, BUTTON_HEIGHT, 0)));
-				isClicked = true;
+				checkButton.setIcon(checkButton.getPress());
+				repaint();
+				changeButton.setClicked(true);
 			}
 			
 			@Override
 			public void mouseExited(MouseEvent e) {
 				// TODO Auto-generated method stub
-				checkButton.setIcon(new ImageIcon(new ImageIcon("resource/image/zoo/button/check.png").getImage().getScaledInstance(BUTTON_WIDTH, BUTTON_HEIGHT, 0)));
-				isClicked = false;
+				checkButton.setIcon(checkButton.getNormal());
+				repaint();
+				changeButton.setClicked(false);
 			}
 			
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				// TODO Auto-generated method stub
-				checkButton.setIcon(new ImageIcon(new ImageIcon("resource/image/zoo/button/check_focus.png").getImage().getScaledInstance(BUTTON_WIDTH, BUTTON_HEIGHT, 0)));
+				checkButton.setIcon(checkButton.getFocus());
+				repaint();
 			}
 			
 			@Override
@@ -235,29 +122,31 @@ public class GameFrame extends JFrame{
 				
 			}
 		});
-		
-		getContentPane().add(mainButton);
-		getContentPane().add(changeButton);
-		getContentPane().add(checkButton);
+		add(checkButton);
 
+		BGMButton soundButton = new BGMButton((WINDOW_WIDTH / 2) + 450, (WINDOW_HEIGHT / 2) + 175, 90, 90);
+		soundButton.addDefaultEventListener();
+		add(soundButton);
+		
 		addWindowListener(new WindowListener() {
 			
 			@Override
 			public void windowOpened(WindowEvent e) {
 				// TODO Auto-generated method stub
-				resumeBGM();
+				bgm.resumeBGM();
 			}
 			
 			@Override
 			public void windowIconified(WindowEvent e) {
 				// TODO Auto-generated method stub
-				pauseBGM();
+				bgm.pauseBGM();
 			}
 			
 			@Override
 			public void windowDeiconified(WindowEvent e) {
 				// TODO Auto-generated method stub
-				resumeBGM();
+				if(bgm.isOn())
+					bgm.resumeBGM();
 			}
 			
 			@Override
@@ -268,68 +157,30 @@ public class GameFrame extends JFrame{
 			@Override
 			public void windowClosing(WindowEvent e) {
 				// TODO Auto-generated method stub
-				pauseBGM();
+				bgm.pauseBGM();
 			}
 			
 			@Override
 			public void windowClosed(WindowEvent e) {
 				// TODO Auto-generated method stub
-				pauseBGM();
-				bgm.close();
+				bgm.pauseBGM();
+				BackgroundClip.getClip().getBGM().close();
 			}
 			
 			@Override
 			public void windowActivated(WindowEvent e) {
 				// TODO Auto-generated method stub
-				resumeBGM();
+				if(bgm.isOn())
+					bgm.resumeBGM();
 			}
 		});
-	}
-
+	}	
+	
 	public Game getGame() {
 		return game;
 	}
 
 	public void setGame(Game game) {
 		this.game = game;
-	}
-	
-	public void setBGM() { // 배경음
-		try {
-			AudioInputStream ais = AudioSystem
-					.getAudioInputStream(new BufferedInputStream(
-							new FileInputStream("resource/sound/bgm/zoo.wav")));
-		
-			bgm = AudioSystem.getClip();
-			bgm.open(ais);
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (UnsupportedAudioFileException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (LineUnavailableException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-	}
-	
-	public void pauseBGM() { // 배경음 일시정지
-		if(bgm.isRunning()) {
-			bgm.stop();
-		}		
-	}
-	
-	public void resumeBGM() { // 배경음 재시작		
-		if(!bgm.isRunning() || !bgm.isActive()) // 재생중이 아니면
-		{
-			bgm.start();
-			bgm.loop(Clip.LOOP_CONTINUOUSLY);
-			// 멈추고 시작할 때마다 루프가 풀리기에 위의 루프를 재생할 때마다 까줘야 한다.
-		}
 	}
 }
