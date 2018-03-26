@@ -58,7 +58,7 @@ public class GameFrame extends JFrame{
 
 		EventButton changeButton = new EventButton(this, new PlayMain());
 		changeButton.setNormalLocation("resource/image/zoo/button/back_choice.png");
-		changeButton.setFocusLocation("resource/image/zoo/button/back_choice_focus.png");
+		changeButton.setFocusLocation("resource/image/zoo/button/back_choice_focus.gif");
 		changeButton.setPressLocation("resource/image/zoo/button/back_choice_press.png");
 		changeButton.setDialog(new WarningDialog(changeButton.getParent(), changeButton.getNextFrame(), "게임 선택 창으로 이동", "정말로 게임 선택 창으로 이동할까요?"));
 		changeButton.setOneSide(WINDOW_WIDTH - 439, WINDOW_HEIGHT - 156, EventButton.BUTTON_WIDTH, EventButton.BUTTON_HEIGHT);
@@ -66,7 +66,7 @@ public class GameFrame extends JFrame{
 		
 		EventButton mainButton = new EventButton(this, new SamMain().getFrame());
 		mainButton.setNormalLocation("resource/image/zoo/button/back_main.png");
-		mainButton.setFocusLocation("resource/image/zoo/button/back_main_focus.png");
+		mainButton.setFocusLocation("resource/image/zoo/button/back_main_focus.gif");
 		mainButton.setPressLocation("resource/image/zoo/button/back_main_press.png");
 		mainButton.setDialog(new WarningDialog(mainButton.getParent(), mainButton.getNextFrame(),"메인 화면으로 이동", "정말로 메인 화면으로 이동할까요?"));
 		mainButton.setOneSide(WINDOW_WIDTH - 222, WINDOW_HEIGHT - 156, EventButton.BUTTON_WIDTH, EventButton.BUTTON_HEIGHT);
@@ -75,7 +75,7 @@ public class GameFrame extends JFrame{
 		EventButton checkButton = new EventButton();
 		checkButton.setParent(this);
 		checkButton.setNormalLocation("resource/image/zoo/button/check.png");
-		checkButton.setFocusLocation("resource/image/zoo/button/check_focus.png");
+		checkButton.setFocusLocation("resource/image/zoo/button/check_focus.gif");
 		checkButton.setPressLocation("resource/image/zoo/button/check_press.png");
 		checkButton.setBounds(WINDOW_WIDTH - 666, WINDOW_HEIGHT - 156, EventButton.BUTTON_WIDTH, EventButton.BUTTON_HEIGHT);
 		checkButton.setButtonImages();
@@ -85,28 +85,29 @@ public class GameFrame extends JFrame{
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				// TODO Auto-generated method stub
-				checkButton.setIcon(checkButton.getNormal());
-				repaint();
-				if(changeButton.isClicked()) {
+//				checkButton.setIcon(checkButton.getNormal());
+//				checkButton.repaint();
+//				repaint();
+				if(changeButton.isEntered()) {
 					game.check();
-					changeButton.setClicked(false);
+					changeButton.setEntered(false);
 				}
 			}
 			
 			@Override
 			public void mousePressed(MouseEvent e) {
 				// TODO Auto-generated method stub
-				checkButton.setIcon(checkButton.getPress());
-				repaint();
-				changeButton.setClicked(true);
+//				checkButton.setIcon(checkButton.getPress());
+//				repaint();
 			}
 			
 			@Override
 			public void mouseExited(MouseEvent e) {
 				// TODO Auto-generated method stub
 				checkButton.setIcon(checkButton.getNormal());
+				checkButton.repaint();
 				repaint();
-				changeButton.setClicked(false);
+				changeButton.setEntered(false);
 			}
 			
 			@Override
@@ -114,6 +115,7 @@ public class GameFrame extends JFrame{
 				// TODO Auto-generated method stub
 				checkButton.setIcon(checkButton.getFocus());
 				repaint();
+				changeButton.setEntered(true);
 			}
 			
 			@Override

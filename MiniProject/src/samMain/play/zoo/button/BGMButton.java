@@ -17,10 +17,14 @@ public class BGMButton extends JLabel{ // 배경음악 음소거 버튼
 	private static final long serialVersionUID = 5362464637650337006L;
 	
 	private static final String BGM_ON = "resource/image/object/on.png";
+	private static final String BGM_ON_FOCUS = "resource/image/object/on_focus.png";
 	private static final String BGM_OFF = "resource/image/object/off.png";
+	private static final String BGM_OFF_FOCUS = "resource/image/object/off_focus.png";
 	
 	private ImageIcon onIcon; // 켜졌을 때
+	private ImageIcon onFocusIcon; // 켜진 상태에서의 포커스
 	private ImageIcon offIcon; // 꺼졌을 때
+	private ImageIcon offFocusIcon;
 	
 	private boolean isEntered; // 들어와 있고 놓았을 때만 가능하도록
 
@@ -38,7 +42,9 @@ public class BGMButton extends JLabel{ // 배경음악 음소거 버튼
 		this();
 		setBounds(x, y, width, height);
 		setOnIcon(new ImageIcon(new ImageIcon(BGM_ON).getImage().getScaledInstance(width, height, 0)));
+		setOnFocusIcon(new ImageIcon(new ImageIcon(BGM_ON_FOCUS).getImage().getScaledInstance(width, height, 0)));
 		setOffIcon(new ImageIcon(new ImageIcon(BGM_OFF).getImage().getScaledInstance(width, height, 0)));
+		setOffFocusIcon(new ImageIcon(new ImageIcon(BGM_OFF_FOCUS).getImage().getScaledInstance(width, height, 0)));
 		setIcon(onIcon);
 	}
 	
@@ -51,12 +57,12 @@ public class BGMButton extends JLabel{ // 배경음악 음소거 버튼
 				if(isEntered) {
 					if(clip.isOn()) {
 						clip.off();
-						setIcon(offIcon);
+						setIcon(offFocusIcon);
 						getParent().repaint();
 						clip.pauseBGM();
 					} else{
 						clip.on();
-						setIcon(onIcon);
+						setIcon(onFocusIcon);
 						getParent().repaint();
 						clip.resumeBGM();
 					}
@@ -73,12 +79,30 @@ public class BGMButton extends JLabel{ // 배경음악 음소거 버튼
 			public void mouseExited(MouseEvent e) {
 				// TODO Auto-generated method stub
 				isEntered = false;
+				if(clip.isOn()) {
+					setIcon(onIcon);
+					repaint();
+					getParent().repaint();
+				} else{
+					setIcon(offIcon);
+					repaint();
+					getParent().repaint();
+				}
 			}
 			
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				// TODO Auto-generated method stub
 				isEntered = true;
+				if(clip.isOn()) {
+					setIcon(onFocusIcon);
+					repaint();
+					getParent().repaint();
+				} else{
+					setIcon(offFocusIcon);
+					repaint();
+					getParent().repaint();
+				}
 			}
 			
 			@Override
@@ -118,5 +142,21 @@ public class BGMButton extends JLabel{ // 배경음악 음소거 버튼
 
 	public void setEntered(boolean isEntered) {
 		this.isEntered = isEntered;
+	}
+
+	public ImageIcon getOnFocusIcon() {
+		return onFocusIcon;
+	}
+
+	public void setOnFocusIcon(ImageIcon onFocusIcon) {
+		this.onFocusIcon = onFocusIcon;
+	}
+
+	public ImageIcon getOffFocusIcon() {
+		return offFocusIcon;
+	}
+
+	public void setOffFocusIcon(ImageIcon offFocusIcon) {
+		this.offFocusIcon = offFocusIcon;
 	}
 }

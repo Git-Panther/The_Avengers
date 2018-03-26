@@ -23,7 +23,7 @@ public class WarningDialog extends ZooDialog { // 예, 아니오 다이얼로그
 		super(frame, title); // 모달(자기 끝낼 때까지 딴거 못함)
 		setTitle(title);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		messageLabel1.setText("지금까지 진행한 정보는 모두 사라집니다.");
+		messageLabel1.setText("지금까지 진행한 정보는 사라집니다.");
 		messageLabel2.setText(message);
 		
         negativeButton = new ZooButton("아니오");
@@ -38,11 +38,12 @@ public class WarningDialog extends ZooDialog { // 예, 아니오 다이얼로그
 				// TODO Auto-generated method stub	
         		negativeButton.setIcon(ZooButton.DEFAULT);
         		negativeButton.getParent().repaint();
-				if(negativeButton.isClicked()) {
-					negativeButton.setClicked(false);
+				if(negativeButton.isEntered() && negativeButton.isPressed()) {
+					negativeButton.setEntered(false);
 					nextFrame.dispose();
 					dispose();
 				}
+				negativeButton.setPressed(false);
 			}
         });
         
@@ -52,12 +53,13 @@ public class WarningDialog extends ZooDialog { // 예, 아니오 다이얼로그
 				// TODO Auto-generated method stub
         		positiveButton.setIcon(ZooButton.DEFAULT);
         		positiveButton.getParent().repaint();
-				if(positiveButton.isClicked()) {
-					positiveButton.setClicked(false);
+				if(positiveButton.isEntered() && positiveButton.isPressed()) {
+					positiveButton.setEntered(false);
 					dispose();
 					nextFrame.setVisible(true);				
 					frame.dispose();
 				}
+				positiveButton.setPressed(false);
         	}
         });
         

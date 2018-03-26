@@ -3,9 +3,8 @@ package samMain.play.zoo.game;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Point;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
@@ -39,8 +38,8 @@ public class ZooGame extends Game {
 	public static final int AMOUNT_OF_ZOO = 6; // 동물원 우리 개수(동시에 문제에 제시되는 동물 종류 개수)
 	public static final int AMOUNT_OF_ANIMAL = 12; // 문제로 제시되는 동물 수
 	
-	public static final int ZOO_NAME_WIDTH = 100; // 동물원 우리 이름표의 가로 길이
-	public static final int ZOO_NAME_HEIGHT = 30; // 동물원 우리 이름표의 세로 길이
+	public static final int ZOO_NAME_WIDTH = 126; // 동물원 우리 이름표의 가로 길이
+	public static final int ZOO_NAME_HEIGHT = 42; // 동물원 우리 이름표의 세로 길이
 	
 	public ZooGame() {
 		bgLocation = "resource/image/bg/zoo.png";
@@ -68,17 +67,17 @@ public class ZooGame extends Game {
 		for(int x = 0; x < AMOUNT_OF_ZOO; x++){
 			zooNames.add(new JLabel(""));
 			zooNames.getLast().setSize(ZOO_NAME_WIDTH, ZOO_NAME_HEIGHT); // 사이즈만 통일. 좌표는 따로 지정해야 한다.
-			zooNames.getLast().setForeground(Color.BLACK);
+			zooNames.getLast().setForeground(new Color(30, 66, 11));
 			zooNames.getLast().setHorizontalAlignment(SwingConstants.CENTER);
-			zooNames.getLast().setFont(new Font("맑은 고딕", Font.BOLD, 15));
+			zooNames.getLast().setFont(new Font("맑은 고딕", Font.BOLD, 18));
 		}
 	
 		// 동물원 우리 팻말 6개 위치 지정.
 		// 주의 : 팻말을 게임 프레임에 넣는 타이밍은 start()가 호출되었을 때 해야 널 참조 안 함.
 		Iterator<JLabel> itrZooNames = zooNames.iterator();
 		itrZooNames.next().setLocation( (GameFrame.WINDOW_WIDTH / 2) - 425, (GameFrame.WINDOW_HEIGHT / 2 ) - 325);
-		itrZooNames.next().setLocation( (GameFrame.WINDOW_WIDTH / 2) - 50, (GameFrame.WINDOW_HEIGHT / 2 ) - 175);
-		itrZooNames.next().setLocation( (GameFrame.WINDOW_WIDTH / 2) + 325, (GameFrame.WINDOW_HEIGHT / 2 ) - 225);
+		itrZooNames.next().setLocation( (GameFrame.WINDOW_WIDTH / 2) - 50, (GameFrame.WINDOW_HEIGHT / 2 ) - 200);
+		itrZooNames.next().setLocation( (GameFrame.WINDOW_WIDTH / 2) + 325, (GameFrame.WINDOW_HEIGHT / 2 ) - 250);
 		itrZooNames.next().setLocation( (GameFrame.WINDOW_WIDTH / 2) - 525, (GameFrame.WINDOW_HEIGHT / 2 ) - 25);
 		itrZooNames.next().setLocation( (GameFrame.WINDOW_WIDTH / 2) + 325, (GameFrame.WINDOW_HEIGHT / 2 ) + 75);
 		itrZooNames.next().setLocation( (GameFrame.WINDOW_WIDTH / 2) - 225, (GameFrame.WINDOW_HEIGHT / 2 ) + 275);
@@ -97,7 +96,7 @@ public class ZooGame extends Game {
 		}
 	}
 
-	class ZooGameListener implements MouseListener, MouseMotionListener { // frame에 넣을 이벤트
+	class ZooGameListener extends MouseAdapter { // frame에 넣을 이벤트
 		@Override
 		public void mouseReleased(MouseEvent e) {
 			// TODO Auto-generated method stub
@@ -144,35 +143,23 @@ public class ZooGame extends Game {
 		}
 
 		@Override
-		public void mouseExited(MouseEvent e) {
-			// TODO Auto-generated method stub
-			// 마우스가 떠났을 때
-		}
-
-		@Override
-		public void mouseEntered(MouseEvent e) {
-			// TODO Auto-generated method stub
-			// 마우스가 들어왔을 때
-		}
-
-		@Override
-		public void mouseClicked(MouseEvent e) {
-			// TODO Auto-generated method stub
-			// 마우스를 클릭했을 때
-		}
-
-		@Override
-		public void mouseMoved(MouseEvent e) {
-			// TODO Auto-generated method stub
-			// 마우스가 움직일 때
-		}
-
-		@Override
 		public void mouseDragged(MouseEvent e) {
 			// TODO Auto-generated method stub
-			// 마우스를 드래그하고 있을 때 그린다.
+			// 마우스를 드래그하고 있을 때 그린다. 단, 윈도우를 벗어날 수는 없다.
 			if (isDragged && movingAnimal != null && movingAnimalParent != null) { // 움직이는 중이며 널 값이 아니어야 가능.
-				movingAnimal.setLocation(e.getX() - mouseX, e.getY() - mouseY);
+				int currentX = e.getX() - mouseX;
+				int currentY = e.getY() - mouseY;
+				if(currentX < 0) {
+					currentX = 0;
+				} else if(currentX > GameFrame.WINDOW_WIDTH - AnimalImage.ANIMAL_WIDTH) {
+					currentX = GameFrame.WINDOW_WIDTH - AnimalImage.ANIMAL_WIDTH;
+				}				
+				if(currentY < 0) {
+					currentY = 0;
+				} else if(currentY > GameFrame.WINDOW_HEIGHT - AnimalImage.ANIMAL_HEIGHT - 30) {
+					currentY = GameFrame.WINDOW_HEIGHT - AnimalImage.ANIMAL_HEIGHT - 30;
+				}			
+				movingAnimal.setLocation(currentX, currentY);
 				frame.getContentPane().repaint();
 				movingAnimal.repaint();
 			}
@@ -184,38 +171,36 @@ public class ZooGame extends Game {
 	public void start() { // 새로 시작
 		// TODO Auto-generated method stub
 		// 팻말 이미지
-		int signWidth = 100;
-		int signHeight = 80;
-		ImageIcon sign = new ImageIcon(new ImageIcon("resource/image/zoo/object/sign.png").getImage().getScaledInstance(signWidth, signHeight, 0));
+		int signWidth = 125;
+		int signHeight = 100;
+		ImageIcon sign_left = new ImageIcon(new ImageIcon("resource/image/zoo/object/sign_left.png").getImage().getScaledInstance(signWidth, signHeight, 0));
+		ImageIcon sign_right = new ImageIcon(new ImageIcon("resource/image/zoo/object/sign_right.png").getImage().getScaledInstance(signWidth, signHeight, 0));
 		LinkedList<JLabel> signs = new LinkedList<JLabel>();			
 		Iterator<JLabel> itrZooLabels = zooNames.iterator();
 		JLabel targetZooLabel = null; // 좌표 같이 지정하기 위해
+//		JLabel targetSign = null; // 뒤집는 용도
 		while(itrZooLabels.hasNext()) {
 			targetZooLabel = itrZooLabels.next();	
-			signs.add(new JLabel(sign));
+			signs.add(new JLabel(sign_left));
 			frame.getContentPane().add(targetZooLabel); // 팻말명 추가
 			frame.getContentPane().add(signs.getLast()); // 팻말 추가
 		}
 		Iterator<JLabel> itrSigns = signs.iterator(); // 팻말을 정해주기 위함.
 		itrZooLabels = zooNames.iterator(); // 이터레이터 초기화
-		targetZooLabel = itrZooLabels.next(); // 1
-		itrSigns.next().setBounds(targetZooLabel.getLocation().x, targetZooLabel.getLocation().y - 10, signWidth, signHeight);
-		targetZooLabel = itrZooLabels.next(); // 2
-		itrSigns.next().setBounds(targetZooLabel.getLocation().x, targetZooLabel.getLocation().y - 10, signWidth, signHeight);
-		targetZooLabel = itrZooLabels.next(); // 3
-		itrSigns.next().setBounds(targetZooLabel.getLocation().x, targetZooLabel.getLocation().y - 10, signWidth, signHeight);
-		targetZooLabel = itrZooLabels.next(); // 4
-		itrSigns.next().setBounds(targetZooLabel.getLocation().x, targetZooLabel.getLocation().y - 10, signWidth, signHeight);
-		targetZooLabel = itrZooLabels.next(); // 5
-		itrSigns.next().setBounds(targetZooLabel.getLocation().x, targetZooLabel.getLocation().y - 10, signWidth, signHeight);
-		targetZooLabel = itrZooLabels.next(); // 6
-		itrSigns.next().setBounds(targetZooLabel.getLocation().x, targetZooLabel.getLocation().y - 10, signWidth, signHeight);
+		while(itrSigns.hasNext()) { // 팻말 위치를 팻말 텍스트에 맞게 정함
+			targetZooLabel = itrZooLabels.next(); 
+			itrSigns.next().setBounds(targetZooLabel.getLocation().x, targetZooLabel.getLocation().y - 10, signWidth, signHeight);
+		}
+		signs.get(2).setBounds(zooNames.get(2).getLocation().x + 8, zooNames.get(2).getLocation().y - 10, signWidth, signHeight);
+		signs.get(2).setIcon(sign_right);
+		signs.get(4).setBounds(zooNames.get(4).getLocation().x + 8, zooNames.get(4).getLocation().y - 10, signWidth, signHeight);
+		signs.get(4).setIcon(sign_right);	
+		// 우측 모드
 		
 		// 문제 가리키는 팻말
 		JLabel quizSign = new JLabel(new ImageIcon(new ImageIcon("resource/image/zoo/object/wooden_sign.png").getImage().getScaledInstance(425, 75, 0)));
 		quizSign.setBounds((GameFrame.WINDOW_WIDTH / 2) - 215, (GameFrame.WINDOW_HEIGHT / 2) - 410, 425, 75);
 		frame.getContentPane().add(quizSign);
-		
 		putAnimals(); // 공간 n개, 동물 x마리 무작위 선출하여 화면에 배치한다.	
 		// 테스트용 : 동물원 범위가 잘 설정되었는지 확인
 //		class TestComponent extends JLabel{
@@ -310,10 +295,11 @@ public class ZooGame extends Game {
 						// TODO Auto-generated method stub
 						acceptButton.setIcon(ZooButton.DEFAULT);
 						acceptButton.getParent().repaint();
-						if(acceptButton.isClicked()) {
-							acceptButton.setClicked(false);
+						if(acceptButton.isEntered() && acceptButton.isPressed()) {
+							acceptButton.setEntered(false);
 							dialog.dispose();			
 						}
+						acceptButton.setPressed(false);
 					}
 				});
 				
@@ -346,11 +332,13 @@ public class ZooGame extends Game {
 								// TODO Auto-generated method stub
 								againButton.setIcon(ZooButton.DEFAULT);
 								againButton.getParent().repaint();
-								if(againButton.isClicked()) {
-									againButton.setClicked(false);
+								if(againButton.isEntered() && againButton.isPressed()) {
+									againButton.setEntered(false);
 									dialog.dispose(); // 다이얼로그 종료
 									ZooGame.this.tryAgain();		
 								}
+								dialog.repaint();
+								againButton.setPressed(false);
 							}
 						});		
 						dialog.buildZooDialog();					
@@ -375,12 +363,13 @@ public class ZooGame extends Game {
 				// TODO Auto-generated method stub
 				restartButton.setIcon(ZooButton.DEFAULT);
 				restartButton.getParent().repaint();
-				if(restartButton.isClicked()) {
-					restartButton.setClicked(false);
+				if(restartButton.isEntered() && restartButton.isPressed()) {
+					restartButton.setEntered(false);
 					dialog.dispose(); // 다이얼로그 종료
 					ZooGame.this.restart();	
 				}
 				dialog.repaint();
+				restartButton.setPressed(false);
 			}
 		});	
 		dialog.buildZooDialog();	

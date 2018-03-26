@@ -20,9 +20,11 @@ public class ZooDialog extends JDialog {
 	 */
 	private static final long serialVersionUID = 8796110747470698087L;
 	
-	public static final int DIALOG_WIDTH = 350; // 패널 가로 길이이기도 함
+	public static final int DIALOG_WIDTH = 350;
 	public static final int DIALOG_HEIGHT = 150;
+	public static final int MESSAGE_PANEL_WIDTH = 330;
 	public static final int MESSAGE_PANEL_HEIGHT = 100;
+	public static final int BUTTON_PANEL_WIDTH = 300;
 	public static final int BUTTON_PANEL_HEIGHT = 45;
 	// 다이얼로그 크기 및 각 패널 세로 길이
 	
@@ -50,7 +52,7 @@ public class ZooDialog extends JDialog {
 		
 		messagePanel = new JPanel();
         messagePanel.setLayout(new FlowLayout());
-        messagePanel.setBounds(0, 15, DIALOG_WIDTH, MESSAGE_PANEL_HEIGHT);
+        messagePanel.setBounds( (DIALOG_WIDTH - MESSAGE_PANEL_WIDTH) / 2 , 15, MESSAGE_PANEL_WIDTH, MESSAGE_PANEL_HEIGHT);
         messagePanel.setBackground(new Color(0, 0, 0, 1));
         getContentPane().add(messagePanel, BorderLayout.CENTER);
        
@@ -69,7 +71,7 @@ public class ZooDialog extends JDialog {
         
         buttonPanel = new JPanel();
         buttonPanel.setLayout(new FlowLayout());
-        buttonPanel.setBounds(0, MESSAGE_PANEL_HEIGHT - 10, DIALOG_WIDTH, BUTTON_PANEL_HEIGHT);
+        buttonPanel.setBounds( (DIALOG_WIDTH - BUTTON_PANEL_WIDTH) / 2 , MESSAGE_PANEL_HEIGHT - 10, BUTTON_PANEL_WIDTH, BUTTON_PANEL_HEIGHT);
         buttonPanel.setBackground(new Color(0, 0, 0, 1));
         getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 	}

@@ -21,7 +21,8 @@ public class ZooButton extends JLabel { // ZooDialog의 버튼
 	public static final ImageIcon PRESS = new ImageIcon(new ImageIcon("resource/image/zoo/button/zoo_button_press.png").getImage().getScaledInstance(BUTTON_WIDTH, BUTTON_HEIGHT, 0));
 	// 각 이미지별로 상태 표시
 	
-	private boolean isClicked; // 안에 들어왔는지에 대한 여부
+	private boolean isEntered; // 안에 들어왔는지에 대한 여부
+	private boolean isPressed; // 눌렀는지에 대한 여부
 	
 	public ZooButton(String message) {
 		super();
@@ -31,15 +32,24 @@ public class ZooButton extends JLabel { // ZooDialog의 버튼
 		setFont(new Font("맑은 고딕", Font.BOLD, 18));
 		setText(message);
 		setHorizontalTextPosition(SwingConstants.CENTER);
+		setVerticalTextPosition(SwingConstants.CENTER);
 		setIcon(DEFAULT);
-		setClicked(false);
+		setEntered(false);
 	}
 
-	public boolean isClicked() {
-		return isClicked;
+	public boolean isEntered() {
+		return isEntered;
 	}
 
-	public void setClicked(boolean isClicked) {
-		this.isClicked = isClicked;
+	public void setEntered(boolean isEntered) {
+		this.isEntered = isEntered;
+	}
+
+	public boolean isPressed() {
+		return isPressed;
+	}
+
+	public void setPressed(boolean isPressed) {
+		this.isPressed = isPressed;
 	}
 }

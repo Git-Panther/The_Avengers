@@ -47,12 +47,13 @@ public class ResultDialog extends ZooDialog { // 결과창에 대한 다이얼�
 				// TODO Auto-generated method stub
 				choiceButton.setIcon(ZooButton.DEFAULT);
 				choiceButton.getParent().repaint();
-				if(choiceButton.isClicked()) {
-					choiceButton.setClicked(false);
+				if(choiceButton.isEntered() && choiceButton.isPressed()) {
+					choiceButton.setEntered(false);
 					new PlayMain().setVisible(true);
 					dispose(); // 다이얼로그 종료
 					getParent().dispose();
 				}
+				choiceButton.setPressed(false);
 			}
 		});
 		
@@ -64,13 +65,14 @@ public class ResultDialog extends ZooDialog { // 결과창에 대한 다이얼�
 				// TODO Auto-generated method stub
 				mainButton.setIcon(ZooButton.DEFAULT);
 				mainButton.getParent().repaint();
-				if(mainButton.isClicked()) {
-					mainButton.setClicked(false);
+				if(mainButton.isEntered() && mainButton.isPressed()) {
+					mainButton.setEntered(false);
 					dispose(); // 다이얼로그 종료
 					new SamMain();
 					getParent().dispose();
 				}
 				repaint();
+				mainButton.setPressed(false);
 			}
 		});
 	}

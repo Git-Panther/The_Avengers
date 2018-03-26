@@ -33,7 +33,7 @@ public class EventButton extends JButton { // 이벤트 버튼. JLabel에 주의
 	private ImageIcon focus; // 마우스 포인터가 올라왔을 때
 	private ImageIcon press; // 마우스 포인터가 위에 있는데 눌렀을 때
 	
-	private boolean isClicked; // 클릭 여부
+	private boolean isEntered; // 마우스 포인터가 안에 들어왔는지에 대한 여부
 	
 	public EventButton() {
 		super();
@@ -89,21 +89,18 @@ public class EventButton extends JButton { // 이벤트 버튼. JLabel에 주의
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				// TODO Auto-generated method stub
-				setIcon(normal);
-				parent.repaint();
-				if(isClicked()) {
+				if(isEntered()) {
 					ClipSet.getClips().activateEFS(false);
 					dialog.setVisible(true);
-					setClicked(false);
+					setEntered(false);
 				}
 			}
 			
 			@Override
 			public void mousePressed(MouseEvent e) {
 				// TODO Auto-generated method stub
-				setIcon(press);
-				parent.repaint();
-				setClicked(true);
+//				setIcon(press);
+//				parent.repaint();		
 			}
 			
 			@Override
@@ -111,7 +108,7 @@ public class EventButton extends JButton { // 이벤트 버튼. JLabel에 주의
 				// TODO Auto-generated method stub
 				setIcon(normal);
 				parent.repaint();
-				setClicked(false);
+				setEntered(false);
 			}
 			
 			@Override
@@ -119,6 +116,7 @@ public class EventButton extends JButton { // 이벤트 버튼. JLabel에 주의
 				// TODO Auto-generated method stub
 				setIcon(focus);
 				parent.repaint();
+				setEntered(true);
 			}
 			
 			@Override
@@ -159,11 +157,11 @@ public class EventButton extends JButton { // 이벤트 버튼. JLabel에 주의
 	public void setNextFrame(JFrame nextFrame) {
 		this.nextFrame = nextFrame;
 	}
-	public boolean isClicked() {
-		return isClicked;
+	public boolean isEntered() {
+		return isEntered;
 	}
-	public void setClicked(boolean isClicked) {
-		this.isClicked = isClicked;
+	public void setEntered(boolean isEntered) {
+		this.isEntered = isEntered;
 	}
 	public ImageIcon getNormal() {
 		return normal;

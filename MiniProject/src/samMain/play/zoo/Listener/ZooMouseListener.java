@@ -19,7 +19,7 @@ public class ZooMouseListener implements MouseListener {
 		// TODO Auto-generated method stub
 		parentButton.setIcon(ZooButton.PRESS);
 		parentButton.getParent().repaint();
-		parentButton.setClicked(true);
+		parentButton.setPressed(true);
 	}
 	
 	@Override
@@ -27,14 +27,19 @@ public class ZooMouseListener implements MouseListener {
 		// TODO Auto-generated method stub
 		parentButton.setIcon(ZooButton.DEFAULT);
 		parentButton.getParent().repaint();
-		parentButton.setClicked(false);
+		parentButton.setEntered(false);
 	}
 	
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		// TODO Auto-generated method stub
-		parentButton.setIcon(ZooButton.FOCUS);
+		if(parentButton.isPressed()) {
+			parentButton.setIcon(ZooButton.PRESS);
+		} else {
+			parentButton.setIcon(ZooButton.FOCUS);
+		}
 		parentButton.getParent().repaint();
+		parentButton.setEntered(true);
 	}
 	
 	@Override
