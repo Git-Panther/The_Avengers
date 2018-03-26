@@ -3,23 +3,23 @@ package samMain.study;
 import java.awt.Image;
 
 import javax.swing.ImageIcon;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 
+import samMain.frame.SamFrame;
 
-public class VehicleStudy extends JFrame{
-	/**
-	 * 
-	 */
+
+public class VehicleStudy extends SamFrame{
+
 	private static final long serialVersionUID = 6944290025300142557L;
 	JLabel vehicle;
-	StudyEnd studyEnd = new StudyEnd();
-	JFrame mainFrame;
+//	StudyEnd studyEnd = new StudyEnd();
+//	JFrame mainFrame;
 	
 	public VehicleStudy(){
-		setBounds(350, 80, 1210, 940);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
-		setLayout(null);
+//		setBounds(350, 80, 1210, 940);
+//		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
+//		setLayout(null);
+		super();
 		
 		vehicle = new JLabel(new ImageIcon(new ImageIcon("study/탈것/경찰차.png").getImage().getScaledInstance(1200, 900, 0)));
 		vehicle.setBounds(0, 0, 1200, 900);
@@ -29,10 +29,10 @@ public class VehicleStudy extends JFrame{
 
 	}
 	
-	public VehicleStudy(JFrame mainFrame) {
-		this();
-		this.mainFrame = mainFrame;
-	}
+//	public VehicleStudy(JFrame mainFrame) {
+//		this();
+//		this.mainFrame = mainFrame;
+//	}
 	
 	class ChangeBg extends Thread {
 		String vehicleArr[] = {"구급차","기차","배","버스","비행기","소방차","자동차","택시","헬리콥터"};
@@ -49,13 +49,11 @@ public class VehicleStudy extends JFrame{
 				}
 				count++;
 				if(count==9){
-					studyEnd.setVisible(true);
+					new StudyEnd().setVisible(true);
 					setVisible(false);
 					break;
 				}
 			}
-		}
-		
+		}	
 	}
-
 }

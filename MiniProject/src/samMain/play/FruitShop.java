@@ -22,7 +22,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
-import samMain.main.SamMain;
+import samMain.main.SamMainFrame;
 
 
 
@@ -147,7 +147,7 @@ public class FruitShop { //과일가게 게임 구현 클래스
 			@Override		
 			public void actionPerformed(ActionEvent e) {		  //메인화면으로 이동하도록 함.
 				clip.stop(); //배경음악 제거
-				new SamMain();
+				new SamMainFrame().setVisible(true);
 				frame.dispose(); //진행중인창 닫기
 			}
 		};

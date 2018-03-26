@@ -11,13 +11,11 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import samMain.play.zoo.cursor.ZooCursor;
 import samMain.play.zoo.frame.GameFrame;
 
 public class ZooDialog extends JDialog {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 8796110747470698087L;
 	
 	public static final int DIALOG_WIDTH = 350;
@@ -35,15 +33,17 @@ public class ZooDialog extends JDialog {
 	
 	protected JFrame parent; // 부모창
 
-	public ZooDialog(JFrame frame, String title) {
-		super(frame, title, true); // 모달(자기 끝낼 때까지 딴거 못함)
-		this.parent = frame; // 부모창
+	public ZooDialog(JFrame parent, String title) {
+		super(parent, title, true); // 모달(자기 끝낼 때까지 딴거 못함)
+		this.parent = parent; // 부모창
 		setBounds( (GameFrame.MONITOR_WIDTH - DIALOG_WIDTH) / 2 , (GameFrame.MONITOR_HEIGHT - DIALOG_HEIGHT) / 2
 				, DIALOG_WIDTH, DIALOG_HEIGHT);
 		setResizable(false);
 		setLayout(null);
 		setUndecorated(true);
 		setBackground(new Color(0, 0, 0, 1));
+		
+		setCursor(ZooCursor.getCursor());
 		
 		ImageIcon bg = new ImageIcon(new ImageIcon("resource/image/zoo/dialog/zoo_dialog.png").getImage().getScaledInstance(DIALOG_WIDTH, DIALOG_HEIGHT, 0));
 	    JLabel bgLabel = new JLabel(bg);

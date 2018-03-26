@@ -7,25 +7,32 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-import samMain.main.SamMain;
+import samMain.frame.SamFrame;
+import samMain.main.SamMainFrame;
 
 
-public class StudyMain extends JFrame {
-	/**
-	 * 
-	 */
+public class StudyMain extends SamFrame {
+
 	private static final long serialVersionUID = 8171178786340925231L;
-	JFrame mainFrame = new JFrame("샘과함께");
+	
+//	JFrame mainFrame = new JFrame("샘과 함께");
 	JButton fruit,animal,tool,body,color,vehicle,end;
-	public static int again=0;
+	public static int again = 0;
+//	private BackgroundClip bgm;
 	
 	public StudyMain(){
-		setBounds(350, 80, 1210, 940);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
-		setLayout(null);		
+//		setBounds(350, 80, 1210, 940);
+//		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
+//		setLayout(null);		
+//		setTitle("샘과 함께");
+//		
+//		bgm = BackgroundClip.getClip(); // 클립 가져오기
+//		if(!bgm.getBGM().isOpen()) { // 닫혀있다면 새로 열어준다.
+//			bgm.setBGM("유민.wav");
+//		}
+		super();
 		
 		JLabel background = new JLabel(new ImageIcon(new ImageIcon("mainView/학습하기_수정본.png").getImage()));
 		background.setBounds(0, 0, 1200, 900);
@@ -42,9 +49,8 @@ public class StudyMain extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if(e.getSource().equals(fruit)){
 					setAgain(1);
-					FruitStudy fruitStudy = new FruitStudy(mainFrame);
-					setVisible(false);
-					fruitStudy.setVisible(true);
+					new FruitStudy().setVisible(true);
+					dispose();
 				}				
 			}
 		});
@@ -74,9 +80,8 @@ public class StudyMain extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if(e.getSource().equals(animal)){
 					setAgain(2);
-					AnimalStudy animalStudy = new AnimalStudy();
-					setVisible(false);
-					animalStudy.setVisible(true);
+					new AnimalStudy().setVisible(true);
+					dispose();
 				}				
 			}
 		});
@@ -106,9 +111,8 @@ public class StudyMain extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if(e.getSource().equals(tool)){
 					setAgain(3);
-					ToolStudy toolStudy = new ToolStudy();
-					setVisible(false);
-					toolStudy.setVisible(true);
+					new ToolStudy().setVisible(true);;
+					dispose();
 				}				
 			}
 		});
@@ -138,9 +142,8 @@ public class StudyMain extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				setAgain(4);
 				if(e.getSource().equals(body)){
-					BodyStudy bodyStudy = new BodyStudy();
-					setVisible(false);
-					bodyStudy.setVisible(true);
+					new BodyStudy().setVisible(true);
+					dispose();
 				}				
 			}
 		});
@@ -170,9 +173,8 @@ public class StudyMain extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if(e.getSource().equals(color)){
 					setAgain(5);
-					ColorStudy colorStudy = new ColorStudy();
+					new ColorStudy().setVisible(true);
 					setVisible(false);
-					colorStudy.setVisible(true);
 				}				
 			}
 		});
@@ -204,9 +206,8 @@ public class StudyMain extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if(e.getSource().equals(vehicle)){
 					setAgain(6);
-					VehicleStudy vehicleStudy = new VehicleStudy();
-					setVisible(false);
-					vehicleStudy.setVisible(true);
+					new VehicleStudy().setVisible(true);
+					dispose();
 				}				
 			}
 		});
@@ -235,26 +236,21 @@ public class StudyMain extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(e.getSource().equals(end)){
-					new SamMain();
-					setVisible(false);
-					
+					new SamMainFrame().setVisible(true);
+					dispose();
 				}				
 			}
 		});	
+		
+//		addWindowListener(new FrameAdapter());
 	}
-	
-//	public int StudyMain(){
-//		return getAgain();
-//	}
 
-	public int getAgain() {
+	public static int getAgain() {
 		return again;
 	}
 
-	public void setAgain(int again) {
+	public static void setAgain(int again) {
 		StudyMain.again = again;
 	}
-	
-
 	
 }

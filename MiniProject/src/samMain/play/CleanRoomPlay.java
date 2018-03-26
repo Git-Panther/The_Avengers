@@ -12,7 +12,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
-import samMain.main.SamMain;
+import samMain.main.SamMainFrame;
 
 public class CleanRoomPlay {
 
@@ -215,22 +215,20 @@ public class CleanRoomPlay {
 			// new EndText();
 			int result = JOptionPane.showConfirmDialog(frame, "게임을 다시 시작하시겠습니까?", "잘했어요!!", JOptionPane.OK_CANCEL_OPTION);
 			if (result == 0) {
-
-				frame.dispose();
 				new CleanRoomPlay();
+				frame.dispose();		
 			} else {
 				int result1 = JOptionPane.showConfirmDialog(frame, "게임선택메뉴로 돌아갈까요?", "확인용",
 						JOptionPane.OK_CANCEL_OPTION);
 				if (result1 == 0) {
-					PlayMain playMain = new PlayMain();
-					playMain.setVisible(true);
-					frame.setVisible(false);
+					new PlayMain().setVisible(true);
+					frame.dispose();
 				} else {
 					int result2 = JOptionPane.showConfirmDialog(frame, "메인메뉴로 돌아갈까요?", "확인용",
 							JOptionPane.OK_CANCEL_OPTION);
 					if (result2 == 0) {
-						new SamMain();
-						frame.setVisible(false);
+						new SamMainFrame().setVisible(true);;
+						frame.dispose();
 					} else {
 						JOptionPane.showMessageDialog(frame, "게임으로 돌아갈께요!", "확인용", JOptionPane.INFORMATION_MESSAGE);
 					}

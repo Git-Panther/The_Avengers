@@ -11,10 +11,12 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 
 import javax.swing.ImageIcon;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
 import samMain.play.zoo.Adapter.ZooMouseAdapter;
+import samMain.play.zoo.button.EventButton;
 import samMain.play.zoo.button.ZooButton;
 import samMain.play.zoo.dialog.ResultDialog;
 import samMain.play.zoo.frame.GameFrame;
@@ -48,13 +50,13 @@ public class ZooGame extends Game {
 		quizLabel.setForeground(new Color(47, 79, 79));
 		quizLabel.setFont(new Font("맑은 고딕", Font.BOLD, 25));
 		quizLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		quizLabel.setBounds(0, 18, GameFrame.WINDOW_WIDTH, 100);
+		quizLabel.setBounds(0, (GameFrame.WINDOW_HEIGHT / 2) - 442, GameFrame.WINDOW_WIDTH, 100);
 		// 위는 매우 기초적인 세팅
 		
 		// 동물 10종
 		imageObjects.add(new AnimalImage("곰", "resource/image/zoo/animal/bear.png"));
 		imageObjects.add(new AnimalImage("고양이", "resource/image/zoo/animal/cat.png"));
-		imageObjects.add(new AnimalImage("개", "resource/image/zoo/animal/dog.png"));
+		imageObjects.add(new AnimalImage("강아지", "resource/image/zoo/animal/dog.png"));
 		imageObjects.add(new AnimalImage("여우", "resource/image/zoo/animal/fox.png"));
 		imageObjects.add(new AnimalImage("기린", "resource/image/zoo/animal/giraffe.png"));
 		imageObjects.add(new AnimalImage("코알라", "resource/image/zoo/animal/koala.png"));
@@ -96,10 +98,40 @@ public class ZooGame extends Game {
 		}
 	}
 
-	class ZooGameListener extends MouseAdapter { // frame에 넣을 이벤트
+	class ZooGameAdapter extends MouseAdapter { // frame에 넣을 이벤트
 		@Override
 		public void mouseReleased(MouseEvent e) {
 			// TODO Auto-generated method stub
+			JComponent target = null;
+//			int checkPointX = e.getX() - mouseX - EventButton.BUTTON_WIDTH; // 보정치 더한 비교 x
+//			int checkPointY = e.getY() - mouseY - EventButton.BUTTON_HEIGHT; // 보정치 더한 비교 y
+			
+//			if(frame.getCheckButton().contains(new Point(checkPointX, checkPointY))) {
+//				target = frame.getCheckButton();	
+//			} else if(frame.getChangeButton().contains(new Point(checkPointX, checkPointY))) {
+//				target = frame.getChangeButton();
+//			} else if(frame.getMainButton().contains(new Point(checkPointX, checkPointY))) {
+//				target = frame.getMainButton();
+//			} else if(frame.getBgmButton().contains(new Point(e.getX() - mouseX - AnimalImage.ANIMAL_WIDTH, e.getY() - mouseY - AnimalImage.ANIMAL_HEIGHT))) {
+//				target = frame.getBgmButton();
+//			}
+			
+			if(frame.getCheckButton().contains(new Point(e.getX(), e.getY()))) {
+				target = frame.getCheckButton();	
+			} else if(frame.getChangeButton().contains(new Point(e.getX(), e.getY()))) {
+				target = frame.getChangeButton();
+			} else if(frame.getMainButton().contains(new Point(e.getX(), e.getY()))) {
+				target = frame.getMainButton();
+			} else if(frame.getBgmButton().contains(new Point(e.getX(), e.getY()))) {
+				target = frame.getBgmButton();
+			}
+			
+			if(target != null) {
+				moveAnimal(target.getLocation().x - target.getWidth(), target.getLocation().y - target.getHeight());
+			}
+			// 위는 버튼 구역에 접근했을 때, 아래의 우리에 들어갔을 때와 겹칠 일은 없다.
+			// 사실 접근 자체를 못하게 막아야 하는데 그런 매커니즘을 찾지 못해서 접근하고 떼면 튕기는 걸로 설정.
+			
 			AnimalRectangle targetRectangle = null;
 			Iterator<AnimalRectangle> itrRectangle = null;
 			// 마우스를 뗐을 때 이미지가 패널에 접근(e)했다면 넣고, 아니면 원위치로. 대신 접근한 곳이 원 부모와 같은 곳이면 원위치로.
@@ -149,22 +181,73 @@ public class ZooGame extends Game {
 			if (isDragged && movingAnimal != null && movingAnimalParent != null) { // 움직이는 중이며 널 값이 아니어야 가능.
 				int currentX = e.getX() - mouseX;
 				int currentY = e.getY() - mouseY;
+				// 프레임 영역을 벗어날 수 없다.
 				if(currentX < 0) {
 					currentX = 0;
-				} else if(currentX > GameFrame.WINDOW_WIDTH - AnimalImage.ANIMAL_WIDTH) {
-					currentX = GameFrame.WINDOW_WIDTH - AnimalImage.ANIMAL_WIDTH;
+				} else if(currentX > GameFrame.WINDOW_WIDTH - AnimalImage.ANIMAL_WIDTH - 15) {
+					currentX = GameFrame.WINDOW_WIDTH - AnimalImage.ANIMAL_WIDTH - 15;
 				}				
 				if(currentY < 0) {
 					currentY = 0;
-				} else if(currentY > GameFrame.WINDOW_HEIGHT - AnimalImage.ANIMAL_HEIGHT - 30) {
-					currentY = GameFrame.WINDOW_HEIGHT - AnimalImage.ANIMAL_HEIGHT - 30;
-				}			
-				movingAnimal.setLocation(currentX, currentY);
-				frame.getContentPane().repaint();
-				movingAnimal.repaint();
+				} else if(currentY > GameFrame.WINDOW_HEIGHT - AnimalImage.ANIMAL_HEIGHT - 40) {
+					currentY = GameFrame.WINDOW_HEIGHT - AnimalImage.ANIMAL_HEIGHT - 40;
+				}
+				moveAnimal(currentX, currentY); // 움직인다.
+//				JComponent target = null;
+//				int checkPointX = currentX + AnimalImage.ANIMAL_WIDTH;
+//				int checkPointY = currentY + AnimalImage.ANIMAL_HEIGHT;
+				
+//				if(frame.getCheckButton().contains(new Point(checkPointX, checkPointY))) {
+//					target = frame.getCheckButton();	
+//				} else if(frame.getCheckButton().contains(new Point(checkPointX, checkPointY))) {
+//					target = frame.getChangeButton();
+//				} else if(frame.getMainButton().contains(new Point(checkPointX, checkPointY))) {
+//					target = frame.getMainButton();
+//				} else if(frame.getBgmButton().contains(new Point(checkPointX, checkPointY))) {
+//					target = frame.getBgmButton();
+//				}
+				
+//				if(target != null) {
+//					if(target.getLocation().y < checkPointY
+//							&& target.getLocation().x == checkPointX) { // x축 침범시
+//						currentX = target.getLocation().x; 
+//					}
+//					
+//					if(target.getLocation().y == checkPointY
+//							&& target.getLocation().x < checkPointX) { // y축 침범시
+//						currentY = target.getLocation().y; 
+//					}
+//				}
+				// 완료 버튼 근처 접근 불가
+//				else if(frame.getCheckButton().containsX(currentX)) {
+//					currentX = frame.getCheckButton().getLocation().x;
+//				}
+//				else if(frame.getCheckButton().containsY(currentY)) {
+//					currentY = frame.getCheckButton().getLocation().y;
+//				}
+//				// 게임 선택 버튼 근처 접근 불가
+//				else if(frame.getChangeButton().containsX(currentX)) {
+//					currentX = frame.getChangeButton().getLocation().x;
+//				}
+//				else if(frame.getChangeButton().containsY(currentY)) {
+//					currentY = frame.getChangeButton().getLocation().y;
+//				}
+//				// 메인 화면 이동 버튼 근처 접근 불가
+//				else if(frame.getMainButton().containsX(currentX)) {
+//					currentX = frame.getMainButton().getLocation().x;
+//				}
+//				else if(frame.getMainButton().containsY(currentY)) {
+//					currentY = frame.getMainButton().getLocation().y;
+//				}
+//				// 브금 버튼 근처 접근 불가
+//				else if(frame.getBgmButton().containsX(currentX)) {
+//					currentX = frame.getBgmButton().getLocation().x;
+//				}
+//				else if(frame.getBgmButton().containsY(currentY)) {
+//					currentY = frame.getBgmButton().getLocation().y;
+//				}			
 			}
 		}
-
 	}
 	
 	@Override
@@ -178,7 +261,6 @@ public class ZooGame extends Game {
 		LinkedList<JLabel> signs = new LinkedList<JLabel>();			
 		Iterator<JLabel> itrZooLabels = zooNames.iterator();
 		JLabel targetZooLabel = null; // 좌표 같이 지정하기 위해
-//		JLabel targetSign = null; // 뒤집는 용도
 		while(itrZooLabels.hasNext()) {
 			targetZooLabel = itrZooLabels.next();	
 			signs.add(new JLabel(sign_left));
@@ -189,24 +271,23 @@ public class ZooGame extends Game {
 		itrZooLabels = zooNames.iterator(); // 이터레이터 초기화
 		while(itrSigns.hasNext()) { // 팻말 위치를 팻말 텍스트에 맞게 정함
 			targetZooLabel = itrZooLabels.next(); 
-			itrSigns.next().setBounds(targetZooLabel.getLocation().x, targetZooLabel.getLocation().y - 10, signWidth, signHeight);
+			itrSigns.next().setBounds(targetZooLabel.getLocation().x, targetZooLabel.getLocation().y - 12, signWidth, signHeight);
 		}
-		signs.get(2).setBounds(zooNames.get(2).getLocation().x + 8, zooNames.get(2).getLocation().y - 10, signWidth, signHeight);
+		// 우측 모드(팻말 반전)
+		signs.get(2).setBounds(zooNames.get(2).getLocation().x + 8, zooNames.get(2).getLocation().y - 12, signWidth, signHeight);
 		signs.get(2).setIcon(sign_right);
-		signs.get(4).setBounds(zooNames.get(4).getLocation().x + 8, zooNames.get(4).getLocation().y - 10, signWidth, signHeight);
+		signs.get(4).setBounds(zooNames.get(4).getLocation().x + 8, zooNames.get(4).getLocation().y - 12, signWidth, signHeight);
 		signs.get(4).setIcon(sign_right);	
-		// 우측 모드
-		
 		// 문제 가리키는 팻말
 		JLabel quizSign = new JLabel(new ImageIcon(new ImageIcon("resource/image/zoo/object/wooden_sign.png").getImage().getScaledInstance(425, 75, 0)));
-		quizSign.setBounds((GameFrame.WINDOW_WIDTH / 2) - 215, (GameFrame.WINDOW_HEIGHT / 2) - 410, 425, 75);
+		quizSign.setBounds((GameFrame.WINDOW_WIDTH / 2) - 215, (GameFrame.WINDOW_HEIGHT / 2) - 420, 425, 75);
 		frame.getContentPane().add(quizSign);
+		// 프레임에 이벤트 추가
+		frame.getContentPane().addMouseMotionListener(new ZooGameAdapter());
+		frame.getContentPane().addMouseListener(new ZooGameAdapter());
 		putAnimals(); // 공간 n개, 동물 x마리 무작위 선출하여 화면에 배치한다.	
 		// 테스트용 : 동물원 범위가 잘 설정되었는지 확인
 //		class TestComponent extends JLabel{
-//			/**
-//			 * 
-//			 */
 //			private static final long serialVersionUID = -2440666689934911210L;
 //			Rectangle rect;
 //			public TestComponent(Rectangle rect) {
@@ -215,7 +296,6 @@ public class ZooGame extends Game {
 //				setVisible(true);
 //				setBounds(rect);
 //			}
-//
 //			@Override
 //			protected void paintComponent(Graphics g) {
 //				// TODO Auto-generated method stub
@@ -224,15 +304,11 @@ public class ZooGame extends Game {
 //				g.drawRect(rect.x, rect.y, rect.width, rect.height);
 //				repaint();
 //			}		
-//		}
-//		
+//		}	
 //		Iterator<AnimalRectangle> itrRect = zooRectangle.iterator();
 //		while(itrRect.hasNext()) {
 //			frame.add(new TestComponent(itrRect.next()));
 //		}
-		// 프레임에 이벤트 추가
-		frame.getContentPane().addMouseMotionListener(new ZooGameListener());
-		frame.getContentPane().addMouseListener(new ZooGameListener());
 	}
 
 	@Override
@@ -246,8 +322,7 @@ public class ZooGame extends Game {
 		AnimalLabel targetAnimal = null; // 검사하는 우리의 동물 리스트의 이터레이터 중 순서대로 검사
 		LinkedList<AnimalLabel> removingAnimals = new LinkedList<AnimalLabel>(); // 중간에 이터레이터가 변하면 안되기에 미리 지울 목록 저장
 		Iterator<AnimalLabel> itrRemoving = null; // 지울 목록들이 다 갱신되면 이터레이터 가져옴
-		AnimalLabel removingAnimal = null; // 지울 동물
-		
+		AnimalLabel removingAnimal = null; // 지울 동물	
 		while (itrZooRectangle.hasNext()) {
 			targetZoo = itrZooRectangle.next();
 			if(!targetZoo.getAnimals().isEmpty()) { // 타깃이 된 우리 안에 동물 리스트가 비어있지 않다면
@@ -488,5 +563,11 @@ public class ZooGame extends Game {
 			return true;
 		} 
 		return false; // 해당 우리에 들어오지 않았다면 false
+	}
+	
+	public void moveAnimal(int x, int y) { // 동물을 움직이고 적용한다.
+		movingAnimal.setLocation(x, y);
+		frame.getContentPane().repaint();
+		movingAnimal.repaint();
 	}
 }

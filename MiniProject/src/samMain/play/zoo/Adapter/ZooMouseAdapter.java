@@ -41,17 +41,6 @@ public class ZooMouseAdapter extends MouseAdapter {
 		parentButton.getParent().repaint();
 		parentButton.setEntered(true);
 	}
-	
-//	@Override
-//	public void mouseClicked(MouseEvent e) {
-//		// TODO Auto-generated method stub	
-//	}
-//
-//	@Override
-//	public void mouseReleased(MouseEvent e) {
-//		// TODO Auto-generated method stub
-//
-//	}
 
 	public ZooButton getParentButton() {
 		return parentButton;

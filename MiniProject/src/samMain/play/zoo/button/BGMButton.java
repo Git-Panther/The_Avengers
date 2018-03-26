@@ -1,8 +1,9 @@
 package samMain.play.zoo.button;
 
+import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -49,7 +50,7 @@ public class BGMButton extends JLabel{ // 배경음악 음소거 버튼
 	}
 	
 	public void addDefaultEventListener() {
-		addMouseListener(new MouseListener() {
+		addMouseListener(new MouseAdapter() {
 			
 			@Override
 			public void mouseReleased(MouseEvent e) {
@@ -67,12 +68,6 @@ public class BGMButton extends JLabel{ // 배경음악 음소거 버튼
 						clip.resumeBGM();
 					}
 				}
-			}
-			
-			@Override
-			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
 			}
 			
 			@Override
@@ -103,11 +98,6 @@ public class BGMButton extends JLabel{ // 배경음악 음소거 버튼
 					repaint();
 					getParent().repaint();
 				}
-			}
-			
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				// TODO Auto-generated method stub
 			}
 		});
 	}
@@ -158,5 +148,25 @@ public class BGMButton extends JLabel{ // 배경음악 음소거 버튼
 
 	public void setOffFocusIcon(ImageIcon offFocusIcon) {
 		this.offFocusIcon = offFocusIcon;
+	}
+	@Override
+	public boolean contains(Point point) { // 범위 안에 있는지 검사
+		// TODO Auto-generated method stub
+		if(containsX(point.x) && containsY(point.y))
+			return true;
+		else
+			return false;
+	}
+	public boolean containsX(int x) { // x 좌표가 범위 안인지 검사
+		if(getLocation().x <= x && getLocation().x + getWidth() >= x)
+			return true;
+		else
+			return false;
+	}
+	public boolean containsY(int y) { // y 좌표가 범위 안인지 검사
+		if(getLocation().y <= y && getLocation().y + getHeight() >= y)
+			return true;
+		else
+			return false;
 	}
 }

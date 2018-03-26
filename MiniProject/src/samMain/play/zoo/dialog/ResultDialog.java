@@ -6,11 +6,11 @@ import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
 
-import samMain.main.SamMain;
+import samMain.main.SamMainFrame;
 import samMain.play.PlayMain;
 import samMain.play.zoo.Adapter.ZooMouseAdapter;
 import samMain.play.zoo.button.ZooButton;
-import samMain.play.zoo.clip.ClipSet;
+import samMain.play.zoo.clip.EffectClip;
 
 public class ResultDialog extends ZooDialog { // 결과창에 대한 다이얼로그
 	private static final long serialVersionUID = 7488391241677890730L;
@@ -26,7 +26,7 @@ public class ResultDialog extends ZooDialog { // 결과창에 대한 다이얼�
 			public void windowOpened(WindowEvent e) {
 				// TODO Auto-generated method stub
 				super.windowOpened(e);
-				ClipSet.getClips().activateEFS(isCorrect);
+				EffectClip.getClips().activateEFS(isCorrect);
 			}
 
 			@Override
@@ -68,7 +68,7 @@ public class ResultDialog extends ZooDialog { // 결과창에 대한 다이얼�
 				if(mainButton.isEntered() && mainButton.isPressed()) {
 					mainButton.setEntered(false);
 					dispose(); // 다이얼로그 종료
-					new SamMain();
+					new SamMainFrame();
 					getParent().dispose();
 				}
 				repaint();

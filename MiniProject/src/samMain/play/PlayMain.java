@@ -10,20 +10,29 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-import samMain.main.SamMain;
+import samMain.frame.SamFrame;
+import samMain.main.SamMainFrame;
 import samMain.play.zoo.frame.GameFrame;
 import samMain.play.zoo.game.ZooGame;
 
-public class PlayMain extends JFrame {
+public class PlayMain extends SamFrame {
 
 	private static final long serialVersionUID = -6022784738766090924L;
-	JFrame mainFrame = new JFrame("샘과함께");
+	JFrame mainFrame = new JFrame("샘과 함께");
 	JButton fruitShop,cleanRoom,body,zoo,end;
+//	private BackgroundClip bgm;
 	
 	public PlayMain(){
-		setBounds(350, 80, 1210, 940);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
-		setLayout(null);		
+//		setBounds(350, 80, 1210, 940);
+//		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
+//		setLayout(null);		
+//		setResizable(false);
+//		
+//		bgm = BackgroundClip.getClip(); // 클립 가져오기
+//		if(!bgm.getBGM().isOpen()) { // 닫혀있다면 새로 열어준다.
+//			bgm.setBGM("유민.wav");
+//		}
+		super();
 		
 		JLabel background = new JLabel(new ImageIcon(new ImageIcon("mainView/놀이학습_수정본.png").getImage()));
 		background.setBounds(0, 0, 1200, 900);
@@ -40,8 +49,9 @@ public class PlayMain extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if(e.getSource().equals(fruitShop)){
 					new FruitShop();
-					setVisible(false);
-					
+					getBgm().pauseBGM();
+					getBgm().getBGM().close();
+					dispose();
 				}				
 			}
 		});
@@ -71,8 +81,9 @@ public class PlayMain extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if(e.getSource().equals(cleanRoom)){		
 					new CleanRoomMain();
-					setVisible(false);
-					
+					getBgm().pauseBGM();
+					getBgm().getBGM().close();
+					dispose();
 				}				
 			}
 		});
@@ -102,8 +113,9 @@ public class PlayMain extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if(e.getSource().equals(body)){
 					new BodyGame();
-					setVisible(false);
-					
+					getBgm().pauseBGM();
+					getBgm().getBGM().close();
+					dispose();
 				}				
 			}
 		});
@@ -133,6 +145,8 @@ public class PlayMain extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if(e.getSource().equals(zoo)){
 					new GameFrame(new ZooGame());
+					getBgm().pauseBGM();
+					getBgm().getBGM().close();
 					dispose();
 				}				
 			}
@@ -162,14 +176,13 @@ public class PlayMain extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(e.getSource().equals(end)){
-					new SamMain();
-					setVisible(false);
-					
+					new SamMainFrame().setVisible(true);
+					dispose();		
 				}				
 			}
 		});
 	
-		setVisible(true);
+//		addWindowListener(new FrameAdapter());
 	}
 
 }

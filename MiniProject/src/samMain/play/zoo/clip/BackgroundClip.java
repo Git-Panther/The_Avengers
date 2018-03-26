@@ -8,24 +8,32 @@ import java.io.IOException;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineEvent;
+import javax.sound.sampled.LineListener;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class BackgroundClip { // 배경음악 클립 기능
 	private Clip bgm; // 배경음악
-	private boolean isOn; // 이 녀석은 음소거 여부
-	private boolean isContinuous; // 배경음 지속 여부
+	private boolean isOn = false; // 이 녀석은 음소거 여부
+//	private boolean isContinuous = false; // 배경음 지속 여부
+	
+	private String bgmLocation; // 브금 로케이션
 	
 	private static BackgroundClip clip = new BackgroundClip();
 	
 	private BackgroundClip() {
-		on();
-		setContinuous(true);
+		if(!isOn())
+			on();
+		
+//		if(!isContinuous())
+//			setContinuous(true);
 	}
 	
 	private BackgroundClip(String location) {
 		this();
-		setBGM(location);
+		this.bgmLocation = location;
+		setBGM();
 	}
 
 	public Clip getBGM() {
@@ -33,13 +41,29 @@ public class BackgroundClip { // 배경음악 클립 기능
 	}
 	
 	public void setBGM(String location) { // 배경음
+		this.bgmLocation = location;
+		setBGM();
+	}
+	
+	public void setBGM() { // 배경음 자동 설정
 		try {
 			AudioInputStream ais = AudioSystem
 					.getAudioInputStream(new BufferedInputStream(
-							new FileInputStream(location)));
+							new FileInputStream(bgmLocation)));
 		
 			bgm = AudioSystem.getClip();
 			bgm.open(ais);
+			bgm.addLineListener(new LineListener() {
+                @Override
+                public void update(LineEvent event) {
+                        // TODO Auto-generated method stub
+                        if(event.getType() == LineEvent.Type.STOP){
+                        	// 이 부분이 없으면 효과음이 메모리에 점점 쌓여서 언젠가 크래시된다
+//                        	clip.close();
+                        	
+                        }
+                }
+			});
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -95,11 +119,19 @@ public class BackgroundClip { // 배경음악 클립 기능
 		this.isOn = false;
 	}
 
-	public boolean isContinuous() {
-		return isContinuous;
+	public String getBgmLocation() {
+		return bgmLocation;
 	}
 
-	public void setContinuous(boolean isContinuous) {
-		this.isContinuous = isContinuous;
+	public void setBgmLocation(String bgmLocation) {
+		this.bgmLocation = bgmLocation;
 	}
+
+//	public boolean isContinuous() {
+//		return isContinuous;
+//	}
+//
+//	public void setContinuous(boolean isContinuous) {
+//		this.isContinuous = isContinuous;
+//	}
 }

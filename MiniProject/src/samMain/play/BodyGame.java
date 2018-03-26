@@ -23,7 +23,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import samMain.main.SamMain;
+import samMain.main.SamMainFrame;
 
 public class BodyGame extends JFrame implements ActionListener {
 
@@ -323,13 +323,12 @@ public class BodyGame extends JFrame implements ActionListener {
       }
       if(e.getSource() == backBtn) {
          clip1.stop();
-         PlayMain playMain = new PlayMain();
-         playMain.setVisible(true);
+         new PlayMain().setVisible(true);
          dispose();
       }
       if(e.getSource() == mainBtn) {
          clip1.stop();
-        new SamMain();
+        new SamMainFrame().setVisible(true);;
          dispose();
       }
    }

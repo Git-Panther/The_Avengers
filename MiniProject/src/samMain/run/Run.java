@@ -1,12 +1,12 @@
 package samMain.run;
 
-import samMain.main.SamMain;
+import samMain.main.SamMainFrame;
 
 
 public class Run {
 
 	public static void main(String[] args) {
-		new SamMain();
+		new SamMainFrame().getFrame().setVisible(true);;
 	}
 
 }

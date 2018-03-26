@@ -11,13 +11,13 @@ import javax.sound.sampled.LineListener;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
-public class ClipSet { // 긍, 부정 효과음
+public class EffectClip { // 긍, 부정 효과음
 	private String positiveAudio = "resource/sound/efs/positive.wav";
 	private String negativeAudio = "resource/sound/efs/negative.wav";
 	
-	private static ClipSet clips = new ClipSet();
+	private static EffectClip clips = new EffectClip();
 
-	private ClipSet() {
+	private EffectClip() {
 		
 	}
 	
@@ -57,12 +57,12 @@ public class ClipSet { // 긍, 부정 효과음
 		
 	}
 	
-	public static ClipSet getClips() {
+	public static EffectClip getClips() {
 		return clips;
 	}
 
-	public static void setClips(ClipSet clips) {
-		ClipSet.clips = clips;
+	public static void setClips(EffectClip clips) {
+		EffectClip.clips = clips;
 	}
 	
 }
