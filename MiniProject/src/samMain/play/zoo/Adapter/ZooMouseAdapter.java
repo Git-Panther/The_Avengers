@@ -1,15 +1,15 @@
-package samMain.play.zoo.Listener;
+package samMain.play.zoo.Adapter;
 
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 import samMain.play.zoo.button.ZooButton;
 
-public class ZooMouseListener implements MouseListener {
+public class ZooMouseAdapter extends MouseAdapter {
 
 	private ZooButton parentButton;
 	
-	public ZooMouseListener(ZooButton parentButton) {
+	public ZooMouseAdapter(ZooButton parentButton) {
 		// TODO Auto-generated constructor stub
 		this.setParentButton(parentButton);
 	}
@@ -42,16 +42,16 @@ public class ZooMouseListener implements MouseListener {
 		parentButton.setEntered(true);
 	}
 	
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub	
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-
-	}
+//	@Override
+//	public void mouseClicked(MouseEvent e) {
+//		// TODO Auto-generated method stub	
+//	}
+//
+//	@Override
+//	public void mouseReleased(MouseEvent e) {
+//		// TODO Auto-generated method stub
+//
+//	}
 
 	public ZooButton getParentButton() {
 		return parentButton;

@@ -14,7 +14,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
-import samMain.play.zoo.Listener.ZooMouseListener;
+import samMain.play.zoo.Adapter.ZooMouseAdapter;
 import samMain.play.zoo.button.ZooButton;
 import samMain.play.zoo.dialog.ResultDialog;
 import samMain.play.zoo.frame.GameFrame;
@@ -289,7 +289,7 @@ public class ZooGame extends Game {
 								
 				ZooButton acceptButton = new ZooButton("확인");
 				dialog.getButtonPanel().add(acceptButton);
-				acceptButton.addMouseListener(new ZooMouseListener(acceptButton) {
+				acceptButton.addMouseListener(new ZooMouseAdapter(acceptButton) {
 					@Override
 					public void mouseReleased(MouseEvent e) {
 						// TODO Auto-generated method stub
@@ -326,7 +326,7 @@ public class ZooGame extends Game {
 						
 						ZooButton againButton = new ZooButton("재시도");
 						dialog.getButtonPanel().add(againButton);
-						againButton.addMouseListener(new ZooMouseListener(againButton){
+						againButton.addMouseListener(new ZooMouseAdapter(againButton){
 							@Override
 							public void mouseReleased(MouseEvent e) {
 								// TODO Auto-generated method stub
@@ -357,7 +357,7 @@ public class ZooGame extends Game {
 		
 		ZooButton restartButton = new ZooButton("다시 하기");
 		dialog.getButtonPanel().add(restartButton);
-		restartButton.addMouseListener(new ZooMouseListener(restartButton) {
+		restartButton.addMouseListener(new ZooMouseAdapter(restartButton) {
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				// TODO Auto-generated method stub

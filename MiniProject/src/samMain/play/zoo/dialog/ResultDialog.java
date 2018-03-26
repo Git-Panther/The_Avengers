@@ -8,7 +8,7 @@ import javax.swing.JFrame;
 
 import samMain.main.SamMain;
 import samMain.play.PlayMain;
-import samMain.play.zoo.Listener.ZooMouseListener;
+import samMain.play.zoo.Adapter.ZooMouseAdapter;
 import samMain.play.zoo.button.ZooButton;
 import samMain.play.zoo.clip.ClipSet;
 
@@ -41,7 +41,7 @@ public class ResultDialog extends ZooDialog { // 결과창에 대한 다이얼�
 	{
 		ZooButton choiceButton = new ZooButton("다른 게임");
 		getButtonPanel().add(choiceButton);
-		choiceButton.addMouseListener(new ZooMouseListener(choiceButton) {
+		choiceButton.addMouseListener(new ZooMouseAdapter(choiceButton) {
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				// TODO Auto-generated method stub
@@ -59,7 +59,7 @@ public class ResultDialog extends ZooDialog { // 결과창에 대한 다이얼�
 		
 		ZooButton mainButton = new ZooButton("메인 화면");
 		getButtonPanel().add(mainButton);
-		mainButton.addMouseListener(new ZooMouseListener(mainButton){
+		mainButton.addMouseListener(new ZooMouseAdapter(mainButton){
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				// TODO Auto-generated method stub

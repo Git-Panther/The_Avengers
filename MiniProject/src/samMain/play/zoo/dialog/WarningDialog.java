@@ -6,7 +6,7 @@ import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
 
-import samMain.play.zoo.Listener.ZooMouseListener;
+import samMain.play.zoo.Adapter.ZooMouseAdapter;
 import samMain.play.zoo.button.ZooButton;
 
 public class WarningDialog extends ZooDialog { // 예, 아니오 다이얼로그
@@ -32,7 +32,7 @@ public class WarningDialog extends ZooDialog { // 예, 아니오 다이얼로그
         positiveButton = new ZooButton("예");
         buttonPanel.add(positiveButton);
         
-        negativeButton.addMouseListener(new ZooMouseListener(negativeButton) {
+        negativeButton.addMouseListener(new ZooMouseAdapter(negativeButton) {
         	@Override
 			public void mouseReleased(MouseEvent e) {
 				// TODO Auto-generated method stub	
@@ -47,7 +47,7 @@ public class WarningDialog extends ZooDialog { // 예, 아니오 다이얼로그
 			}
         });
         
-        positiveButton.addMouseListener(new ZooMouseListener(positiveButton) {
+        positiveButton.addMouseListener(new ZooMouseAdapter(positiveButton) {
         	@Override
 			public void mouseReleased(MouseEvent e) {
 				// TODO Auto-generated method stub

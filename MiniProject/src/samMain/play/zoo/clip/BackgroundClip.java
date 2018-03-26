@@ -14,14 +14,17 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 public class BackgroundClip { // 배경음악 클립 기능
 	private Clip bgm; // 배경음악
 	private boolean isOn; // 이 녀석은 음소거 여부
+	private boolean isContinuous; // 배경음 지속 여부
 	
 	private static BackgroundClip clip = new BackgroundClip();
 	
 	private BackgroundClip() {
 		on();
+		setContinuous(true);
 	}
 	
 	private BackgroundClip(String location) {
+		this();
 		setBGM(location);
 	}
 
@@ -56,6 +59,11 @@ public class BackgroundClip { // 배경음악 클립 기능
 		return clip;
 	}
 
+	public static BackgroundClip getClip(String location) {
+		clip = new BackgroundClip(location);
+		return clip;
+	}
+	
 	public static void setClip(BackgroundClip clip) {
 		BackgroundClip.clip = clip;
 	}
@@ -67,7 +75,7 @@ public class BackgroundClip { // 배경음악 클립 기능
 	}
 	
 	public void resumeBGM() { // 배경음 재시작		
-		if(!bgm.isRunning() || !bgm.isActive()) // 재생중이 아니면
+		if(!bgm.isRunning()) // 재생중이 아니면
 		{
 			bgm.start();
 			bgm.loop(Clip.LOOP_CONTINUOUSLY);
@@ -85,5 +93,13 @@ public class BackgroundClip { // 배경음악 클립 기능
 	
 	public void off() {
 		this.isOn = false;
+	}
+
+	public boolean isContinuous() {
+		return isContinuous;
+	}
+
+	public void setContinuous(boolean isContinuous) {
+		this.isContinuous = isContinuous;
 	}
 }

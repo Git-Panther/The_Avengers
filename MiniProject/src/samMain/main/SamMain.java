@@ -21,7 +21,8 @@ public class SamMain{
 
 	public SamMain(){
 		mainFrame.setBounds(350, 80, 1210, 930);
-		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
+		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		mainFrame.setResizable(false);
 		mainFrame.setLayout(null);		
 		
 		JLabel background = new JLabel(new ImageIcon(new ImageIcon("mainView/메인화면.png").getImage()));
@@ -106,13 +107,7 @@ public class SamMain{
 //         }
 //	}
 
-public JFrame getFrame() {
-	return mainFrame;
-}
-
-
-	
-	
-	
-
+	public JFrame getFrame() {
+		return mainFrame;
+	}
 }

@@ -41,7 +41,7 @@ public class GameFrame extends JFrame{
 		setResizable(false);
 		getContentPane().setLayout(null);
 		bgm.setBGM("resource/sound/bgm/zoo.wav");
-		bgm.on(); // 시작했으니 켜준다. 사실 음악을 끈 상태에서 나가면 false가 그대로 남기 때문에 시작할 때 초기화해줘야 한다.
+//		bgm.on(); // 시작했으니 켜준다. 사실 음악을 끈 상태에서 나가면 false가 그대로 남기 때문에 시작할 때 초기화해줘야 한다.
 		setDefault();
 		setVisible(true);
 	}
@@ -85,12 +85,11 @@ public class GameFrame extends JFrame{
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				// TODO Auto-generated method stub
-//				checkButton.setIcon(checkButton.getNormal());
-//				checkButton.repaint();
-//				repaint();
-				if(changeButton.isEntered()) {
+				checkButton.setIcon(checkButton.getNormal());
+				repaint();
+				if(checkButton.isEntered()) {
 					game.check();
-					changeButton.setEntered(false);
+					checkButton.setEntered(false);
 				}
 			}
 			
@@ -107,7 +106,7 @@ public class GameFrame extends JFrame{
 				checkButton.setIcon(checkButton.getNormal());
 				checkButton.repaint();
 				repaint();
-				changeButton.setEntered(false);
+				checkButton.setEntered(false);
 			}
 			
 			@Override
@@ -115,7 +114,7 @@ public class GameFrame extends JFrame{
 				// TODO Auto-generated method stub
 				checkButton.setIcon(checkButton.getFocus());
 				repaint();
-				changeButton.setEntered(true);
+				checkButton.setEntered(true);
 			}
 			
 			@Override

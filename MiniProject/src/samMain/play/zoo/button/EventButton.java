@@ -89,6 +89,8 @@ public class EventButton extends JButton { // 이벤트 버튼. JLabel에 주의
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				// TODO Auto-generated method stub
+				setIcon(normal);
+				parent.repaint();
 				if(isEntered()) {
 					ClipSet.getClips().activateEFS(false);
 					dialog.setVisible(true);
