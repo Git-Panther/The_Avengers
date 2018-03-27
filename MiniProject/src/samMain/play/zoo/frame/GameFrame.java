@@ -16,7 +16,7 @@ import samMain.play.zoo.Adapter.ZooMouseAdapter;
 import samMain.play.zoo.button.BGMButton;
 import samMain.play.zoo.button.EventButton;
 import samMain.play.zoo.button.ZooButton;
-import samMain.play.zoo.clip.ZooBackgroundClip;
+import samMain.play.zoo.clip.ZooBackGroundClip;
 import samMain.play.zoo.cursor.ZooCursor;
 import samMain.play.zoo.dialog.WarningDialog;
 import samMain.play.zoo.game.Game;
@@ -26,7 +26,7 @@ public class GameFrame extends JFrame{
 	// 위 시리얼 id 없으면 warning 창 뜸.
 	
 	private Game game; // 게임 객체
-	private ZooBackgroundClip bgm; // BGM 클립
+	private ZooBackGroundClip bgm; // BGM 클립
 	
 	public static final int WINDOW_WIDTH = 1210;
 	public static final int WINDOW_HEIGHT = 930;
@@ -49,7 +49,7 @@ public class GameFrame extends JFrame{
 		setResizable(false);
 		getContentPane().setLayout(null);
 		setIconImage(new ImageIcon("images/game3FrameIcon.png").getImage());
-		bgm = ZooBackgroundClip.getClip("resource/sound/bgm/zoo.wav"); // BGM 클립을 따오고 비교해봐서 해당 브금이 아니면 바꾼다.
+		bgm = ZooBackGroundClip.getClip("resource/sound/bgm/zoo.wav"); // BGM 클립을 따오고 비교해봐서 해당 브금이 아니면 바꾼다.
 		setCursor(ZooCursor.getCursor());
 		setDefault();
 		setVisible(true);

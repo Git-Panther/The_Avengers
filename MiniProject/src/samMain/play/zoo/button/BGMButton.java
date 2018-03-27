@@ -8,7 +8,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
-import samMain.play.zoo.clip.ZooBackgroundClip;
+import samMain.play.zoo.clip.ZooBackGroundClip;
 
 public class BGMButton extends JLabel{ // 배경음악 음소거 버튼
 	private static final long serialVersionUID = 5362464637650337006L;
@@ -25,7 +25,7 @@ public class BGMButton extends JLabel{ // 배경음악 음소거 버튼
 	
 	private boolean isEntered; // 들어와 있고 놓았을 때만 가능하도록
 
-	private ZooBackgroundClip clip = ZooBackgroundClip.getClip();
+	private ZooBackGroundClip clip = ZooBackGroundClip.getClip();
 
 	public BGMButton() {
 		super();
@@ -98,11 +98,11 @@ public class BGMButton extends JLabel{ // 배경음악 음소거 버튼
 		});
 	}
 	
-	public ZooBackgroundClip getClip() {
+	public ZooBackGroundClip getClip() {
 		return clip;
 	}
 
-	public void setClip(ZooBackgroundClip clip) {
+	public void setClip(ZooBackGroundClip clip) {
 		this.clip = clip;
 	}
 

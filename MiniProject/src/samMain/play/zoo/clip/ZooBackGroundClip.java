@@ -12,19 +12,19 @@ import javax.sound.sampled.LineListener;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
-public class ZooBackgroundClip { // 배경음악 클립 기능
+public class ZooBackGroundClip { // 배경음악 클립 기능
 	private Clip bgm; // 배경음악
 	private boolean isOn = false; // 이 녀석은 음소거 여부	
 	private String bgmLocation; // 브금 로케이션
 	
-	private static ZooBackgroundClip clip = new ZooBackgroundClip(); // 반환 대상
+	private static ZooBackGroundClip clip = new ZooBackGroundClip(); // 반환 대상
 	
-	private ZooBackgroundClip() {
+	private ZooBackGroundClip() {
 		if(!isOn())
 			on();
 	}
 	
-	private ZooBackgroundClip(String location) {
+	private ZooBackGroundClip(String location) {
 		this();
 		this.bgmLocation = location;
 		setBGM();
@@ -72,17 +72,17 @@ public class ZooBackgroundClip { // 배경음악 클립 기능
 		}
 	}
 
-	public static ZooBackgroundClip getClip() {
+	public static ZooBackGroundClip getClip() {
 		return clip;
 	}
 
-	public static ZooBackgroundClip getClip(String location) {
-		clip = new ZooBackgroundClip(location);
+	public static ZooBackGroundClip getClip(String location) {
+		clip = new ZooBackGroundClip(location);
 		return clip;
 	}
 	
-	public static void setClip(ZooBackgroundClip clip) {
-		ZooBackgroundClip.clip = clip;
+	public static void setClip(ZooBackGroundClip clip) {
+		ZooBackGroundClip.clip = clip;
 	}
 	
 	public void pauseBGM() { // 배경음 일시정지
