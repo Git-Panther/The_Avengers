@@ -39,18 +39,15 @@ public class GameFrame extends JFrame{
 	
 	public GameFrame(Game game) {
 		// 화면 생성
-		super("샘과 함께");
+		super("오늘은 내가 조련사!");
 		this.setGame(game);
 		game.setGameFrame(this);
 		setBounds( (MONITOR_WIDTH - WINDOW_WIDTH) / 2 , (MONITOR_HEIGHT - WINDOW_HEIGHT) / 2 , WINDOW_WIDTH, WINDOW_HEIGHT);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setResizable(false);
 		getContentPane().setLayout(null);
-		bgm = BackgroundClip.getClip("resource/sound/bgm/zoo.wav"); // BGM 클립
-//		if(!bgm.getBGM().isOpen()) { // 닫혀있다면 새로 열어준다.
-//		if(!bgm.getBGM().isActive()) {
-//		bgm.setBGM("resource/sound/bgm/zoo.wav");
-//		}
+		setIconImage(new ImageIcon("images/game3FrameIcon.png").getImage());
+		bgm = BackgroundClip.getClip("resource/sound/bgm/zoo.wav"); // BGM 클립 새로 따와서 온다.
 		setCursor(ZooCursor.getCursor());
 		setDefault();
 		setVisible(true);

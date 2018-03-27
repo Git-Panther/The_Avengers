@@ -56,8 +56,17 @@ public class WarningDialog extends ZooDialog { // 예, 아니오 다이얼로그
 				if(positiveButton.isEntered() && positiveButton.isPressed()) {
 					positiveButton.setEntered(false);
 					dispose();
-					nextFrame.setVisible(true);				
 					frame.dispose();
+					nextFrame.setVisible(true);				
+					try {
+						nextFrame.getClass().newInstance();
+					} catch (InstantiationException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (IllegalAccessException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
 				positiveButton.setPressed(false);
         	}

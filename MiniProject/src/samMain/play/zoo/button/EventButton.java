@@ -180,24 +180,38 @@ public class EventButton extends JButton { // 이벤트 버튼. JLabel에 주의
 	public void setDialog(JDialog dialog) {
 		this.dialog = dialog;
 	}
+//	@Override
+//	public boolean contains(Point point) { // 범위 안에 있는지 검사
+//		// TODO Auto-generated method stub
+//		if(containsX(point.x) && containsY(point.y))
+//			return true;
+//		else
+//			return false;
+//	}
 	@Override
-	public boolean contains(Point point) { // 범위 안에 있는지 검사
+	public boolean contains(Point point) { // 범위 안에 있는지 검사 : int 버전
 		// TODO Auto-generated method stub
-		if(containsX(point.x) && containsY(point.y))
+		if(containsX(point.x) > 0 && containsY(point.y) > 0)
 			return true;
 		else
 			return false;
 	}
-	public boolean containsX(int x) { // x 좌표가 범위 안인지 검사
-		if(getLocation().x <= x && getLocation().x + EventButton.BUTTON_WIDTH >= x)
-			return true;
-		else
-			return false;
+//	public boolean containsX(int x) { // x 좌표가 범위 안인지 검사. 버튼 사이로도 못 오게 상한선 없앰.
+//		if(getLocation().x <= x) //&& getLocation().x + EventButton.BUTTON_WIDTH >= x)
+//			return true;
+//		else
+//			return false;
+//	}
+//	public boolean containsY(int y) { // 주의할 점은 마우스가 화면 밖으로 튀면 못 나오니 하한선만 정한다.
+//		if(getLocation().y <= y) //&& getLocation().y + EventButton.BUTTON_HEIGHT >= y)
+//			return true;
+//		else
+//			return false;
+//	}
+	public int containsX(int x) { // x 좌표가 범위 초과시 양수 반환
+		return x - getLocation().x;
 	}
-	public boolean containsY(int y) { // y 좌표가 범위 안인지 검사
-		if(getLocation().y <= y && getLocation().y + EventButton.BUTTON_HEIGHT >= y)
-			return true;
-		else
-			return false;
+	public int containsY(int y) { // y 좌표가 범위 초과시 양수 반환
+		return y - getLocation().y;
 	}
 }

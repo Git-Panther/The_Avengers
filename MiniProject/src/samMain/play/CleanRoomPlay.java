@@ -32,6 +32,7 @@ public class CleanRoomPlay {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);
 		frame.setLayout(null);
+		frame.setIconImage(new ImageIcon("images/game3FrameIcon.png").getImage());
 
 		JLabel background = new JLabel(new ImageIcon(new ImageIcon("background1.png").getImage()));
 		background.setBounds(0, 0, 1210, 940);

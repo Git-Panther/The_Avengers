@@ -44,12 +44,12 @@ public class ZooGame extends Game {
 	
 	public ZooGame() {
 		bgLocation = "resource/image/bg/zoo.png";
-		quiz = "동물들을 우리로 돌려보내세요";
+		quiz = "마우스로 동물들을 우리로 돌려보내세요";
 		quizLabel = new JLabel(quiz);
 		quizLabel.setForeground(new Color(47, 79, 79));
-		quizLabel.setFont(new Font("맑은 고딕", Font.BOLD, 25));
+		quizLabel.setFont(new Font("상상토끼 신비는 일곱살", Font.BOLD, 42));
 		quizLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		quizLabel.setBounds(0, (GameFrame.WINDOW_HEIGHT / 2) - 442, GameFrame.WINDOW_WIDTH, 100);
+		quizLabel.setBounds(0, (GameFrame.WINDOW_HEIGHT / 2) - 448, GameFrame.WINDOW_WIDTH, 100);
 		// 위는 매우 기초적인 세팅
 		
 		// 동물 10종
@@ -70,7 +70,7 @@ public class ZooGame extends Game {
 			zooNames.getLast().setSize(ZOO_NAME_WIDTH, ZOO_NAME_HEIGHT); // 사이즈만 통일. 좌표는 따로 지정해야 한다.
 			zooNames.getLast().setForeground(new Color(30, 66, 11));
 			zooNames.getLast().setHorizontalAlignment(SwingConstants.CENTER);
-			zooNames.getLast().setFont(new Font("맑은 고딕", Font.BOLD, 18));
+			zooNames.getLast().setFont(new Font("타이포_쌍문동 B", Font.PLAIN, 18));
 		}
 	
 		// 동물원 우리 팻말 6개 위치 지정.
@@ -101,23 +101,22 @@ public class ZooGame extends Game {
 		@Override
 		public void mouseReleased(MouseEvent e) {
 			// TODO Auto-generated method stub
-			if(frame.getCheckButton().contains(new Point(e.getX(), e.getY()))
-					|| frame.getChangeButton().contains(new Point(e.getX(), e.getY()))
-					|| frame.getMainButton().contains(new Point(e.getX(), e.getY()))
-					|| frame.getBgmButton().contains(new Point(e.getX(), e.getY()))
-			) {
-				moveAnimal(movingAnimalPoint.x, movingAnimalPoint.y); // 위치 롤백
-				initializeFields();
-				return;
-			}
-			// 위는 버튼 구역(완료, 선택, 메인, 브금)에 접근했을 때, 아래의 우리에 들어갔을 때와 겹칠 일은 없다.
-			// 사실 접근 자체를 못하게 막아야 하는데 그런 매커니즘을 찾지 못해서 접근하고 떼면 옮기기 직전의 위치로 롤백.
-			// 이렇게 막는 이유는 버튼 위치에 접근하면 이후부터 마우스 포인터를 갖다 대도 버튼을 먼저 인식하기 때문.
-			
 			AnimalRectangle targetRectangle = null;
 			Iterator<AnimalRectangle> itrRectangle = null;
 			// 마우스를 뗐을 때 이미지가 패널에 접근(e)했다면 넣고, 아니면 원위치로. 대신 접근한 곳이 원 부모와 같은 곳이면 원위치로.
 			if (movingAnimal != null && movingAnimalParent != null) { // 널 값이 아니어야 진행
+				// 이하는 구역(완료, 선택, 메인, 브금)에 접근했을 때, 아래의 우리에 들어갔을 때와 겹칠 일은 없다.
+				// 사실 접근 자체를 못하게 막아야 하는데 그런 매커니즘을 찾지 못해서 접근하고 떼면 옮기기 직전의 위치로 롤백.
+				// 이렇게 막는 이유는 버튼 위치에 접근하면 이후부터 마우스 포인터를 갖다 대도 버튼을 먼저 인식하기 때문.
+				if(	frame.getCheckButton().contains(new Point(e.getX(), e.getY()))
+						|| frame.getChangeButton().contains(new Point(e.getX(), e.getY()))
+						|| frame.getMainButton().contains(new Point(e.getX(), e.getY()))
+						|| frame.getBgmButton().contains(new Point(e.getX(), e.getY()))
+				) {
+					moveAnimal(movingAnimalPoint.x, movingAnimalPoint.y); // 위치 롤백
+					initializeFields();
+					return;
+				}
 				// 우리 영역 n개 중 하나에서 마우스를 뗐는지 검사
 				itrRectangle = zooRectangle.iterator();
 				while (itrRectangle.hasNext()) {
@@ -161,19 +160,49 @@ public class ZooGame extends Game {
 			// TODO Auto-generated method stub
 			// 마우스를 드래그하고 있을 때 그린다. 단, 윈도우를 벗어날 수는 없다.
 			if (isDragged && movingAnimal != null && movingAnimalParent != null) { // 움직이는 중이며 널 값이 아니어야 가능.
-				int currentX = e.getX() - mouseX; // 드래그하여 적용할 x 좌표
-				int currentY = e.getY() - mouseY; // 드래그하여 적용할 y 좌표
+				int currentX = -1; // = e.getX() - mouseX; // 드래그하여 적용할 x 좌표
+				int currentY = -1; // = e.getY() - mouseY; // 드래그하여 적용할 y 좌표
 				// 프레임 영역을 벗어날 수 없다.
-				if(currentX < 0) {
+				if(e.getX() < 0) {
 					currentX = 0;
-				} else if(currentX > GameFrame.WINDOW_WIDTH - AnimalImage.ANIMAL_WIDTH - 15) {
-					currentX = GameFrame.WINDOW_WIDTH - AnimalImage.ANIMAL_WIDTH - 15;
-				}				
-				if(currentY < 0) {
-					currentY = 0;
-				} else if(currentY > GameFrame.WINDOW_HEIGHT - AnimalImage.ANIMAL_HEIGHT - 40) {
-					currentY = GameFrame.WINDOW_HEIGHT - AnimalImage.ANIMAL_HEIGHT - 40;
+				} else if(e.getX() >= GameFrame.WINDOW_WIDTH) {
+					currentX = GameFrame.WINDOW_WIDTH - AnimalImage.ANIMAL_WIDTH;
+				} else if(frame.getCheckButton().contains(new Point(e.getX(), e.getY()))) {
+					
+				} else if(frame.getChangeButton().contains(new Point(e.getX(), e.getY()))) {
+					
+				} else if(frame.getMainButton().contains(new Point(e.getX(), e.getY()))) {
+					
+				} else if(frame.getBgmButton().contains(new Point(e.getX(), e.getY()))) {
+					
 				}
+				else {
+					currentX = e.getX() - mouseX; // 드래그하여 적용할 x 좌표
+				}
+				
+				if(e.getY() < 0) {
+					currentY = 0;
+				} else if(e.getY()  >= GameFrame.WINDOW_HEIGHT - 30) {
+					currentY = GameFrame.WINDOW_HEIGHT - AnimalImage.ANIMAL_HEIGHT - 30;
+				} else {
+					currentY = e.getY() - mouseY; // 드래그하여 적용할 y 좌표
+				}
+
+//				if(frame.getCheckButton().contains(new Point(e.getX(), e.getY()))
+//						|| frame.getChangeButton().contains(new Point(e.getX(), e.getY()))
+//						|| frame.getMainButton().contains(new Point(e.getX(), e.getY()))
+//						|| frame.getBgmButton().contains(new Point(e.getX(), e.getY()))
+//				) {
+//					moveAnimal(currentX, currentY); // 위치 롤백
+//					initializeFields();
+//					return;
+//				}
+				
+	
+						
+						
+				// e.getX()나 e.getY()가 초과한 값만큼 - 보정하여 움직일까?
+				
 				moveAnimal(currentX, currentY); // 움직인다.	
 			}
 		}
@@ -289,7 +318,7 @@ public class ZooGame extends Game {
 				dialog.setCorrect(false);
 				dialog.setTitle("저런! 다 안 옮겼네요?");
 				dialog.getMessageLabel1().setText("아직 동물들이 밖에 남아있어요!");
-				dialog.getMessageLabel2().setText("모든 동물들을 돌려보내세요!");			
+				dialog.getMessageLabel2().setText("남은 동물들을 우리로 돌려보내세요!");			
 				ZooButton acceptButton = new ZooButton("확인");
 				dialog.getButtonPanel().add(acceptButton);
 				acceptButton.addMouseListener(new ZooMouseAdapter(acceptButton) {
@@ -324,7 +353,7 @@ public class ZooGame extends Game {
 						dialog.setCorrect(false);
 						dialog.setTitle("땡! 틀렸습니다!");
 						dialog.getMessageLabel1().setText("저런, 잘못 들어간 동물이 있어요!");	
-						dialog.getMessageLabel2().setText("다시 한 번 돌려보낼까요?");
+						dialog.getMessageLabel2().setText("다시 한 번 올바르게 돌려보낼까요?");
 						ZooButton againButton = new ZooButton("재시도");
 						dialog.getButtonPanel().add(againButton);
 						againButton.addMouseListener(new ZooMouseAdapter(againButton){
@@ -352,8 +381,8 @@ public class ZooGame extends Game {
 		// 정답이라면 위의 오답인지 검사하는 과정에서 빠져나오지 못하고 여기까지 올 것이다.
 		dialog.setCorrect(true);
 		dialog.setTitle("정답!");	
-		dialog.getMessageLabel1().setText("잘했어요! 동물들이 모두 돌아왔어요!");			
-		dialog.getMessageLabel2().setText("한 판 더 하시겠어요?");
+		dialog.getMessageLabel1().setText("잘했어요! 모든 동물들이 맞게 돌아왔어요!");			
+		dialog.getMessageLabel2().setText("새 게임 한 판 더 하시겠어요?");
 		ZooButton restartButton = new ZooButton("다시 하기");
 		dialog.getButtonPanel().add(restartButton);
 		restartButton.addMouseListener(new ZooMouseAdapter(restartButton) {
@@ -408,17 +437,17 @@ public class ZooGame extends Game {
 		}	
 		// 2. AnimalRectangle을 n개만큼 생성하고(zooRectangle에 삽입) 이름은 Set 컬렉션에 들어간 동물의 순서대로 넣어준다	
 		zooRectangle // 1번째 우리
-		.add(new AnimalRectangle( new Point(0, 0), 350, 200));
+		.add(new AnimalRectangle( new Point(-50, -20), 380, 230));
 		zooRectangle // 2번째 우리
-		.add(new AnimalRectangle(new Point( (GameFrame.WINDOW_WIDTH) / 2 - 250, (GameFrame.WINDOW_HEIGHT) / 2 - 350), 450, 200));
+		.add(new AnimalRectangle(new Point( (GameFrame.WINDOW_WIDTH) / 2 - 260, (GameFrame.WINDOW_HEIGHT) / 2 - 350), 490, 200));
 		zooRectangle // 3번째 우리
-		.add(new AnimalRectangle(new Point( (GameFrame.WINDOW_WIDTH) / 2 + 200, 25), 400, 225));
+		.add(new AnimalRectangle(new Point( (GameFrame.WINDOW_WIDTH) / 2 + 235, 20), 425, 245));
 		zooRectangle // 4번째 우리
-		.add(new AnimalRectangle(new Point(0, (GameFrame.WINDOW_HEIGHT) / 2 - 175), 350, 200));
+		.add(new AnimalRectangle(new Point(-50, (GameFrame.WINDOW_HEIGHT) / 2 - 175), 380, 200));
 		zooRectangle // 5번째 우리
-		.add(new AnimalRectangle(new Point( (GameFrame.WINDOW_WIDTH) / 2 + 250, (GameFrame.WINDOW_HEIGHT) / 2 - 100), 350, 225));
+		.add(new AnimalRectangle(new Point( (GameFrame.WINDOW_WIDTH) / 2 + 265, (GameFrame.WINDOW_HEIGHT) / 2 - 105), 400, 230));
 		zooRectangle // 6번째 우리
-		.add(new AnimalRectangle(new Point(0,  (GameFrame.WINDOW_HEIGHT) / 2 + 175), 400, 225));
+		.add(new AnimalRectangle(new Point(-50,  (GameFrame.WINDOW_HEIGHT) / 2 + 175), 465, 260));
 		// 이터레이터를 통해 우리의 이름판을 적용한다.
 		Iterator<AnimalRectangle> itrRectangle = zooRectangle.iterator(); // 동물원 우리
 		Iterator<AnimalImage> itrImage = animalSet.iterator(); // 동물 종류 이미지
@@ -449,6 +478,7 @@ public class ZooGame extends Game {
 		movingAnimalParent = null;
 		mouseX = -1;
 		mouseY = -1;
+		movingAnimalPoint = null;
 	}
 
 	public boolean collocatePoint(LinkedList<AnimalLabel> animalList, MouseEvent e) { // 마우스 포인터 좌표 잡기 위한 계산식

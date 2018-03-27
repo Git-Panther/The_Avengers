@@ -49,9 +49,9 @@ public class ResultDialog extends ZooDialog { // 결과창에 대한 다이얼�
 				choiceButton.getParent().repaint();
 				if(choiceButton.isEntered() && choiceButton.isPressed()) {
 					choiceButton.setEntered(false);
-					new PlayMain().setVisible(true);
 					dispose(); // 다이얼로그 종료
 					getParent().dispose();
+					new PlayMain().setVisible(true);
 				}
 				choiceButton.setPressed(false);
 			}
@@ -68,8 +68,8 @@ public class ResultDialog extends ZooDialog { // 결과창에 대한 다이얼�
 				if(mainButton.isEntered() && mainButton.isPressed()) {
 					mainButton.setEntered(false);
 					dispose(); // 다이얼로그 종료
-					new SamMainFrame();
 					getParent().dispose();
+					new SamMainFrame().setVisible(true);;
 				}
 				repaint();
 				mainButton.setPressed(false);

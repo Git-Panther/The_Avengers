@@ -59,12 +59,12 @@ public class ZooDialog extends JDialog {
         messageLabel1 = new JLabel("", JLabel.CENTER);	
 //        messageLabel1.setForeground(new Color(57, 198, 147));
         messageLabel1.setForeground(new Color(255, 246, 229));
-        messageLabel1.setFont(new Font("맑은 고딕", Font.BOLD, 18));
+        messageLabel1.setFont(new Font("상상토끼 신비는 일곱살", Font.BOLD, 28));
         
         messageLabel2 = new JLabel("", JLabel.CENTER);	
 //        messageLabel2.setForeground(new Color(57, 198, 147));
         messageLabel2.setForeground(new Color(255, 246, 229));
-        messageLabel2.setFont(new Font("맑은 고딕", Font.BOLD, 18));
+        messageLabel2.setFont(new Font("상상토끼 신비는 일곱살", Font.BOLD, 28));
         
         messagePanel.add(messageLabel1);
         messagePanel.add(messageLabel2);

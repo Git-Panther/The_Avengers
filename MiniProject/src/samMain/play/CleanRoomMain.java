@@ -3,6 +3,7 @@ package samMain.play;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -14,8 +15,8 @@ public class CleanRoomMain {
 		JFrame startText = new JFrame("정리정돈");
 		startText.setBounds(350, 80, 1210, 940);
 		startText.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
 		startText.setLayout(null);
+		startText.setIconImage(new ImageIcon("images/game3FrameIcon.png").getImage());
 
 		JButton gameinfoBtn = new JButton("게임소개");
 		gameinfoBtn.setLocation(95, 50);

@@ -41,6 +41,7 @@ public class FruitShop { //과일가게 게임 구현 클래스
 		frame.setBounds(350, 100, 1200, 900);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
 		frame.setLayout(null);
+		frame.setIconImage(new ImageIcon("images/game3FrameIcon.png").getImage());
 		changeMousePointer();
 		
 		background = new JLabel(new ImageIcon(new ImageIcon("cartGameImage/과일가게.png").getImage().getScaledInstance(1200, 900, 0)));

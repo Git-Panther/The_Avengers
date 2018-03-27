@@ -11,10 +11,6 @@ import javax.swing.JLabel;
 import samMain.play.zoo.clip.BackgroundClip;
 
 public class BGMButton extends JLabel{ // 배경음악 음소거 버튼
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 5362464637650337006L;
 	
 	private static final String BGM_ON = "resource/image/object/on.png";
@@ -157,14 +153,14 @@ public class BGMButton extends JLabel{ // 배경음악 음소거 버튼
 		else
 			return false;
 	}
-	public boolean containsX(int x) { // x 좌표가 범위 안인지 검사
-		if(getLocation().x <= x && getLocation().x + getWidth() >= x)
+	public boolean containsX(int x) { // x 좌표가 범위 안인지 검사. 상한선 없음.
+		if(getLocation().x <= x )//&& getLocation().x + getWidth() >= x)
 			return true;
 		else
 			return false;
 	}
-	public boolean containsY(int y) { // y 좌표가 범위 안인지 검사
-		if(getLocation().y <= y && getLocation().y + getHeight() >= y)
+	public boolean containsY(int y) { // y 좌표가 범위 안인지 검사. 상한선 없음
+		if(getLocation().y <= y )//&& getLocation().y + getHeight() >= y)
 			return true;
 		else
 			return false;

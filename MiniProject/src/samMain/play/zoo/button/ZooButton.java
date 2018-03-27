@@ -29,7 +29,7 @@ public class ZooButton extends JLabel { // ZooDialog의 버튼
 		setBackground(new Color(0, 0, 0, 1));
 		setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
 		setForeground(new Color(30, 50, 105));
-		setFont(new Font("맑은 고딕", Font.BOLD, 18));
+		setFont(new Font("타이포_쌍문동 B", Font.PLAIN, 18));
 		setText(message);
 		setHorizontalTextPosition(SwingConstants.CENTER);
 		setVerticalTextPosition(SwingConstants.CENTER);

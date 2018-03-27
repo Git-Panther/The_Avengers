@@ -5,7 +5,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineEvent;
@@ -15,19 +14,14 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class BackgroundClip { // 배경음악 클립 기능
 	private Clip bgm; // 배경음악
-	private boolean isOn = false; // 이 녀석은 음소거 여부
-//	private boolean isContinuous = false; // 배경음 지속 여부
-	
+	private boolean isOn = false; // 이 녀석은 음소거 여부	
 	private String bgmLocation; // 브금 로케이션
 	
-	private static BackgroundClip clip = new BackgroundClip();
+	private static BackgroundClip clip = new BackgroundClip(); // 반환 대상
 	
 	private BackgroundClip() {
 		if(!isOn())
 			on();
-		
-//		if(!isContinuous())
-//			setContinuous(true);
 	}
 	
 	private BackgroundClip(String location) {
@@ -46,21 +40,18 @@ public class BackgroundClip { // 배경음악 클립 기능
 	}
 	
 	public void setBGM() { // 배경음 자동 설정
-		try {
-			AudioInputStream ais = AudioSystem
-					.getAudioInputStream(new BufferedInputStream(
-							new FileInputStream(bgmLocation)));
-		
+		try {		
 			bgm = AudioSystem.getClip();
-			bgm.open(ais);
+			bgm.open(AudioSystem
+					.getAudioInputStream(new BufferedInputStream(
+							new FileInputStream(bgmLocation))));
 			bgm.addLineListener(new LineListener() {
                 @Override
                 public void update(LineEvent event) {
                         // TODO Auto-generated method stub
-                        if(event.getType() == LineEvent.Type.STOP){
-                        	// 이 부분이 없으면 효과음이 메모리에 점점 쌓여서 언젠가 크래시된다
-//                        	clip.close();
-                        	
+                        if(event.getType() == LineEvent.Type.CLOSE){ // 닫혔을 때 경로를 초기화해줌으로써 다음에 새롭게 브금을 실행할 수 있게 한다.
+                        	setBgmLocation(""); // 경로를 초기화해줘야 나중에 새롭게 재생할 때 지속된다.
+                        	on(); // 브금 꺼진 상태도 초기화(다시 켜야 하므로)
                         }
                 }
 			});
@@ -126,12 +117,4 @@ public class BackgroundClip { // 배경음악 클립 기능
 	public void setBgmLocation(String bgmLocation) {
 		this.bgmLocation = bgmLocation;
 	}
-
-//	public boolean isContinuous() {
-//		return isContinuous;
-//	}
-//
-//	public void setContinuous(boolean isContinuous) {
-//		this.isContinuous = isContinuous;
-//	}
 }
