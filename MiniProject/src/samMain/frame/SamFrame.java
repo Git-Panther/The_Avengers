@@ -22,17 +22,10 @@ public class SamFrame extends JFrame {
 		setResizable(false);
 		setLayout(null);	
 		setTitle("샘과 함께");
-		
-//		bgm = BackgroundClip.getClip();
-		
+				
 		if(bgm.getBGM() == null || !bgm.getBgmLocation().equals("유민.wav")) { // 없다면 새로 만들어줌
 			bgm.setBGM("유민.wav");
 		}
-		
-//		if(!SamFrame.bgm.getBGM().isRunning() || !SamFrame.bgm.getBGM().isActive()) {
-//			SamFrame.bgm.resumeBGM();
-//		}
-		
 //		SamFrame.bgm.resumeBGM();		
 		addWindowListener(new FrameAdapter(SamFrame.bgm));
 	}
