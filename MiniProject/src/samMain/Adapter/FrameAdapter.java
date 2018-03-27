@@ -1,9 +1,9 @@
-package samMain.play.zoo.Adapter;
+package samMain.Adapter;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-import samMain.play.zoo.clip.BackgroundClip;
+import samMain.clip.BackgroundClip;
 
 public class FrameAdapter extends WindowAdapter {
 	private BackgroundClip bgm;
@@ -15,7 +15,7 @@ public class FrameAdapter extends WindowAdapter {
 	@Override
 	public void windowOpened(WindowEvent e) {
 		// TODO Auto-generated method stub
-		bgm.resumeBGM();
+//		bgm.resumeBGM();
 	}
 	
 	@Override
@@ -37,18 +37,23 @@ public class FrameAdapter extends WindowAdapter {
 		bgm.pauseBGM();
 	}
 	
-//	@Override
-//	public void windowClosed(WindowEvent e) {
-//		// TODO Auto-generated method stub
+	@Override
+	public void windowClosed(WindowEvent e) {
+		// TODO Auto-generated method stub
 //		bgm.pauseBGM();
 //		clip.setContinuous(false);
 //		bgm.getBGM().close();
-//	}
+	}
 	
 	@Override
 	public void windowActivated(WindowEvent e) {
 		// TODO Auto-generated method stub
 //		if(bgm.isOn())
+		if(!bgm.getBgmLocation().equals("유민.wav")) {
+			bgm.pauseBGM();
+			bgm.getBGM().close();
+			bgm = BackgroundClip.getClip("유민.wav");
+		}	
 		bgm.resumeBGM();
 	}
 

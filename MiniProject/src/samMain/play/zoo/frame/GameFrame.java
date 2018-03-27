@@ -3,6 +3,7 @@ package samMain.play.zoo.frame;
 import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import javax.swing.ImageIcon;
@@ -11,10 +12,11 @@ import javax.swing.JLabel;
 
 import samMain.main.SamMainFrame;
 import samMain.play.PlayMain;
-import samMain.play.zoo.Adapter.FrameAdapter;
+import samMain.play.zoo.Adapter.ZooMouseAdapter;
 import samMain.play.zoo.button.BGMButton;
 import samMain.play.zoo.button.EventButton;
-import samMain.play.zoo.clip.BackgroundClip;
+import samMain.play.zoo.button.ZooButton;
+import samMain.play.zoo.clip.ZooBackgroundClip;
 import samMain.play.zoo.cursor.ZooCursor;
 import samMain.play.zoo.dialog.WarningDialog;
 import samMain.play.zoo.game.Game;
@@ -24,7 +26,7 @@ public class GameFrame extends JFrame{
 	// 위 시리얼 id 없으면 warning 창 뜸.
 	
 	private Game game; // 게임 객체
-	private BackgroundClip bgm; // BGM 클립
+	private ZooBackgroundClip bgm; // BGM 클립
 	
 	public static final int WINDOW_WIDTH = 1210;
 	public static final int WINDOW_HEIGHT = 930;
@@ -47,7 +49,7 @@ public class GameFrame extends JFrame{
 		setResizable(false);
 		getContentPane().setLayout(null);
 		setIconImage(new ImageIcon("images/game3FrameIcon.png").getImage());
-		bgm = BackgroundClip.getClip("resource/sound/bgm/zoo.wav"); // BGM 클립 새로 따와서 온다.
+		bgm = ZooBackgroundClip.getClip("resource/sound/bgm/zoo.wav"); // BGM 클립을 따오고 비교해봐서 해당 브금이 아니면 바꾼다.
 		setCursor(ZooCursor.getCursor());
 		setDefault();
 		setVisible(true);
@@ -63,19 +65,51 @@ public class GameFrame extends JFrame{
 		repaint();
 		game.start(); // Game 객체에게 주입받는 형식으로 생성
 
-		changeButton = new EventButton(this, new PlayMain());
+		changeButton = new EventButton(this);
 		changeButton.setNormalLocation("resource/image/zoo/button/back_choice.png");
 		changeButton.setFocusLocation("resource/image/zoo/button/back_choice_focus.gif");
 //		changeButton.setPressLocation("resource/image/zoo/button/back_choice_press.png");
-		changeButton.setDialog(new WarningDialog(changeButton.getParent(), changeButton.getNextFrame(), "게임 선택 창으로 이동", "정말로 게임 선택 창으로 이동할까요?"));
+		WarningDialog changeDialog = new WarningDialog(changeButton.getParent(), "게임 선택 창으로 이동", "정말로 게임 선택 창으로 이동할까요?");
+		changeDialog.getPositiveButton().addMouseListener(new ZooMouseAdapter(changeDialog.getPositiveButton()) {
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				changeDialog.getPositiveButton().setIcon(ZooButton.DEFAULT);
+				changeDialog.getPositiveButton().getParent().repaint();
+				if(changeDialog.getPositiveButton().isEntered() && changeDialog.getPositiveButton().isPressed()) {
+					changeDialog.getPositiveButton().setEntered(false);
+					changeDialog.dispose();
+					dispose();
+					new PlayMain().setVisible(true);	
+				}
+				changeDialog.getPositiveButton().setPressed(false);
+        	}
+		});
+		changeButton.setDialog(changeDialog);
 		changeButton.setOneSide(WINDOW_WIDTH - 439, WINDOW_HEIGHT - 156, EventButton.BUTTON_WIDTH, EventButton.BUTTON_HEIGHT);
 		add(changeButton);
 		
-		mainButton = new EventButton(this, new SamMainFrame().getFrame());
+		mainButton = new EventButton(this);
 		mainButton.setNormalLocation("resource/image/zoo/button/back_main.png");
 		mainButton.setFocusLocation("resource/image/zoo/button/back_main_focus.gif");
 //		mainButton.setPressLocation("resource/image/zoo/button/back_main_press.png");
-		mainButton.setDialog(new WarningDialog(mainButton.getParent(), mainButton.getNextFrame(),"메인 화면으로 이동", "정말로 메인 화면으로 이동할까요?"));
+		WarningDialog mainDialog = new WarningDialog(mainButton.getParent(), "메인 화면으로 이동", "정말로 메인 화면으로 이동할까요?");
+		mainDialog.getPositiveButton().addMouseListener(new ZooMouseAdapter(mainDialog.getPositiveButton()) {
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				mainDialog.getPositiveButton().setIcon(ZooButton.DEFAULT);
+				mainDialog.getPositiveButton().getParent().repaint();
+				if(mainDialog.getPositiveButton().isEntered() && mainDialog.getPositiveButton().isPressed()) {
+					mainDialog.getPositiveButton().setEntered(false);
+					mainDialog.dispose();
+					dispose();
+					new SamMainFrame().setVisible(true);	
+				}
+				mainDialog.getPositiveButton().setPressed(false);
+        	}
+		});
+		mainButton.setDialog(mainDialog);
 		mainButton.setOneSide(WINDOW_WIDTH - 222, WINDOW_HEIGHT - 156, EventButton.BUTTON_WIDTH, EventButton.BUTTON_HEIGHT);
 		add(mainButton);
 		
@@ -130,7 +164,13 @@ public class GameFrame extends JFrame{
 		bgmButton.addDefaultEventListener();
 		add(bgmButton);
 		
-		addWindowListener(new FrameAdapter(bgm) {
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowIconified(WindowEvent e) {
+				// TODO Auto-generated method stub
+				bgm.pauseBGM();
+			}
+			
 			@Override
 			public void windowDeiconified(WindowEvent e) {
 				// TODO Auto-generated method stub
@@ -149,7 +189,6 @@ public class GameFrame extends JFrame{
 			public void windowClosing(WindowEvent e) { // 닫히고 있을 때. closing -> 다른 창 opening -> closed이니 주의.
 				// TODO Auto-generated method stub
 				bgm.pauseBGM();
-//				bgm.setContinuous(false);
 			}
 
 			@Override

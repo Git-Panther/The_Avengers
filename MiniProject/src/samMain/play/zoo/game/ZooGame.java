@@ -2,9 +2,13 @@ package samMain.play.zoo.game;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.FontFormatException;
+import java.awt.GraphicsEnvironment;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
@@ -48,6 +52,8 @@ public class ZooGame extends Game {
 		quizLabel = new JLabel(quiz);
 		quizLabel.setForeground(new Color(47, 79, 79));
 		quizLabel.setFont(new Font("상상토끼 신비는 일곱살", Font.BOLD, 42));
+		// 주의 : 해당 컴퓨터에 폰트가 안 깔려 있으면 작동 안 함. 즉, 폰트보다는 기존에 준비된 이미지가 좋다.
+		// 그리고 폰트로 굳이 해야겠다면 번거롭게 창조하거나, 아니면 통상적으로 다 깔려있는 폰트를 쓸 것.
 		quizLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		quizLabel.setBounds(0, (GameFrame.WINDOW_HEIGHT / 2) - 448, GameFrame.WINDOW_WIDTH, 100);
 		// 위는 매우 기초적인 세팅
@@ -162,20 +168,21 @@ public class ZooGame extends Game {
 			if (isDragged && movingAnimal != null && movingAnimalParent != null) { // 움직이는 중이며 널 값이 아니어야 가능.
 				int currentX = -1; // = e.getX() - mouseX; // 드래그하여 적용할 x 좌표
 				int currentY = -1; // = e.getY() - mouseY; // 드래그하여 적용할 y 좌표
-				// 프레임 영역을 벗어날 수 없다.
+				// 위치에 따라 동물의 x와 y 좌표를 결정한다.
 				if(e.getX() < 0) {
 					currentX = 0;
 				} else if(e.getX() >= GameFrame.WINDOW_WIDTH) {
 					currentX = GameFrame.WINDOW_WIDTH - AnimalImage.ANIMAL_WIDTH;
-				} else if(frame.getCheckButton().contains(new Point(e.getX(), e.getY()))) {
-					
-				} else if(frame.getChangeButton().contains(new Point(e.getX(), e.getY()))) {
-					
-				} else if(frame.getMainButton().contains(new Point(e.getX(), e.getY()))) {
-					
-				} else if(frame.getBgmButton().contains(new Point(e.getX(), e.getY()))) {
-					
 				}
+//				else if(frame.getCheckButton().containsX(e.getX()) > 0) {
+//					currentX = e.getX() - frame.getCheckButton().containsX(e.getX());
+//				} else if(frame.getChangeButton().contains(new Point(e.getX(), e.getY()))) {
+//					currentX = e.getX() - frame.getChangeButton().containsX(e.getX());
+//				} else if(frame.getMainButton().contains(new Point(e.getX(), e.getY()))) {
+//					currentX = e.getX() - frame.getMainButton().containsX(e.getX());
+//				} else if(frame.getBgmButton().contains(new Point(e.getX(), e.getY()))) {
+//					currentX = e.getX() - frame.getBgmButton().containsX(e.getX());
+//				}
 				else {
 					currentX = e.getX() - mouseX; // 드래그하여 적용할 x 좌표
 				}
@@ -184,24 +191,20 @@ public class ZooGame extends Game {
 					currentY = 0;
 				} else if(e.getY()  >= GameFrame.WINDOW_HEIGHT - 30) {
 					currentY = GameFrame.WINDOW_HEIGHT - AnimalImage.ANIMAL_HEIGHT - 30;
-				} else {
-					currentY = e.getY() - mouseY; // 드래그하여 적용할 y 좌표
 				}
-
-//				if(frame.getCheckButton().contains(new Point(e.getX(), e.getY()))
-//						|| frame.getChangeButton().contains(new Point(e.getX(), e.getY()))
-//						|| frame.getMainButton().contains(new Point(e.getX(), e.getY()))
-//						|| frame.getBgmButton().contains(new Point(e.getX(), e.getY()))
-//				) {
-//					moveAnimal(currentX, currentY); // 위치 롤백
-//					initializeFields();
-//					return;
-//				}
-				
-	
-						
-						
+//				else if(frame.getCheckButton().containsY(e.getY()) > 0) {
+//					currentY = e.getY() - frame.getCheckButton().containsY(e.getY());
+//				} else if(frame.getChangeButton().containsY(e.getY()) > 0) {
+//					currentY = e.getY() - frame.getChangeButton().containsY(e.getY());
+//				} else if(frame.getMainButton().containsY(e.getY()) > 0) {
+//					currentY = e.getY() - frame.getMainButton().containsY(e.getY());
+//				} else if(frame.getBgmButton().containsY(e.getY()) > 0) {
+//					currentY = e.getY() - frame.getBgmButton().containsY(e.getY());
+				else {
+					currentY = e.getY() - mouseY; // 드래그하여 적용할 y 좌표
+				}	
 				// e.getX()나 e.getY()가 초과한 값만큼 - 보정하여 움직일까?
+				// 결론 : 갈 수 있는 범위조차 못 가게 됨... 마우스 놓았을 때 따지기로...
 				
 				moveAnimal(currentX, currentY); // 움직인다.	
 			}

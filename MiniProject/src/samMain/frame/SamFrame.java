@@ -3,8 +3,8 @@ package samMain.frame;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
-import samMain.play.zoo.Adapter.FrameAdapter;
-import samMain.play.zoo.clip.BackgroundClip;
+import samMain.Adapter.FrameAdapter;
+import samMain.clip.BackgroundClip;
 
 public class SamFrame extends JFrame {
 
@@ -24,12 +24,11 @@ public class SamFrame extends JFrame {
 		setLayout(null);	
 		setTitle("샘과 함께");
 		setIconImage(new ImageIcon("images/game3FrameIcon.png").getImage());
-				
-		if(bgm.getBGM() == null || !bgm.getBgmLocation().equals("유민.wav")) { // 없다면 새로 만들어줌
+		addWindowListener(new FrameAdapter(bgm));
+		if(!bgm.getBGM().isRunning()) {
 			bgm.setBGM("유민.wav");
 			bgm.resumeBGM();
 		}
-		addWindowListener(new FrameAdapter(SamFrame.bgm));
 	}
 	
 	public JFrame getFrame() {

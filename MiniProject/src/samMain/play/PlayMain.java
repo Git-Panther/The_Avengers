@@ -10,6 +10,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
+import samMain.Adapter.FrameAdapter;
 import samMain.frame.SamFrame;
 import samMain.main.SamMainFrame;
 import samMain.play.zoo.frame.GameFrame;
@@ -20,20 +21,9 @@ public class PlayMain extends SamFrame {
 	private static final long serialVersionUID = -6022784738766090924L;
 	JFrame mainFrame = new JFrame("샘과 함께");
 	JButton fruitShop,cleanRoom,body,zoo,end;
-//	private BackgroundClip bgm;
 	
 	public PlayMain(){
-//		setBounds(350, 80, 1210, 940);
-//		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
-//		setLayout(null);		
-//		setResizable(false);
-//		
-//		bgm = BackgroundClip.getClip(); // 클립 가져오기
-//		if(!bgm.getBGM().isOpen()) { // 닫혀있다면 새로 열어준다.
-//			bgm.setBGM("유민.wav");
-//		}
 		super();
-		
 		JLabel background = new JLabel(new ImageIcon(new ImageIcon("mainView/놀이학습_수정본.png").getImage()));
 		background.setBounds(0, 0, 1200, 900);
 		add(background);
@@ -50,6 +40,7 @@ public class PlayMain extends SamFrame {
 				if(e.getSource().equals(fruitShop)){
 					new FruitShop();
 					getBgm().pauseBGM();
+					getBgm().getBGM().flush();
 					getBgm().getBGM().close();
 					dispose();
 				}				
@@ -82,6 +73,7 @@ public class PlayMain extends SamFrame {
 				if(e.getSource().equals(cleanRoom)){		
 					new CleanRoomMain();
 					getBgm().pauseBGM();
+					getBgm().getBGM().flush();
 					getBgm().getBGM().close();
 					dispose();
 				}				
@@ -114,6 +106,7 @@ public class PlayMain extends SamFrame {
 				if(e.getSource().equals(body)){
 					new BodyGame();
 					getBgm().pauseBGM();
+					getBgm().getBGM().flush();
 					getBgm().getBGM().close();
 					dispose();
 				}				
@@ -146,6 +139,7 @@ public class PlayMain extends SamFrame {
 				if(e.getSource().equals(zoo)){
 					new GameFrame(new ZooGame());
 					getBgm().pauseBGM();
+					getBgm().getBGM().flush();
 					getBgm().getBGM().close();
 					dispose();
 				}				
@@ -182,7 +176,15 @@ public class PlayMain extends SamFrame {
 			}
 		});
 	
-//		addWindowListener(new FrameAdapter());
+		addWindowListener(new FrameAdapter(getBgm()) {
+
+//			@Override
+//			public void windowOpened(WindowEvent e) {
+//				// TODO Auto-generated method stub
+//				if(isVisible())
+//					getBgm().resumeBGM();
+//			}
+		});
 	}
 
 }

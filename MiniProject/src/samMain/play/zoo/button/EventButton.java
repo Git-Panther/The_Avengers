@@ -24,7 +24,7 @@ public class EventButton extends JButton { // 이벤트 버튼. JLabel에 주의
 	private String focusLocation; // 마우스를 올려놨을 때 모습
 //	private String pressLocation; // 눌렀을 때 모습
 	private JFrame parent; // 해당 버튼의 부모
-	private JFrame nextFrame; // 다음 프레임으로 넘어갈 경우 필요함
+//	private JFrame nextFrame; // 다음 프레임으로 넘어갈 경우 필요함
 	private JDialog dialog; // 띄울 다이얼로그
 	
 	private ImageIcon normal; // 노멀 이미지아이콘
@@ -40,23 +40,23 @@ public class EventButton extends JButton { // 이벤트 버튼. JLabel에 주의
 		setBorderPainted(false);
 		setBackground(new Color(0, 0, 0, 1));
 	}
-	public EventButton(JFrame parent, JFrame nextFrame) {
+	public EventButton(JFrame parent) {
 		this();
 		// TODO Auto-generated constructor stub
 		this.parent = parent;
-		this.nextFrame = nextFrame;
-		if(nextFrame.isVisible()) {
-			nextFrame.setVisible(false);
-		}
+//		this.nextFrame = nextFrame;
+//		if(nextFrame.isVisible()) {
+//			nextFrame.setVisible(false);
+//		}
 	}
-	public EventButton(JFrame parent, JFrame nextFrame, String normal, String focus, String press) {
+	public EventButton(JFrame parent, String normal, String focus, String press) {
 		this();
 		// TODO Auto-generated constructor stub
 		this.parent = parent;
 		this.normalLocation = normal;
 		this.focusLocation = focus;
 //		this.pressLocation = press;
-		this.nextFrame = nextFrame;
+//		this.nextFrame = nextFrame;
 	}
 	
 	public void setOneSide(Rectangle rect) { // 원사이드하게 하려면.
@@ -144,12 +144,12 @@ public class EventButton extends JButton { // 이벤트 버튼. JLabel에 주의
 	public void setParent(JFrame parent) {
 		this.parent = parent;
 	}
-	public JFrame getNextFrame() {
-		return nextFrame;
-	}
-	public void setNextFrame(JFrame nextFrame) {
-		this.nextFrame = nextFrame;
-	}
+//	public JFrame getNextFrame() {
+//		return nextFrame;
+//	}
+//	public void setNextFrame(JFrame nextFrame) {
+//		this.nextFrame = nextFrame;
+//	}
 	public boolean isEntered() {
 		return isEntered;
 	}

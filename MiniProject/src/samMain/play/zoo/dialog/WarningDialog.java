@@ -15,11 +15,11 @@ public class WarningDialog extends ZooDialog { // 예, 아니오 다이얼로그
 	private ZooButton positiveButton; // 예 버튼
 	private ZooButton negativeButton; // 아니오 버튼
 	
-	public WarningDialog(JFrame frame, JFrame nextFrame) {
-		this(frame, nextFrame, "", "");
+	public WarningDialog(JFrame frame) {
+		this(frame, "", "");
 	}
 	
-	public WarningDialog(JFrame frame, JFrame nextFrame, String title, String message) {
+	public WarningDialog(JFrame frame, String title, String message) {
 		super(frame, title); // 모달(자기 끝낼 때까지 딴거 못함)
 		setTitle(title);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -40,37 +40,28 @@ public class WarningDialog extends ZooDialog { // 예, 아니오 다이얼로그
         		negativeButton.getParent().repaint();
 				if(negativeButton.isEntered() && negativeButton.isPressed()) {
 					negativeButton.setEntered(false);
-					nextFrame.dispose();
+//					nextFrame.dispose();
 					dispose();
 				}
 				negativeButton.setPressed(false);
 			}
         });
         
-        positiveButton.addMouseListener(new ZooMouseAdapter(positiveButton) {
-        	@Override
-			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-        		positiveButton.setIcon(ZooButton.DEFAULT);
-        		positiveButton.getParent().repaint();
-				if(positiveButton.isEntered() && positiveButton.isPressed()) {
-					positiveButton.setEntered(false);
-					dispose();
-					frame.dispose();
-					nextFrame.setVisible(true);				
-					try {
-						nextFrame.getClass().newInstance();
-					} catch (InstantiationException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					} catch (IllegalAccessException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-				}
-				positiveButton.setPressed(false);
-        	}
-        });
+//        positiveButton.addMouseListener(new ZooMouseAdapter(positiveButton) {
+//        	@Override
+//			public void mouseReleased(MouseEvent e) {
+//				// TODO Auto-generated method stub
+//        		positiveButton.setIcon(ZooButton.DEFAULT);
+//        		positiveButton.getParent().repaint();
+//				if(positiveButton.isEntered() && positiveButton.isPressed()) {
+//					positiveButton.setEntered(false);
+//					dispose();
+//					frame.dispose();
+//					nextFrame.setVisible(true);				
+//				}
+//				positiveButton.setPressed(false);
+//        	}
+//        });
         
         addWindowListener(new WindowAdapter() { // 창 닫힐 때 닫아야 함.
             @Override

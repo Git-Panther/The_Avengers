@@ -1,4 +1,4 @@
-package samMain.play.zoo.clip;
+package samMain.clip;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
@@ -7,6 +7,7 @@ import java.io.IOException;
 
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.Line;
 import javax.sound.sampled.LineEvent;
 import javax.sound.sampled.LineListener;
 import javax.sound.sampled.LineUnavailableException;
@@ -41,7 +42,7 @@ public class BackgroundClip { // 배경음악 클립 기능
 	
 	public void setBGM() { // 배경음 자동 설정
 		try {		
-			bgm = AudioSystem.getClip();
+			bgm = (Clip)AudioSystem.getLine(new Line.Info(Clip.class));
 			bgm.open(AudioSystem
 					.getAudioInputStream(new BufferedInputStream(
 							new FileInputStream(bgmLocation))));
@@ -51,10 +52,12 @@ public class BackgroundClip { // 배경음악 클립 기능
                         // TODO Auto-generated method stub
                         if(event.getType() == LineEvent.Type.CLOSE){ // 닫혔을 때 경로를 초기화해줌으로써 다음에 새롭게 브금을 실행할 수 있게 한다.
                         	setBgmLocation(""); // 경로를 초기화해줘야 나중에 새롭게 재생할 때 지속된다.
-                        	on(); // 브금 꺼진 상태도 초기화(다시 켜야 하므로)
+                        	bgm.close();
+//                        	on(); // 브금 꺼진 상태도 초기화(다시 켜야 하므로)
                         }
                 }
 			});
+//			bgm.start();
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
