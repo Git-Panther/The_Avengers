@@ -2,13 +2,9 @@ package samMain.play.zoo.game;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.FontFormatException;
-import java.awt.GraphicsEnvironment;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
